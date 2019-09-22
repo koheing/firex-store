@@ -22,5 +22,5 @@ jobs:
             - ./node_modules
 
       - run:
-          command: npm run test:unit
+          command: npm run test
           working_directory: ./
