@@ -29,7 +29,7 @@ describe('subscribe', () => {
     })
   })
 
-  it('subscribe collection , default action name', async () => {
+  it('subscribe collection , default action name', async (done) => {
     const spy = jest.spyOn(FirestoreService, 'subscribeAll')
     const commentModule: Module<any, any> = {
       namespaced: true,
@@ -52,9 +52,11 @@ describe('subscribe', () => {
     expect(spy).toHaveBeenCalled()
 
     spy.mockClear()
+
+    done()
   })
 
-  it('subscribe collection , custom action name', async () => {
+  it('subscribe collection , custom action name', async (done) => {
     const spy = jest.spyOn(FirestoreService, 'subscribeAll')
     const commentModule: Module<any, any> = {
       namespaced: true,
@@ -79,9 +81,11 @@ describe('subscribe', () => {
 
     expect(spy).toHaveBeenCalled()
     spy.mockClear()
+
+    done()
   })
 
-  it('subscribe document , custom action name', async () => {
+  it('subscribe document , custom action name', async (done) => {
     const spy = jest.spyOn(FirestoreService, 'subscribe')
     const userModule: Module<any, any> = {
       namespaced: true,
@@ -105,9 +109,11 @@ describe('subscribe', () => {
 
     expect(spy).toHaveBeenCalled()
     spy.mockClear()
+
+    done()
   })
 
-  it('collection state has Unsubscriber', async () => {
+  it('collection state has Unsubscriber', async (done) => {
     const spy = jest.spyOn(FirestoreService, 'subscribeAll')
     const commentModule: Module<any, any> = {
       namespaced: true,
@@ -135,9 +141,11 @@ describe('subscribe', () => {
       store.state.comment[FIREX_COLLECTION_UNSUBSCRIBER]
     ).not.toBeUndefined()
     spy.mockClear()
+
+    done()
   })
 
-  it('document state has Unsubscriber', async () => {
+  it('document state has Unsubscriber', async (done) => {
     const spy = jest.spyOn(FirestoreService, 'subscribe')
     const userModule: Module<any, any> = {
       namespaced: true,
@@ -162,9 +170,11 @@ describe('subscribe', () => {
 
     expect(store.state.user[FIREX_DOCUMENT_UNSUBSCRIBER]).not.toBeUndefined()
     spy.mockClear()
+
+    done()
   })
 
-  it('cannot call suibscribeAll when it had already called', async () => {
+  it('cannot call suibscribeAll when it had already called', async (done) => {
     const spy = jest.spyOn(FirestoreService, 'subscribeAll')
     const commentModule: Module<any, any> = {
       namespaced: true,
@@ -190,9 +200,11 @@ describe('subscribe', () => {
 
     expect(spy).not.toHaveBeenCalled()
     spy.mockClear()
+
+    done()
   })
 
-  it('cannot call suibscribe when it had already called', async () => {
+  it('cannot call suibscribe when it had already called', async (done) => {
     const spy = jest.spyOn(FirestoreService, 'subscribe')
     const userModule: Module<any, any> = {
       namespaced: true,
@@ -218,5 +230,7 @@ describe('subscribe', () => {
 
     expect(spy).not.toHaveBeenCalled()
     spy.mockClear()
+
+    done()
   })
 })

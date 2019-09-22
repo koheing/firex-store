@@ -23,7 +23,7 @@ describe('subscribe', () => {
     })
   })
 
-  it('unsubscribe collection', async () => {
+  it('unsubscribe collection', async (done) => {
     const mockFunction = () => jest.fn()
     const commentModule: Module<any, any> = {
       namespaced: true,
@@ -45,9 +45,10 @@ describe('subscribe', () => {
     await store.dispatch('comment/unsubscribe')
 
     expect(store.state.comment[FIREX_COLLECTION_UNSUBSCRIBER]).toBeUndefined()
+    done()
   })
 
-  it('unsubscribe document', async () => {
+  it('unsubscribe document', async (done) => {
     const mockFunction = () => jest.fn()
     const userMocule: Module<any, any> = {
       namespaced: true,
@@ -69,5 +70,7 @@ describe('subscribe', () => {
     await store.dispatch('user/unsubscribe')
 
     expect(store.state.user[FIREX_DOCUMENT_UNSUBSCRIBER]).toBeUndefined()
+
+    done()
   })
 })
