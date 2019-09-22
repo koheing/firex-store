@@ -1,0 +1,58 @@
+{
+  "name": "firex-store",
+  "version": "0.1.0",
+  "description": "subscribe firebase data to vuex",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "eslint --fix \"./src/**/*.ts\"",
+    "test": "jest --config jestconfig.json",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nor-ko-hi-jp/firex-store.git"
+  },
+  "keywords": [
+    "vuex",
+    "firebase",
+    "firestore",
+    "vue",
+    "nuxt"
+  ],
+  "author": "nor-ko-hi-jp",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nor-ko-hi-jp/firex-store/issues"
+  },
+  "homepage": "https://github.com/nor-ko-hi-jp/firex-store#readme",
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "@typescript-eslint/eslint-plugin": "^2.2.0",
+    "@typescript-eslint/parser": "^2.3.0",
+    "@vue/test-utils": "^1.0.0-beta.29",
+    "eslint": "^6.3.0",
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "firebase": "^6.6.2",
+    "jest": "^24.9.0",
+    "prettier": "^1.18.2",
+    "ts-jest": "^24.1.0",
+    "typescript": "^3.6.3",
+    "vue": "^2.6.10",
+    "vue-template-compiler": "^2.6.10",
+    "vuex": "^3.1.1"
+  },
+  "files": [
+    "lib/**/*"
+  ]
+}
