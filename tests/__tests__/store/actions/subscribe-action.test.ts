@@ -24,7 +24,7 @@ describe('subscribe-action', () => {
     })
   })
 
-  it('subscribe collection , default action name and', async () => {
+  it('subscribe collection , default action name and', async (done) => {
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
@@ -44,9 +44,11 @@ describe('subscribe-action', () => {
     await store.dispatch(`comment/${actionTypes.COLLECTION_SUBSCRIBE}`)
 
     expect(subscribeFirestore).toHaveBeenCalledTimes(1)
+
+    done()
   })
 
-  it('subscribe collection , custom action name', async () => {
+  it('subscribe collection , custom action name', async (done) => {
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
@@ -69,9 +71,11 @@ describe('subscribe-action', () => {
     await store.dispatch(`comment/test`)
 
     expect(subscribeFirestore).toHaveBeenCalledTimes(2)
+
+    done()
   })
 
-  it('subscribe document , custom action name', async () => {
+  it('subscribe document , custom action name', async (done) => {
     const userModule: Module<any, any> = {
       namespaced: true,
       state: {
@@ -93,5 +97,7 @@ describe('subscribe-action', () => {
     await store.dispatch(`user/${actionTypes.DOCUMENT_SUBSCRIBE}`)
 
     expect(subscribeFirestore).toHaveBeenCalledTimes(3)
+
+    done()
   })
 })
