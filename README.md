@@ -1,10 +1,10 @@
 # firex-store
 
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
-[![CircleCI](https://circleci.com/gh/nor-ko-hi-jp/firex-store/tree/circle-ci.svg?style=svg)](https://circleci.com/gh/nor-ko-hi-jp/firex-store/tree/circle-ci)
+[![CircleCI](https://circleci.com/gh/nor-ko-hi-jp/firex-store.svg?style=svg)](https://circleci.com/gh/nor-ko-hi-jp/firex-store)
 
-- if you use this npm, you can reference firestore data, easily
-- it is influenced by [vuexfire](https://github.com/vuejs/vuefire)
+- If you use this npm, you can reference firestore data, easily
+- It is influenced by [vuexfire](https://github.com/vuejs/vuefire)
 - node v10 ~
 
 ## Installation
