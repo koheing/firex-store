@@ -9,7 +9,7 @@ describe('FirestoreService', () => {
     const ref = new MockDocumentReference(
       Promise.resolve(new MockDocumentSnapshot())
     )
-    const errorHandler = (error?: Error) => jest.fn()
+    const errorHandler = (error?: any) => jest.fn()
     const onCompleted = jest.fn()
     FirestoreService.find({
       ref,

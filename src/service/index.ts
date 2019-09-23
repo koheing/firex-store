@@ -29,7 +29,7 @@ export class FirestoreService {
 
         fireMutation('added', payload)
       },
-      (error: Error) =>
+      (error: any) =>
         errorHandler ? errorHandler(error) : console.error(error),
       () => {
         if (!onCompleted) {
@@ -61,7 +61,7 @@ export class FirestoreService {
           fireMutation(change.type, payload)
         })
       },
-      (error: Error) =>
+      (error: any) =>
         errorHandler ? errorHandler(error) : console.error(error),
       () => {
         if (!onCompleted) {
@@ -89,7 +89,7 @@ export class FirestoreService {
 
         return payload
       })
-      .catch((error: Error) =>
+      .catch((error: any) =>
         errorHandler ? errorHandler(error) : console.error(error)
       )
       .finally(() => {
@@ -121,7 +121,7 @@ export class FirestoreService {
           return payload
         })
       )
-      .catch((error: Error) =>
+      .catch((error: any) =>
         errorHandler ? errorHandler(error) : console.error(error)
       )
       .finally(() => {
