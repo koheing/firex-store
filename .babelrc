@@ -12,7 +12,10 @@
           }
         ]
       ],
-      "plugins": ["yntax-object-rest-spread"]
+      "plugins": [
+        "syntax-object-rest-spread",
+        "transform-es2015-modules-commonjs"
+      ]
     }
   }
 }
