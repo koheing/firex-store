@@ -1,7 +1,7 @@
 import { FireMutation } from '../types'
 import { Unsubscribe } from 'firebase'
 import { CriteriaOptions } from '../criteria-options.interface'
-import { mapToIfDefined } from './utils'
+import { mapToIfDefined, isNodeV8Over } from './utils'
 
 interface SubscribeCriteria<T, U> extends CriteriaOptions<T> {
   ref: U
@@ -78,7 +78,7 @@ export class FirestoreService {
     errorHandler,
     onCompleted
   }: FindCriteria<T, firebase.firestore.DocumentReference>): Promise<T | any> {
-    return ref
+    const result: Promise<T | any> = ref
       .get()
       .then((doc) => {
         if (!doc.exists) {
@@ -92,12 +92,14 @@ export class FirestoreService {
       .catch((error: any) =>
         errorHandler ? errorHandler(error) : console.error(error)
       )
-      .finally(() => {
-        if (!onCompleted) {
-          return
-        }
-        onCompleted()
-      })
+    return !isNodeV8Over()
+      ? result
+      : result.finally(() => {
+          if (!onCompleted) {
+            return
+          }
+          onCompleted()
+        })
   }
 
   static findAll<T = any>({
@@ -109,7 +111,7 @@ export class FirestoreService {
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
   >): Promise<T | any> {
-    return ref
+    const result: Promise<T | any> = ref
       .get()
       .then((snapshot) =>
         snapshot.docs.map((doc) => {
@@ -124,11 +126,14 @@ export class FirestoreService {
       .catch((error: any) =>
         errorHandler ? errorHandler(error) : console.error(error)
       )
-      .finally(() => {
-        if (!onCompleted) {
-          return
-        }
-        onCompleted()
-      })
+
+    return !isNodeV8Over()
+      ? result
+      : result.finally(() => {
+          if (!onCompleted) {
+            return
+          }
+          onCompleted()
+        })
   }
 }

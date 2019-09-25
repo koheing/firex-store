@@ -8,11 +8,14 @@ interface Criteria {
   actionName?: string
 }
 
-export const firestoreUnsubscribeActions = ({ type, actionName }: Criteria) => {
+export const firestoreUnsubscribeActions = ({
+  type,
+  actionName
+}: Criteria): ActionTree<any, any> => {
   const defaultActionName =
     type === 'document'
-      ? actionTypes.DOCUMENT_UNSUBSCRIBE
-      : actionTypes.COLLECTION_UNSUBSCRIBE
+      ? actionTypes.document.UNSUBSCRIBE
+      : actionTypes.collection.UNSUBSCRIBE
 
   const action = actionName ? actionName : defaultActionName
 

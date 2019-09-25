@@ -14,10 +14,10 @@ export const firestoreSubscribeActions = <T = any>({
   ref,
   actionName,
   options
-}: Criteria<T>) => {
+}: Criteria<T>): ActionTree<any, any> => {
   const defaultActionName = isDocumentRef(ref)
-    ? actionTypes.DOCUMENT_SUBSCRIBE
-    : actionTypes.COLLECTION_SUBSCRIBE
+    ? actionTypes.document.SUBSCRIBE
+    : actionTypes.collection.SUBSCRIBE
 
   const action = actionName ? actionName : defaultActionName
 
