@@ -22,5 +22,5 @@ jobs:
             - ./node_modules
 
       - run:
-          command: npm run test
+          command: npm run test -- --no-cache
           working_directory: ./
