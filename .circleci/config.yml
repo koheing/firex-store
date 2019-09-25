@@ -6,6 +6,10 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          command: npm rebuild
+          working_directory: ./
+
       - restore_cache:
           keys:
             - v1-npm-dependencies-{{ checksum "./package.json" }}
