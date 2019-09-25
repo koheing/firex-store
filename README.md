@@ -30,8 +30,6 @@ others comming soon
 
 - If you want to subscribe again after unsubscribing 'collection', set the property of the store you want to subscribe to `[]` and then subscribe.
 
-- If you use `node v8` and `findFirestore`, `OnCompleted` in options is not work.
-
 ## Usage
 
 - [Subscribe Firestore, using firex-store actions](#1-subscribe-firestore-using-firex-store-actions)

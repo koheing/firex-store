@@ -1,8 +1,4 @@
 export declare const actionTypes: {
-    DOCUMENT_SUBSCRIBE: string;
-    COLLECTION_SUBSCRIBE: string;
-    DOCUMENT_UNSUBSCRIBE: string;
-    COLLECTION_UNSUBSCRIBE: string;
     collection: {
         SUBSCRIBE: string;
         UNSUBSCRIBE: string;
@@ -11,4 +7,20 @@ export declare const actionTypes: {
         SUBSCRIBE: string;
         UNSUBSCRIBE: string;
     };
+    /**
+     * @deprecated follow variables are removed ^2.0.0
+     */
+    DOCUMENT_SUBSCRIBE: string;
+    /**
+     * @deprecated follow variables are removed ^2.0.0
+     */
+    COLLECTION_SUBSCRIBE: string;
+    /**
+     * @deprecated follow variables are removed ^2.0.0
+     */
+    DOCUMENT_UNSUBSCRIBE: string;
+    /**
+     * @deprecated follow variables are removed ^2.0.0
+     */
+    COLLECTION_UNSUBSCRIBE: string;
 };
