@@ -12,7 +12,7 @@
           }
         ]
       ],
-      "plugins": ["transform-object-rest-spread"]
+      "plugins": ["yntax-object-rest-spread"]
     }
   }
 }
