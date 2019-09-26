@@ -81,27 +81,33 @@ describe('fire-mutations', () => {
   })
 
   it('document types.Add called', () => {
-    store.dispatch('user/add', { docId: 'user1', name: 'testName1' })
+    store.dispatch('user/add', { data: { docId: 'user1', name: 'testName1' } })
 
     expect(store.state.user.user.docId).toEqual('user1')
   })
 
   it('document types.MODIFY called', () => {
-    store.dispatch('user/add', { docId: 'user1', name: 'testName1' })
-    store.dispatch('user/modify', { docId: 'user1', name: 'testName2' })
+    store.dispatch('user/add', { data: { docId: 'user1', name: 'testName1' } })
+    store.dispatch('user/modify', {
+      data: { docId: 'user1', name: 'testName2' }
+    })
 
     expect(store.state.user.user.name).toEqual('testName2')
   })
 
   it('document types.REMOVE called', () => {
-    store.dispatch('user/add', { docId: 'user1', name: 'testName1' })
-    store.dispatch('user/remove', { docId: 'user1', name: 'testName1' })
+    store.dispatch('user/add', { data: { docId: 'user1', name: 'testName1' } })
+    store.dispatch('user/remove', {
+      data: { docId: 'user1', name: 'testName1' }
+    })
 
     expect(store.state.user.user).toBeNull()
   })
 
   it('collection types.ADD called', () => {
-    store.dispatch('comment/add', { docId: 'comment1', message: 'test' })
+    store.dispatch('comment/add', {
+      data: { docId: 'comment1', message: 'test' }
+    })
 
     expect(store.state.comment.comments[0].docId).toEqual('comment1')
   })

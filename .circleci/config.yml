@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:8.9.4
+      - image: circleci/node:8.0
     steps:
       - checkout
 
@@ -16,14 +16,14 @@ jobs:
           command: npm install --no-save
           working_directory: ./
 
+      - run:
+          command: npm rebuild
+          working_directory: ./
+
       - save_cache:
           key: v1-npm-dependencies-{{ checksum "./package.json" }}
           paths:
             - ./node_modules
-
-      - run:
-          command: npm rebuild
-          working_directory: ./
 
       - run:
           command: npm run test

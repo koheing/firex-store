@@ -1,6 +1,6 @@
 import { Commit } from 'vuex';
 import { FirestoreRef } from '../../types';
-import { CriteriaOptions } from '../../criteria-options.interface';
+import { CriteriaOptions } from '../../options';
 interface Criteria<T, U> {
     state: any;
     commit: Commit;

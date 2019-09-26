@@ -1,5 +1,5 @@
 import { ActionTree } from 'vuex';
-import { CriteriaOptions } from '../../criteria-options.interface';
+import { CriteriaOptions } from '../../options';
 import { FirestoreRef } from '../../types';
 interface Criteria<T = any> {
     ref: FirestoreRef;

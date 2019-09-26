@@ -1,1 +1,1 @@
-export type ErrorHandler = (error?: any) => void
+export type ErrorHandler = (error?: any) => any

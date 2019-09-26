@@ -1,6 +1,7 @@
 import { FireMutation } from '../types'
 import { Unsubscribe } from 'firebase'
-import { CriteriaOptions } from '../criteria-options.interface'
+import { CriteriaOptions } from '../options'
+import { Payload } from '../models'
 import { mapToIfDefined } from './utils'
 
 interface SubscribeCriteria<T, U> extends CriteriaOptions<T> {
@@ -25,7 +26,8 @@ export class FirestoreService {
         if (!doc.exists) {
           return
         }
-        const payload = mapToIfDefined(doc, mapper)
+        const data = mapToIfDefined(doc, mapper)
+        const payload: Payload = { data }
 
         fireMutation('added', payload)
       },
@@ -56,7 +58,8 @@ export class FirestoreService {
           if (!change.doc.exists) {
             return
           }
-          const payload = mapToIfDefined(change.doc, mapper)
+          const data = mapToIfDefined(change.doc, mapper)
+          const payload: Payload = { data }
 
           fireMutation(change.type, payload)
         })

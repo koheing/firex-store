@@ -24,8 +24,6 @@ others comming soon
 
 - Return values or state values bounded to Firestore has `docId`(documentId in Firestore) property.
 
-- This npm library methods use only one 'document' and 'collection' type in one store module
-
 - A store module cannot subscribe to more than one 'collection' and 'document'
 
 - If you want to subscribe again after unsubscribing 'collection', set the property of the store you want to subscribe to `[]` and then subscribe.

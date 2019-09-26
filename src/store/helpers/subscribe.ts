@@ -5,7 +5,7 @@ import {
 } from '../configurations'
 import { FirestoreService } from '../../service'
 import { FirestoreRef, FireMutation } from '../../types'
-import { CriteriaOptions } from '../../criteria-options.interface'
+import { CriteriaOptions } from '../../options'
 import { isDocumentRef } from './is-document-ref'
 import { fireMutation } from './fire-mutation'
 

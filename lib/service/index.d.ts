@@ -1,6 +1,6 @@
 import { FireMutation } from '../types';
 import { Unsubscribe } from 'firebase';
-import { CriteriaOptions } from '../criteria-options.interface';
+import { CriteriaOptions } from '../options';
 interface SubscribeCriteria<T, U> extends CriteriaOptions<T> {
     ref: U;
     fireMutation: FireMutation;

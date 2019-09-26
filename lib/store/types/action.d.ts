@@ -8,19 +8,19 @@ export declare const actionTypes: {
         UNSUBSCRIBE: string;
     };
     /**
-     * @deprecated follow variables are removed ^2.0.0
+     * @deprecated it will be removed ^2.0.0, so use `document.SUBSCRIBE` , please
      */
     DOCUMENT_SUBSCRIBE: string;
     /**
-     * @deprecated follow variables are removed ^2.0.0
+     * @deprecated it will be removed ^2.0.0, so use `collection.SUBSCRIBE` , please
      */
     COLLECTION_SUBSCRIBE: string;
     /**
-     * @deprecated follow variables are removed ^2.0.0
+     * @deprecated it will be removed ^2.0.0, so use `document.UNSUBSCRIBE` , please
      */
     DOCUMENT_UNSUBSCRIBE: string;
     /**
-     * @deprecated follow variables are removed ^2.0.0
+     * @deprecated it will be removed ^2.0.0, so use `collection.UNSUBSCRIBE` , please
      */
     COLLECTION_UNSUBSCRIBE: string;
 };
