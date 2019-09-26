@@ -5,7 +5,8 @@
 
 - If you use this npm, you can reference firestore data, easily
 - It is influenced by [vuexfire](https://github.com/vuejs/vuefire)
-- node v10 ~
+
+- node v8.9.4 ~
 
 ## Installation
 
@@ -23,8 +24,6 @@ others comming soon
 
 - Return values or state values bounded to Firestore has `docId`(documentId in Firestore) property.
 
-- This npm library methods use only one 'document' and 'collection' type in one store module
-
 - A store module cannot subscribe to more than one 'collection' and 'document'
 
 - If you want to subscribe again after unsubscribing 'collection', set the property of the store you want to subscribe to `[]` and then subscribe.
@@ -36,7 +35,7 @@ others comming soon
 - [Unsubscribe Firestore, using firex-store actions](#3-unsubscribe-firestore-using-firex-store-actions)
 - [Unsubscribe Firestore, using custom actions](#4-unsubscribe-firestore-using-custom-actions)
 - [Fetch at Once](#5-fetch-at-once)
-- [Options](#Options)
+- [Options](#options)
 
 ### Before Start...
 
@@ -122,7 +121,7 @@ import { actionTypes } from 'firex-store'
 export default {
   name: 'Comments',
   created() {
-    this.$store.dispatch(`comment/${actionTypes.COLLECTION_SUBSCRIBE}`)
+    this.$store.dispatch(`comment/${actionTypes.collection.SUBSCRIBE}`)
   }
 }
 
@@ -228,7 +227,7 @@ import { actionTypes } from 'firex-store'
 export default {
   name: 'Comments',
   created() {
-    this.$store.dispatch(`comment/${actionTypes.COLLECTION_UNSUBSCRIBE}`)
+    this.$store.dispatch(`comment/${actionTypes.collection.UNSUBSCRIBE}`)
   }
 }
 
@@ -345,7 +344,7 @@ export default {
     comment: null
   },
   mutations: {
-    ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
+    ...firestoreMutations({ statePropName: 'users', type: 'document' })
   },
   actions: {
     subscribe: ({ state, commit }) => {

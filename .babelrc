@@ -1,0 +1,21 @@
+{
+  "presets": [["env"]],
+  "env": {
+    "test": {
+      "presets": [
+        [
+          "env",
+          {
+            "targets": {
+              "node": "current"
+            }
+          }
+        ]
+      ],
+      "plugins": [
+        "syntax-object-rest-spread",
+        "transform-es2015-modules-commonjs"
+      ]
+    }
+  }
+}

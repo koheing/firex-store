@@ -1,7 +1,7 @@
 import { ActionTree } from 'vuex'
 import { actionTypes } from '../types/action'
 import { subscribeFirestore, isDocumentRef } from '../helpers'
-import { CriteriaOptions } from '../../criteria-options.interface'
+import { CriteriaOptions } from '../../options'
 import { FirestoreRef } from '../../types'
 
 interface Criteria<T = any> {
@@ -14,10 +14,10 @@ export const firestoreSubscribeActions = <T = any>({
   ref,
   actionName,
   options
-}: Criteria<T>) => {
+}: Criteria<T>): ActionTree<any, any> => {
   const defaultActionName = isDocumentRef(ref)
-    ? actionTypes.DOCUMENT_SUBSCRIBE
-    : actionTypes.COLLECTION_SUBSCRIBE
+    ? actionTypes.document.SUBSCRIBE
+    : actionTypes.collection.SUBSCRIBE
 
   const action = actionName ? actionName : defaultActionName
 

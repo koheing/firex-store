@@ -1,6 +1,7 @@
 import { FireMutation } from '../types'
 import { Unsubscribe } from 'firebase'
-import { CriteriaOptions } from '../criteria-options.interface'
+import { CriteriaOptions } from '../options'
+import { Payload } from '../models'
 import { mapToIfDefined } from './utils'
 
 interface SubscribeCriteria<T, U> extends CriteriaOptions<T> {
@@ -25,7 +26,8 @@ export class FirestoreService {
         if (!doc.exists) {
           return
         }
-        const payload = mapToIfDefined(doc, mapper)
+        const data = mapToIfDefined(doc, mapper)
+        const payload: Payload = { data }
 
         fireMutation('added', payload)
       },
@@ -56,7 +58,8 @@ export class FirestoreService {
           if (!change.doc.exists) {
             return
           }
-          const payload = mapToIfDefined(change.doc, mapper)
+          const data = mapToIfDefined(change.doc, mapper)
+          const payload: Payload = { data }
 
           fireMutation(change.type, payload)
         })
@@ -72,13 +75,13 @@ export class FirestoreService {
     )
   }
 
-  static find<T = any>({
+  static async find<T = any>({
     ref,
     mapper,
     errorHandler,
     onCompleted
   }: FindCriteria<T, firebase.firestore.DocumentReference>): Promise<T | any> {
-    return ref
+    const result = await ref
       .get()
       .then((doc) => {
         if (!doc.exists) {
@@ -92,15 +95,14 @@ export class FirestoreService {
       .catch((error: any) =>
         errorHandler ? errorHandler(error) : console.error(error)
       )
-      .finally(() => {
-        if (!onCompleted) {
-          return
-        }
-        onCompleted()
-      })
+
+    if (onCompleted) {
+      onCompleted()
+    }
+    return result
   }
 
-  static findAll<T = any>({
+  static async findAll<T = any>({
     ref,
     mapper,
     errorHandler,
@@ -108,8 +110,8 @@ export class FirestoreService {
   }: FindCriteria<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
-  >): Promise<T | any> {
-    return ref
+  >): Promise<T[] | any | any[]> {
+    const result = await ref
       .get()
       .then((snapshot) =>
         snapshot.docs.map((doc) => {
@@ -124,11 +126,11 @@ export class FirestoreService {
       .catch((error: any) =>
         errorHandler ? errorHandler(error) : console.error(error)
       )
-      .finally(() => {
-        if (!onCompleted) {
-          return
-        }
-        onCompleted()
-      })
+
+    if (onCompleted) {
+      onCompleted()
+    }
+
+    return result
   }
 }

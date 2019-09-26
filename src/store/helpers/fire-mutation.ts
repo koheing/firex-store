@@ -1,12 +1,13 @@
 import { Commit } from 'vuex'
 import { mutationTypes } from '../types/mutation'
 import { MutationType } from '../../types'
+import { Payload } from '../../models'
 
 interface Criteria {
   mutationType: MutationType
   changeType: firebase.firestore.DocumentChangeType
   commit: Commit
-  payload: any
+  payload: Payload
 }
 
 export const fireMutation = ({
@@ -21,13 +22,13 @@ export const fireMutation = ({
       : mutationTypes.collection
   switch (changeType) {
     case 'added':
-      commit(types.ADD, payload)
+      commit(types.ADD, payload.data)
       break
     case 'modified':
-      commit(types.MODIFY, payload)
+      commit(types.MODIFY, payload.data)
       break
     default:
-      commit(types.REMOVE, payload)
+      commit(types.REMOVE, payload.data)
       break
   }
 }
