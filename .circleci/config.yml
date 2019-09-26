@@ -16,6 +16,10 @@ jobs:
           command: npm install --no-save
           working_directory: ./
 
+      - run:
+          command: npm rebuild
+          working_directory: ./
+
       - save_cache:
           key: v1-npm-dependencies-{{ checksum "./package.json" }}
           paths:
