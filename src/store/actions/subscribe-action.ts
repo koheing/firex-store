@@ -1,13 +1,13 @@
 import { ActionTree } from 'vuex'
 import { actionTypes } from '../types/action'
 import { subscribeFirestore, isDocumentRef } from '../helpers'
-import { CriteriaOptions } from '../../options'
+import { SubscribeCriteriaOptions } from '../../options'
 import { FirestoreRef } from '../../types'
 
 interface Criteria<T = any> {
   ref: FirestoreRef
   actionName?: string
-  options?: CriteriaOptions<T>
+  options?: SubscribeCriteriaOptions<T>
 }
 
 export const firestoreSubscribeActions = <T = any>({

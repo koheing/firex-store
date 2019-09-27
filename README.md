@@ -4,7 +4,7 @@
 [![CircleCI](https://circleci.com/gh/nor-ko-hi-jp/firex-store.svg?style=svg)](https://circleci.com/gh/nor-ko-hi-jp/firex-store)
 
 - If you use this npm, you can reference firestore data, easily
-- It is influenced by [vuexfire](https://github.com/vuejs/vuefire)
+- It is inspired by [vuexfire](https://github.com/vuejs/vuefire)
 
 - node v8.9.4 ~
 
@@ -87,7 +87,7 @@ export default {
 
   - ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
   - actionName?: action property you want to define.
-  - options?: see [Options](#Options)
+  - options?: see [Options](#options)
 
 Ex. subscribe collection
 
@@ -162,7 +162,7 @@ export default {
   - state: State
   - commit: Commit
   - ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
-  - options?: see [Options](#Options)
+  - options?: see [Options](#options)
 
 ```javascript
 export default {
@@ -278,7 +278,7 @@ export default {
 - argments:
 
   - ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
-  - options?: see [Options](#Options)
+  - options?: see [Options](#options)
 
 EX. call in Store Action, to fetch collection
 
@@ -314,6 +314,11 @@ export default {
 
     - If it defined, call it when completed
 
+  - afterMutationCalled
+
+    - `subscribeFirestore` and `subscribeFirestoreActions` only.
+    - this method called after mutation called
+
 Ex.
 
 ```javascript
@@ -337,6 +342,15 @@ const onCompleted = () => {
 ```
 
 ```javascript
+const afterMutationCalled = (payload: Payload) => {
+  /**
+   * payload = { data: any, [key: string]: any }
+   * */
+  console.log(payload)
+}
+```
+
+```javascript
 export default {
   namespaced: true,
   state: {
@@ -355,7 +369,8 @@ export default {
         options: {
           mapper: mapUser,
           errorHandler,
-          onCompleted
+          onCompleted,
+          afterMutationCalled
         }
       })
     }

@@ -5,7 +5,7 @@ import {
 } from '../configurations'
 import { FirestoreService } from '../../service'
 import { FirestoreRef, FireMutation } from '../../types'
-import { CriteriaOptions } from '../../options'
+import { SubscribeCriteriaOptions } from '../../options'
 import { isDocumentRef } from './is-document-ref'
 import { fireMutation } from './fire-mutation'
 
@@ -13,7 +13,7 @@ interface Criteria<T, U> {
   state: any
   commit: Commit
   ref: T
-  options?: CriteriaOptions<U>
+  options?: SubscribeCriteriaOptions<U>
 }
 
 const subscribeFirestoreCollection = <T = any>({
