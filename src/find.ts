@@ -1,11 +1,11 @@
 import { FirestoreService } from './service'
-import { CriteriaOptions } from './criteria-options.interface'
+import { FindCriteriaOptions } from './options'
 import { FirestoreRef } from './types'
 import { isDocumentRef } from './store/helpers/is-document-ref'
 
 interface Criteria<T, U> {
   ref: T
-  options?: CriteriaOptions<U>
+  options?: FindCriteriaOptions<U>
 }
 
 export const findFirestore = <T = any>({

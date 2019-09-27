@@ -1,3 +1,3 @@
-import { DocumentResult } from '../models'
+import { Payload } from '../models'
 
-export type AfterMutationCalled = (data?: DocumentResult | any | void) => any
+export type AfterMutationCalled = (data?: Payload | any | void) => any
