@@ -1,15 +1,15 @@
 import { FireMutation } from '../types'
 import { Unsubscribe } from 'firebase'
-import { CriteriaOptions } from '../options'
+import { SubscribeCriteriaOptions, FindCriteriaOptions } from '../options'
 import { Payload } from '../models'
 import { mapToIfDefined } from './utils'
 
-interface SubscribeCriteria<T, U> extends CriteriaOptions<T> {
+interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
   ref: U
   fireMutation: FireMutation
 }
 
-interface FindCriteria<T, U> extends CriteriaOptions<T> {
+interface FindCriteria<T, U> extends FindCriteriaOptions<T> {
   ref: U
 }
 
@@ -19,7 +19,8 @@ export class FirestoreService {
     fireMutation,
     mapper,
     errorHandler,
-    onCompleted
+    onCompleted,
+    afterMutationCalled
   }: SubscribeCriteria<T, firebase.firestore.DocumentReference>): Unsubscribe {
     return ref.onSnapshot(
       (doc) => {
@@ -30,6 +31,10 @@ export class FirestoreService {
         const payload: Payload = { data }
 
         fireMutation('added', payload)
+
+        if (afterMutationCalled) {
+          afterMutationCalled(payload)
+        }
       },
       (error: any) =>
         errorHandler ? errorHandler(error) : console.error(error),
@@ -47,7 +52,8 @@ export class FirestoreService {
     fireMutation,
     mapper,
     errorHandler,
-    onCompleted
+    onCompleted,
+    afterMutationCalled
   }: SubscribeCriteria<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
@@ -62,6 +68,10 @@ export class FirestoreService {
           const payload: Payload = { data }
 
           fireMutation(change.type, payload)
+
+          if (afterMutationCalled) {
+            afterMutationCalled(payload)
+          }
         })
       },
       (error: any) =>
