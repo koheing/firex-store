@@ -10,4 +10,4 @@ import { Payload } from '../models'
  *   [key: string]: any
  * }
  */
-export type AfterMutationCalled = (payload?: Payload | any | void) => any
+export type AfterMutationCalled = (payload?: Payload) => void

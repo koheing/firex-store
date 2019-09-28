@@ -9,4 +9,4 @@ import { Payload } from '../models';
  *   [key: string]: any
  * }
  */
-export declare type AfterMutationCalled = (payload?: Payload | any | void) => any;
+export declare type AfterMutationCalled = (payload?: Payload) => void;
