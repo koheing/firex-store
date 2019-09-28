@@ -1,4 +1,7 @@
+import { DocumentResult } from './document-result.interface'
+
 export interface Payload {
-  data: any
+  data: DocumentResult
+  isLast?: boolean
   [key: string]: any
 }

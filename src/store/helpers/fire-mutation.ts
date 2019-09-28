@@ -22,13 +22,13 @@ export const fireMutation = ({
       : mutationTypes.collection
   switch (changeType) {
     case 'added':
-      commit(types.ADD, payload.data)
+      commit(types.ADD, payload)
       break
     case 'modified':
-      commit(types.MODIFY, payload.data)
+      commit(types.MODIFY, payload)
       break
     default:
-      commit(types.REMOVE, payload.data)
+      commit(types.REMOVE, payload)
       break
   }
 }
