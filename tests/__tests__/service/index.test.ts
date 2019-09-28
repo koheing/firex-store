@@ -5,57 +5,103 @@ import { MockQueryReference } from '../../mocks/mock-query-reference'
 import { MockQuerySnapshot } from '../../mocks/mock-query-snapshot'
 
 describe('FirestoreService', () => {
-  it('find: return vaule', () => {
+  it('find: return vaule', async (done) => {
     const ref = new MockDocumentReference(
       Promise.resolve(new MockDocumentSnapshot())
     )
     const errorHandler = (error?: any) => jest.fn()
     const onCompleted = jest.fn()
-    FirestoreService.find({
+    const result = await FirestoreService.find({
       ref,
       errorHandler,
       onCompleted
-    }).then((result) => {
-      expect(result.name).toEqual('test')
-      expect(onCompleted).toHaveBeenCalled()
     })
+    expect(result.name).toEqual('test')
+    expect(onCompleted).toHaveBeenCalled()
+    done()
   })
 
-  it('find: error occured', () => {
+  it('find: error occured', async (done) => {
     const ref = new MockDocumentReference(
       Promise.reject({ message: 'test error' } as Error)
     )
     const errorHandler = jest.fn()
-    FirestoreService.find({
+    const result = await FirestoreService.find({
       ref,
       errorHandler
-    }).then((result) => {
-      expect(errorHandler).toHaveBeenCalled()
     })
+    expect(errorHandler).toHaveBeenCalled()
+    done()
   })
 
-  it('findAll: return vaule', () => {
+  it('find: return null', async (done) => {
+    const ref = new MockDocumentReference(
+      Promise.resolve(new MockDocumentSnapshot(false, null))
+    )
+    const errorHandler = (error?: any) => jest.fn()
+    const onCompleted = jest.fn()
+    const result = await FirestoreService.find({
+      ref,
+      errorHandler,
+      onCompleted
+    })
+    expect(result).toBeNull()
+    expect(onCompleted).toHaveBeenCalled()
+    done()
+  })
+
+  it('findAll: return vaule', async (done) => {
     const ref = new MockQueryReference(Promise.resolve(new MockQuerySnapshot()))
     const onCompleted = jest.fn()
-    FirestoreService.findAll({
+    const result = await FirestoreService.findAll({
       ref,
       onCompleted
-    }).then((result) => {
-      expect(result[0].count).toEqual(0)
-      expect(onCompleted).toHaveBeenCalled()
     })
+    expect(result[0].count).toEqual(0)
+    expect(onCompleted).toHaveBeenCalled()
+    done()
   })
 
-  it('findAll: error occured', () => {
+  it('findAll: error occured', async (done) => {
     const ref = new MockQueryReference(
       Promise.reject({ message: 'test error' } as Error)
     )
     const errorHandler = jest.fn()
-    FirestoreService.findAll({
+    const result = await FirestoreService.findAll({
       ref,
       errorHandler
-    }).then((result) => {
-      expect(errorHandler).toHaveBeenCalled()
     })
+    expect(errorHandler).toHaveBeenCalled()
+    done()
+  })
+
+  it('findAll: return null . querySnapshot is null', async (done) => {
+    const ref = new MockQueryReference(
+      Promise.resolve(new MockQuerySnapshot(true))
+    )
+    const onCompleted = jest.fn()
+    const result = await FirestoreService.findAll({
+      ref,
+      onCompleted
+    })
+    expect(result).toBeNull()
+    expect(onCompleted).toHaveBeenCalled()
+    done()
+  })
+
+  it('findAll: return null . documentSnapshot is null', async (done) => {
+    const ref = new MockQueryReference(
+      Promise.resolve(
+        new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
+      )
+    )
+    const onCompleted = jest.fn()
+    const result = await FirestoreService.findAll({
+      ref,
+      onCompleted
+    })
+    expect(result).toBeNull()
+    expect(onCompleted).toHaveBeenCalled()
+    done()
   })
 })
