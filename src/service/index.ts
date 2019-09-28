@@ -28,7 +28,7 @@ export class FirestoreService {
           return
         }
         const data = mapToIfDefined(doc, mapper)
-        const payload: Payload = { data }
+        const payload: Payload = { data, isLast: true }
 
         fireMutation('added', payload)
 
@@ -60,12 +60,13 @@ export class FirestoreService {
   >): Unsubscribe {
     return ref.onSnapshot(
       (snapshot) => {
-        snapshot.docChanges().forEach((change) => {
+        const length = snapshot.docChanges().length
+        snapshot.docChanges().forEach((change, index) => {
           if (!change.doc.exists) {
             return
           }
           const data = mapToIfDefined(change.doc, mapper)
-          const payload: Payload = { data }
+          const payload: Payload = { data, isLast: length === index + 1 }
 
           fireMutation(change.type, payload)
 
