@@ -8,10 +8,7 @@ export class MockQuerySnapshot {
     fromCache: false,
     isEqual: jest.fn()
   }
-  docs: firebase.firestore.QueryDocumentSnapshot[] = [
-    new MockDocumentSnapshot(),
-    new MockDocumentSnapshot({ name: 'test0002', count: 1 })
-  ]
+  docs: firebase.firestore.QueryDocumentSnapshot[]
   size = 2
   empty = false
 
@@ -25,7 +22,7 @@ export class MockQuerySnapshot {
       },
       {
         type: 'added',
-        doc: new MockDocumentSnapshot({ name: 'test0002', count: 1 }),
+        doc: new MockDocumentSnapshot(true, { name: 'test0002', count: 1 }),
         oldIndex: 1,
         newIndex: 1
       }
@@ -35,4 +32,15 @@ export class MockQuerySnapshot {
   forEach = jest.fn()
 
   isEqual = jest.fn()
+
+  constructor(
+    empty = false,
+    docs = [
+      new MockDocumentSnapshot(),
+      new MockDocumentSnapshot(true, { name: 'test0002', count: 1 })
+    ]
+  ) {
+    this.empty = empty
+    this.docs = docs
+  }
 }

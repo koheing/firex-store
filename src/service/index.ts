@@ -1,12 +1,12 @@
-import { FireMutation } from '../types'
+import { CallMutation, NullOr } from '../types'
 import { Unsubscribe } from 'firebase'
 import { SubscribeCriteriaOptions, FindCriteriaOptions } from '../options'
 import { Payload } from '../models'
-import { mapToIfDefined } from './utils'
+import { mapToIfDefined } from './helpers'
 
 interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
   ref: U
-  fireMutation: FireMutation
+  callMutation: CallMutation
 }
 
 interface FindCriteria<T, U> extends FindCriteriaOptions<T> {
@@ -16,7 +16,7 @@ interface FindCriteria<T, U> extends FindCriteriaOptions<T> {
 export class FirestoreService {
   static subscribe<T = any>({
     ref,
-    fireMutation,
+    callMutation,
     mapper,
     errorHandler,
     onCompleted,
@@ -30,7 +30,7 @@ export class FirestoreService {
         const data = mapToIfDefined(doc, mapper)
         const payload: Payload = { data, isLast: true }
 
-        fireMutation('added', payload)
+        callMutation('added', payload)
 
         if (afterMutationCalled) {
           afterMutationCalled(payload)
@@ -49,7 +49,7 @@ export class FirestoreService {
 
   static subscribeAll<T = any>({
     ref,
-    fireMutation,
+    callMutation,
     mapper,
     errorHandler,
     onCompleted,
@@ -68,7 +68,7 @@ export class FirestoreService {
           const data = mapToIfDefined(change.doc, mapper)
           const payload: Payload = { data, isLast: length === index + 1 }
 
-          fireMutation(change.type, payload)
+          callMutation(change.type, payload)
 
           if (afterMutationCalled) {
             afterMutationCalled(payload)
@@ -91,18 +91,12 @@ export class FirestoreService {
     mapper,
     errorHandler,
     onCompleted
-  }: FindCriteria<T, firebase.firestore.DocumentReference>): Promise<T | any> {
+  }: FindCriteria<T, firebase.firestore.DocumentReference>): Promise<
+    NullOr<T | any>
+  > {
     const result = await ref
       .get()
-      .then((doc) => {
-        if (!doc.exists) {
-          return
-        }
-
-        const payload = mapToIfDefined(doc, mapper)
-
-        return payload
-      })
+      .then((doc) => (!doc.exists ? null : mapToIfDefined(doc, mapper)))
       .catch((error: any) =>
         errorHandler ? errorHandler(error) : console.error(error)
       )
@@ -121,19 +115,20 @@ export class FirestoreService {
   }: FindCriteria<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
-  >): Promise<T[] | any | any[]> {
+  >): Promise<NullOr<T[] | any | any[]>> {
     const result = await ref
       .get()
       .then((snapshot) =>
-        snapshot.docs.map((doc) => {
-          if (!doc.exists) {
-            return
-          }
-          const payload = mapToIfDefined(doc, mapper)
-
-          return payload
-        })
+        snapshot.empty
+          ? []
+          : snapshot.docs.map((doc) =>
+              !doc.exists ? null : mapToIfDefined(doc, mapper)
+            )
       )
+      .then((documentResults) => {
+        const resultWithoutNull = documentResults.filter((it) => it !== null)
+        return resultWithoutNull.length > 0 ? resultWithoutNull : null
+      })
       .catch((error: any) =>
         errorHandler ? errorHandler(error) : console.error(error)
       )

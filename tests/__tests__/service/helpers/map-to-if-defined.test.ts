@@ -1,4 +1,4 @@
-import { mapToIfDefined } from '../../../../src/service/utils'
+import { mapToIfDefined } from '../../../../src/service/helpers'
 import { MockDocumentSnapshot } from '../../../mocks/mock-document-snapshot'
 import * as jest from 'jest'
 

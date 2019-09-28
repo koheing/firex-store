@@ -3,7 +3,6 @@ import { firestore } from './firebase'
 export class MockDocumentSnapshot {
   id = 'test0001'
   ref = firestore.collection('/test').doc('testpath')
-  exists = true
   metadata = {
     hasPendingWrites: false,
     fromCache: false,
@@ -11,13 +10,16 @@ export class MockDocumentSnapshot {
   }
 
   _data: any
+  exists: boolean
   constructor(
-    data: { name: string; count: number } = {
+    exists: boolean = true,
+    data: { name: string; count: number } | null = {
       name: 'test',
       count: 0
     }
   ) {
     this._data = data
+    this.exists = exists
   }
 
   data() {

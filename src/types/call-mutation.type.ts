@@ -1,6 +1,6 @@
 import { firestore } from 'firebase'
 
-export type FireMutation = (
+export type CallMutation = (
   changeType: firestore.DocumentChangeType,
   payload: any
 ) => void
