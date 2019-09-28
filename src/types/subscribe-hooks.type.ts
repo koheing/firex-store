@@ -1,3 +1,13 @@
 import { Payload } from '../models'
 
-export type AfterMutationCalled = (data?: Payload | any | void) => any
+/**
+ * @description Payload = {
+ *   data?: {
+ *     docId: string | null,
+ *     [key: string]: any
+ *   },
+ *   isLast?: boolean,
+ *   [key: string]: any
+ * }
+ */
+export type AfterMutationCalled = (payload?: Payload | any | void) => any

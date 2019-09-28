@@ -59,8 +59,8 @@ export const firestore = firebase.firestore()
 
 - method: `firestoreMutations`
 - argments:
-  - stateKey: you want to bind in the state
-  - mutationType: 'collection' or 'document'
+  - statePropName: you want to bind in the state
+  - type: 'collection' or 'document'
 
 Ex. subscribe collection
 
@@ -134,8 +134,8 @@ export default {
 
 - method: `firestoreMutations`
 - argments:
-  - stateKey: you want to bind in the state
-  - mutationType: 'collection' or 'document'
+  - statePropName: you want to bind in the state
+  - type: 'collection' or 'document'
 
 Ex. subscribe collection
 
@@ -344,7 +344,10 @@ const onCompleted = () => {
 ```javascript
 const afterMutationCalled = (payload: Payload) => {
   /**
-   * payload = { data: any, [key: string]: any }
+   * payload = {
+   *   data: { docId: string | null, [key: string]: any },
+   *   isLast: boolean [key: string]: any
+   * }
    * */
   console.log(payload)
 }

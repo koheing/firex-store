@@ -8,6 +8,7 @@ import { FirestoreRef, FireMutation } from '../../types'
 import { SubscribeCriteriaOptions } from '../../options'
 import { isDocumentRef } from './is-document-ref'
 import { fireMutation } from './fire-mutation'
+import { Payload } from '../../models'
 
 interface Criteria<T, U> {
   state: any
@@ -54,7 +55,7 @@ const subscribeFirestoreDocument = <T = any>({
 
   const mutation: FireMutation = (
     changeType: firebase.firestore.DocumentChangeType,
-    payload: any
+    payload: Payload
   ) => fireMutation({ mutationType: 'document', changeType, commit, payload })
   const unsubscriber = FirestoreService.subscribe({
     ref,
