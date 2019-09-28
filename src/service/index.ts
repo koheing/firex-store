@@ -1,4 +1,4 @@
-import { FireMutation, NullOr } from '../types'
+import { CallMutation, NullOr } from '../types'
 import { Unsubscribe } from 'firebase'
 import { SubscribeCriteriaOptions, FindCriteriaOptions } from '../options'
 import { Payload } from '../models'
@@ -6,7 +6,7 @@ import { mapToIfDefined } from './helpers'
 
 interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
   ref: U
-  fireMutation: FireMutation
+  callMutation: CallMutation
 }
 
 interface FindCriteria<T, U> extends FindCriteriaOptions<T> {
@@ -16,7 +16,7 @@ interface FindCriteria<T, U> extends FindCriteriaOptions<T> {
 export class FirestoreService {
   static subscribe<T = any>({
     ref,
-    fireMutation,
+    callMutation,
     mapper,
     errorHandler,
     onCompleted,
@@ -30,7 +30,7 @@ export class FirestoreService {
         const data = mapToIfDefined(doc, mapper)
         const payload: Payload = { data, isLast: true }
 
-        fireMutation('added', payload)
+        callMutation('added', payload)
 
         if (afterMutationCalled) {
           afterMutationCalled(payload)
@@ -49,7 +49,7 @@ export class FirestoreService {
 
   static subscribeAll<T = any>({
     ref,
-    fireMutation,
+    callMutation,
     mapper,
     errorHandler,
     onCompleted,
@@ -68,7 +68,7 @@ export class FirestoreService {
           const data = mapToIfDefined(change.doc, mapper)
           const payload: Payload = { data, isLast: length === index + 1 }
 
-          fireMutation(change.type, payload)
+          callMutation(change.type, payload)
 
           if (afterMutationCalled) {
             afterMutationCalled(payload)

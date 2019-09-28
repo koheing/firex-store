@@ -2,7 +2,7 @@ import { createLocalVue } from '@vue/test-utils'
 import * as Vuex from 'vuex'
 import { Store } from 'vuex'
 import { firestoreMutations } from '../../../../src'
-import { fireMutation } from '../../../../src/store/helpers/fire-mutation'
+import { callMutation } from '../../../../src/store/helpers/call-mutation'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -24,7 +24,7 @@ describe('fire-mutations', () => {
           },
           actions: {
             add: ({ state, commit }, payload) => {
-              fireMutation({
+              callMutation({
                 mutationType: 'document',
                 changeType: 'added',
                 commit,
@@ -32,7 +32,7 @@ describe('fire-mutations', () => {
               })
             },
             modify: ({ state, commit }, payload) => {
-              fireMutation({
+              callMutation({
                 mutationType: 'document',
                 changeType: 'modified',
                 commit,
@@ -40,7 +40,7 @@ describe('fire-mutations', () => {
               })
             },
             remove: ({ commit }, payload) => {
-              fireMutation({
+              callMutation({
                 mutationType: 'document',
                 changeType: 'removed',
                 commit,
@@ -63,7 +63,7 @@ describe('fire-mutations', () => {
           },
           actions: {
             add: ({ state, commit }, payload) => {
-              fireMutation({
+              callMutation({
                 mutationType: 'collection',
                 changeType: 'added',
                 commit,

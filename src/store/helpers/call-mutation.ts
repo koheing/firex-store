@@ -10,7 +10,7 @@ interface Criteria {
   payload: Payload
 }
 
-export const fireMutation = ({
+export const callMutation = ({
   mutationType,
   changeType,
   commit,
