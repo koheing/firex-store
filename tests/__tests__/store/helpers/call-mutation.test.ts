@@ -7,7 +7,7 @@ import { callMutation } from '../../../../src/store/helpers/call-mutation'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
-describe('fire-mutations', () => {
+describe('call-mutations', () => {
   let store: Store<any>
 
   beforeEach(() => {
