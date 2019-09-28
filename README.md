@@ -317,6 +317,7 @@ export default {
   - afterMutationCalled
 
     - `subscribeFirestore` and `subscribeFirestoreActions` only.
+    - If it defined, call it when completed
     - this method called after mutation called
 
 Ex.
@@ -342,11 +343,12 @@ const onCompleted = () => {
 ```
 
 ```javascript
-const afterMutationCalled = (payload: Payload) => {
+const afterMutationCalled = (payload) => {
   /**
    * payload = {
    *   data: { docId: string | null, [key: string]: any },
-   *   isLast: boolean [key: string]: any
+   *   isLast: boolean,
+   *   [key: string]: any
    * }
    * */
   console.log(payload)
