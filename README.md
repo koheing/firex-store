@@ -39,7 +39,7 @@ others comming soon
 
 ### Before Start...
 
-- you must initailize firebase
+- You have to initailize firebase
 
 ```javascript
 .....
@@ -62,7 +62,7 @@ export const firestore = firebase.firestore()
   - statePropName: you want to bind in the state
   - type: 'collection' or 'document'
 
-Ex. subscribe collection
+Ex. Subscribe collection
 
 ```javascript
 
@@ -89,7 +89,7 @@ export default {
   - actionName?: action property you want to define.
   - options?: see [Options](#options)
 
-Ex. subscribe collection
+Ex. Subscribe collection
 
 ```javascript
 
@@ -112,7 +112,7 @@ export default {
 
 #### part3. Call firex-store actionType to subscribe data
 
-Ex. subscribe collection
+Ex. Subscribe collection
 
 ```javascript
 <script>
@@ -137,7 +137,7 @@ export default {
   - statePropName: you want to bind in the state
   - type: 'collection' or 'document'
 
-Ex. subscribe collection
+Ex. Subscribe collection
 
 ```javascript
 
@@ -190,7 +190,7 @@ export default {
 
 ### 3. Unsubscribe Firestore, using firex-store actions
 
-Ex. unsubscribe collection
+Ex. Unsubscribe collection
 
 #### part1. Add `firestoreUnsubscribeActions` in actions
 
@@ -280,7 +280,9 @@ export default {
   - ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
   - options?: see [Options](#options)
 
-EX. call in Store Action, to fetch collection
+- Return `null` if data not found
+
+EX. Call in Store Action, to fetch collection
 
 ```javascript
 export default {
@@ -318,7 +320,7 @@ export default {
 
     - `subscribeFirestore` and `subscribeFirestoreActions` only.
     - If it defined, call it when completed
-    - this method called after mutation called
+    - This method called after mutation called
 
 Ex.
 
