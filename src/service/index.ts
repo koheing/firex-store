@@ -5,7 +5,9 @@ import {
   mapToIfDefined,
   callDocumentMutation,
   callCollectionMutation,
-  notifyNotFound
+  notifyNotFound,
+  notifyErrorOccurred,
+  notifyCompletionIfDefined
 } from './helpers'
 
 interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
@@ -37,13 +39,8 @@ export class FirestoreService {
               mapper,
               afterMutationCalled
             }),
-      (error: any) =>
-        errorHandler ? errorHandler(error) : console.error(error),
-      () => {
-        if (completionHandler) {
-          completionHandler()
-        }
-      }
+      (error: any) => notifyErrorOccurred(error, errorHandler),
+      () => notifyCompletionIfDefined(completionHandler)
     )
   }
 
@@ -71,13 +68,8 @@ export class FirestoreService {
               notifyNotFound: () =>
                 notifyNotFound('collection', notFoundHandler, false)
             }),
-      (error: any) =>
-        errorHandler ? errorHandler(error) : console.error(error),
-      () => {
-        if (completionHandler) {
-          completionHandler()
-        }
-      }
+      (error: any) => notifyErrorOccurred(error, errorHandler),
+      () => notifyCompletionIfDefined(completionHandler)
     )
   }
 
@@ -92,13 +84,9 @@ export class FirestoreService {
     const result = await ref
       .get()
       .then((doc) => (!doc.exists ? null : mapToIfDefined(doc, mapper)))
-      .catch((error: any) =>
-        errorHandler ? errorHandler(error) : console.error(error)
-      )
+      .catch((error: any) => notifyErrorOccurred(error, errorHandler))
 
-    if (completionHandler) {
-      completionHandler()
-    }
+    notifyCompletionIfDefined(completionHandler)
     return result
   }
 
@@ -124,13 +112,9 @@ export class FirestoreService {
         const resultWithoutNull = documentResults.filter((it) => it !== null)
         return resultWithoutNull.length > 0 ? resultWithoutNull : null
       })
-      .catch((error: any) =>
-        errorHandler ? errorHandler(error) : console.error(error)
-      )
+      .catch((error: any) => notifyErrorOccurred(error, errorHandler))
 
-    if (completionHandler) {
-      completionHandler()
-    }
+    notifyCompletionIfDefined(completionHandler)
 
     return result
   }
