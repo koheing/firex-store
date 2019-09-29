@@ -28,7 +28,7 @@ export const callDocumentMutation = <T = any>({
   afterMutationCalled
 }: DocumentCriteria<T>) => {
   const _type = type ? type : 'added'
-  const _isLast: boolean = isLast ? isLast : true
+  const _isLast: boolean = typeof isLast !== 'undefined' ? isLast : true
 
   const data = mapToIfDefined(snapshot, mapper)
   const payload: Payload = { data, isLast: _isLast }
