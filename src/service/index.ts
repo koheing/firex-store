@@ -40,10 +40,9 @@ export class FirestoreService {
       (error: any) =>
         errorHandler ? errorHandler(error) : console.error(error),
       () => {
-        if (!completionHandler) {
-          return
+        if (completionHandler) {
+          completionHandler()
         }
-        completionHandler()
       }
     )
   }
@@ -75,10 +74,9 @@ export class FirestoreService {
       (error: any) =>
         errorHandler ? errorHandler(error) : console.error(error),
       () => {
-        if (!completionHandler) {
-          return
+        if (completionHandler) {
+          completionHandler()
         }
-        completionHandler()
       }
     )
   }
