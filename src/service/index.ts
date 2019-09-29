@@ -1,8 +1,11 @@
 import { CallMutation, NullOr } from '../types'
 import { Unsubscribe } from 'firebase'
 import { SubscribeCriteriaOptions, FindCriteriaOptions } from '../options'
-import { Payload } from '../models'
-import { mapToIfDefined, fireMutation } from './helpers'
+import {
+  mapToIfDefined,
+  callDocumentMutation,
+  callCollectionMutation
+} from './helpers'
 
 interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
   ref: U
@@ -19,20 +22,20 @@ export class FirestoreService {
     callMutation,
     mapper,
     errorHandler,
-    onCompleted,
+    completionHandler,
     afterMutationCalled,
-    onDataNotFound
+    notFoundHandler
   }: SubscribeCriteria<T, firebase.firestore.DocumentReference>): Unsubscribe {
     const notifyNotFound = () =>
-      onDataNotFound ? onDataNotFound('document') : ''
+      notFoundHandler
+        ? notFoundHandler('document')
+        : console.log('data not found')
     return ref.onSnapshot(
       (doc) => {
         !doc.exists
           ? notifyNotFound()
-          : fireMutation({
+          : callDocumentMutation({
               snapshot: doc,
-              type: 'added',
-              isLast: true,
               callMutation,
               mapper,
               afterMutationCalled
@@ -41,10 +44,10 @@ export class FirestoreService {
       (error: any) =>
         errorHandler ? errorHandler(error) : console.error(error),
       () => {
-        if (!onCompleted) {
+        if (!completionHandler) {
           return
         }
-        onCompleted()
+        completionHandler()
       }
     )
   }
@@ -54,37 +57,36 @@ export class FirestoreService {
     callMutation,
     mapper,
     errorHandler,
-    onCompleted,
+    completionHandler,
     afterMutationCalled,
-    onDataNotFound
+    notFoundHandler
   }: SubscribeCriteria<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
   >): Unsubscribe {
+    const notifyNotFound = (isAll: boolean) =>
+      notFoundHandler
+        ? notFoundHandler('collection', isAll)
+        : console.log('data not found')
     return ref.onSnapshot(
       (snapshot) => {
-        const length = snapshot.docChanges().length
-        snapshot.docChanges().forEach((change, index) => {
-          if (!change.doc.exists) {
-            return
-          }
-          const data = mapToIfDefined(change.doc, mapper)
-          const payload: Payload = { data, isLast: length === index + 1 }
-
-          callMutation(change.type, payload)
-
-          if (afterMutationCalled) {
-            afterMutationCalled(payload)
-          }
-        })
+        snapshot.empty
+          ? notifyNotFound(true)
+          : callCollectionMutation({
+              snapshot,
+              callMutation,
+              mapper,
+              afterMutationCalled,
+              notifyNotFound
+            })
       },
       (error: any) =>
         errorHandler ? errorHandler(error) : console.error(error),
       () => {
-        if (!onCompleted) {
+        if (!completionHandler) {
           return
         }
-        onCompleted()
+        completionHandler()
       }
     )
   }
@@ -93,7 +95,7 @@ export class FirestoreService {
     ref,
     mapper,
     errorHandler,
-    onCompleted
+    completionHandler
   }: FindCriteria<T, firebase.firestore.DocumentReference>): Promise<
     NullOr<T | any>
   > {
@@ -104,8 +106,8 @@ export class FirestoreService {
         errorHandler ? errorHandler(error) : console.error(error)
       )
 
-    if (onCompleted) {
-      onCompleted()
+    if (completionHandler) {
+      completionHandler()
     }
     return result
   }
@@ -114,7 +116,7 @@ export class FirestoreService {
     ref,
     mapper,
     errorHandler,
-    onCompleted
+    completionHandler
   }: FindCriteria<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
@@ -136,8 +138,8 @@ export class FirestoreService {
         errorHandler ? errorHandler(error) : console.error(error)
       )
 
-    if (onCompleted) {
-      onCompleted()
+    if (completionHandler) {
+      completionHandler()
     }
 
     return result

@@ -1,8 +1,13 @@
-import { Mapper, ErrorHandler, OnCompleted, OnDataNotFound } from '../types'
+import {
+  Mapper,
+  ErrorHandler,
+  CompletionHandler,
+  NotFoundHandler
+} from '../types'
 
 export interface CriteriaOptions<T> {
   mapper?: Mapper<T>
   errorHandler?: ErrorHandler
-  onCompleted?: OnCompleted
-  onDataNotFound?: OnDataNotFound
+  completionHandler?: CompletionHandler
+  notFoundHandler?: NotFoundHandler
 }
