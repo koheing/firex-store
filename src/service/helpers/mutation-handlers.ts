@@ -51,7 +51,7 @@ export const callCollectionMutation = <T = any>({
   snapshot.docChanges().forEach((change, index) => {
     !change.doc.exists
       ? notifyNotFound()
-      : callDocumentMutation({
+      : callDocumentMutation<T>({
           snapshot: change.doc,
           callMutation,
           isLast: length === index + 1,

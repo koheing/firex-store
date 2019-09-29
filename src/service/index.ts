@@ -33,7 +33,7 @@ export class FirestoreService {
       (doc) =>
         !doc.exists
           ? notifyNotFound('document', notFoundHandler)
-          : callDocumentMutation({
+          : callDocumentMutation<T>({
               snapshot: doc,
               callMutation,
               mapper,
@@ -60,7 +60,7 @@ export class FirestoreService {
       (snapshot) =>
         snapshot.empty
           ? notifyNotFound('collection', notFoundHandler, true)
-          : callCollectionMutation({
+          : callCollectionMutation<T>({
               snapshot,
               callMutation,
               mapper,
