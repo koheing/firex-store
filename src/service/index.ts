@@ -4,7 +4,8 @@ import { SubscribeCriteriaOptions, FindCriteriaOptions } from '../options'
 import {
   mapToIfDefined,
   callDocumentMutation,
-  callCollectionMutation
+  callCollectionMutation,
+  notifyNotFound
 } from './helpers'
 
 interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
@@ -26,21 +27,16 @@ export class FirestoreService {
     afterMutationCalled,
     notFoundHandler
   }: SubscribeCriteria<T, firebase.firestore.DocumentReference>): Unsubscribe {
-    const notifyNotFound = () =>
-      notFoundHandler
-        ? notFoundHandler('document')
-        : console.log('data not found')
     return ref.onSnapshot(
-      (doc) => {
+      (doc) =>
         !doc.exists
-          ? notifyNotFound()
+          ? notifyNotFound('document', notFoundHandler)
           : callDocumentMutation({
               snapshot: doc,
               callMutation,
               mapper,
               afterMutationCalled
-            })
-      },
+            }),
       (error: any) =>
         errorHandler ? errorHandler(error) : console.error(error),
       () => {
@@ -64,22 +60,18 @@ export class FirestoreService {
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
   >): Unsubscribe {
-    const notifyNotFound = (isAll: boolean) =>
-      notFoundHandler
-        ? notFoundHandler('collection', isAll)
-        : console.log('data not found')
     return ref.onSnapshot(
-      (snapshot) => {
+      (snapshot) =>
         snapshot.empty
-          ? notifyNotFound(true)
+          ? notifyNotFound('collection', notFoundHandler, true)
           : callCollectionMutation({
               snapshot,
               callMutation,
               mapper,
               afterMutationCalled,
-              notifyNotFound
-            })
-      },
+              notifyNotFound: () =>
+                notifyNotFound('collection', notFoundHandler, false)
+            }),
       (error: any) =>
         errorHandler ? errorHandler(error) : console.error(error),
       () => {

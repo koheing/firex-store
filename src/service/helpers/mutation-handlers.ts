@@ -14,7 +14,7 @@ interface DocumentCriteria<T> {
 interface CollectionCriteria<T> {
   snapshot: firebase.firestore.QuerySnapshot
   callMutation: CallMutation
-  notifyNotFound: (isAll: boolean) => void
+  notifyNotFound: () => void
   mapper?: Mapper<T>
   afterMutationCalled?: AfterMutationCalled
 }
@@ -50,7 +50,7 @@ export const callCollectionMutation = <T = any>({
   const length = snapshot.docChanges().length
   snapshot.docChanges().forEach((change, index) => {
     !change.doc.exists
-      ? notifyNotFound(false)
+      ? notifyNotFound()
       : callDocumentMutation({
           snapshot: change.doc,
           callMutation,
