@@ -10,7 +10,13 @@ export const notifyNotFound = (
   notFoundHandler?: NotFoundHandler,
   isAll?: boolean
 ) =>
-  notFoundHandler ? notFoundHandler(type, isAll) : console.log('DATA NOT FOUND')
+  notFoundHandler
+    ? notFoundHandler(type, isAll)
+    : console.log(
+        type === 'document' || (type === 'collection' && isAll! === true)
+          ? 'DATA NOT FOUND'
+          : 'PARTIAL DATA NOT FOUND'
+      )
 
 export const notifyErrorOccurred = (error: any, errorHandler?: ErrorHandler) =>
   errorHandler ? errorHandler(error) : console.error(error)

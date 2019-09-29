@@ -10,14 +10,14 @@ describe('FirestoreService', () => {
       Promise.resolve(new MockDocumentSnapshot())
     )
     const errorHandler = (error?: any) => jest.fn()
-    const onCompleted = jest.fn()
+    const completionHandler = jest.fn()
     const result = await FirestoreService.find({
       ref,
       errorHandler,
-      onCompleted
+      completionHandler
     })
     expect(result.name).toEqual('test')
-    expect(onCompleted).toHaveBeenCalled()
+    expect(completionHandler).toHaveBeenCalled()
     done()
   })
 
@@ -39,26 +39,26 @@ describe('FirestoreService', () => {
       Promise.resolve(new MockDocumentSnapshot(false, null))
     )
     const errorHandler = (error?: any) => jest.fn()
-    const onCompleted = jest.fn()
+    const completionHandler = jest.fn()
     const result = await FirestoreService.find({
       ref,
       errorHandler,
-      onCompleted
+      completionHandler
     })
     expect(result).toBeNull()
-    expect(onCompleted).toHaveBeenCalled()
+    expect(completionHandler).toHaveBeenCalled()
     done()
   })
 
   it('findAll: return vaule', async (done) => {
     const ref = new MockQueryReference(Promise.resolve(new MockQuerySnapshot()))
-    const onCompleted = jest.fn()
+    const completionHandler = jest.fn()
     const result = await FirestoreService.findAll({
       ref,
-      onCompleted
+      completionHandler
     })
     expect(result[0].count).toEqual(0)
-    expect(onCompleted).toHaveBeenCalled()
+    expect(completionHandler).toHaveBeenCalled()
     done()
   })
 
@@ -79,13 +79,13 @@ describe('FirestoreService', () => {
     const ref = new MockQueryReference(
       Promise.resolve(new MockQuerySnapshot(true))
     )
-    const onCompleted = jest.fn()
+    const completionHandler = jest.fn()
     const result = await FirestoreService.findAll({
       ref,
-      onCompleted
+      completionHandler
     })
     expect(result).toBeNull()
-    expect(onCompleted).toHaveBeenCalled()
+    expect(completionHandler).toHaveBeenCalled()
     done()
   })
 
@@ -95,13 +95,13 @@ describe('FirestoreService', () => {
         new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
       )
     )
-    const onCompleted = jest.fn()
+    const completionHandler = jest.fn()
     const result = await FirestoreService.findAll({
       ref,
-      onCompleted
+      completionHandler
     })
     expect(result).toBeNull()
-    expect(onCompleted).toHaveBeenCalled()
+    expect(completionHandler).toHaveBeenCalled()
     done()
   })
 })
