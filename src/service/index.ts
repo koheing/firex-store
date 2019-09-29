@@ -2,7 +2,7 @@ import { CallMutation, NullOr } from '../types'
 import { Unsubscribe } from 'firebase'
 import { SubscribeCriteriaOptions, FindCriteriaOptions } from '../options'
 import { Payload } from '../models'
-import { mapToIfDefined } from './helpers'
+import { mapToIfDefined, fireMutation } from './helpers'
 
 interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
   ref: U
@@ -20,21 +20,23 @@ export class FirestoreService {
     mapper,
     errorHandler,
     onCompleted,
-    afterMutationCalled
+    afterMutationCalled,
+    onDataNotFound
   }: SubscribeCriteria<T, firebase.firestore.DocumentReference>): Unsubscribe {
+    const notifyNotFound = () =>
+      onDataNotFound ? onDataNotFound('document') : ''
     return ref.onSnapshot(
       (doc) => {
-        if (!doc.exists) {
-          return
-        }
-        const data = mapToIfDefined(doc, mapper)
-        const payload: Payload = { data, isLast: true }
-
-        callMutation('added', payload)
-
-        if (afterMutationCalled) {
-          afterMutationCalled(payload)
-        }
+        !doc.exists
+          ? notifyNotFound()
+          : fireMutation({
+              snapshot: doc,
+              type: 'added',
+              isLast: true,
+              callMutation,
+              mapper,
+              afterMutationCalled
+            })
       },
       (error: any) =>
         errorHandler ? errorHandler(error) : console.error(error),
@@ -53,7 +55,8 @@ export class FirestoreService {
     mapper,
     errorHandler,
     onCompleted,
-    afterMutationCalled
+    afterMutationCalled,
+    onDataNotFound
   }: SubscribeCriteria<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
