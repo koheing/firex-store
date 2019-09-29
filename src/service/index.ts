@@ -109,8 +109,8 @@ export class FirestoreService {
             )
       )
       .then((documentResults) => {
-        const resultWithoutNull = documentResults.filter((it) => it !== null)
-        return resultWithoutNull.length > 0 ? resultWithoutNull : null
+        const resultsWithoutNull = documentResults.filter((it) => it !== null)
+        return resultsWithoutNull.length > 0 ? resultsWithoutNull : null
       })
       .catch((error: any) => notifyErrorOccurred(error, errorHandler))
 
