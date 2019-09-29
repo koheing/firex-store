@@ -312,7 +312,11 @@ export default {
 
     - If it defined, call it when error occured. But if not, call `console.error(error)`
 
-  - onCompleted
+  - CompletionHandler
+
+    - If it defined, call it when completed
+
+  - OnCompleted   ※ It is obsoleted , ^0.7.0~
 
     - If it defined, call it when completed
 
@@ -339,7 +343,7 @@ const errorHandler = (error) => {
 ```
 
 ```javascript
-const onCompleted = () => {
+const completionHandler = () => {
   console.log('completed!')
 }
 ```
@@ -376,7 +380,8 @@ export default {
         options: {
           mapper: mapUser,
           errorHandler,
-          onCompleted,
+          completionHandler,
+          // onCompleted, <- obsoleted
           afterMutationCalled
         }
       })
