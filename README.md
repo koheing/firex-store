@@ -316,7 +316,7 @@ export default {
 
     - If it defined, call it when completed
 
-  - OnCompleted   ※ It is obsoleted , ^0.7.0~
+  - OnCompleted   ※ It is deprecated and removed on v1.0.0~
 
     - If it defined, call it when completed
 
