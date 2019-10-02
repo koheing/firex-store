@@ -41,7 +41,10 @@ export class FirestoreService {
               afterMutationCalled
             }),
       (error: any) => notifyErrorOccurred(error, errorHandler),
-      () => notifyCompletionIfDefined(completionHandler ? completionHandler : onCompleted)
+      () =>
+        notifyCompletionIfDefined(
+          completionHandler ? completionHandler : onCompleted
+        )
     )
   }
 
@@ -71,7 +74,10 @@ export class FirestoreService {
                 notifyNotFound('collection', notFoundHandler, false)
             }),
       (error: any) => notifyErrorOccurred(error, errorHandler),
-      () => notifyCompletionIfDefined(completionHandler ? completionHandler : onCompleted)
+      () =>
+        notifyCompletionIfDefined(
+          completionHandler ? completionHandler : onCompleted
+        )
     )
   }
 
@@ -89,7 +95,9 @@ export class FirestoreService {
       .then((doc) => (!doc.exists ? null : mapToIfDefined(doc, mapper)))
       .catch((error: any) => notifyErrorOccurred(error, errorHandler))
 
-    notifyCompletionIfDefined(completionHandler ? completionHandler : onCompleted)
+    notifyCompletionIfDefined(
+      completionHandler ? completionHandler : onCompleted
+    )
     return result
   }
 
@@ -118,7 +126,9 @@ export class FirestoreService {
       })
       .catch((error: any) => notifyErrorOccurred(error, errorHandler))
 
-    notifyCompletionIfDefined(completionHandler ? completionHandler : onCompleted)
+    notifyCompletionIfDefined(
+      completionHandler ? completionHandler : onCompleted
+    )
 
     return result
   }
