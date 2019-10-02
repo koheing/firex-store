@@ -1,4 +1,10 @@
 export * from './store'
 export { findFirestore } from './find'
-export { ErrorHandler, OnCompleted, Mapper, AfterMutationCalled } from './types'
+export {
+  Mapper,
+  AfterMutationCalled,
+  ErrorHandler,
+  CompletionHandler,
+  NotFoundHandler
+} from './types'
 export { Payload, DocumentResult } from './models'

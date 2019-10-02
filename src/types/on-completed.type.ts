@@ -1,1 +1,1 @@
-export type OnCompleted = () => void
+export type OnCompleted = () =>void
