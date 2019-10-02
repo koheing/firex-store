@@ -1,8 +1,14 @@
 import { CallMutation, NullOr } from '../types'
 import { Unsubscribe } from 'firebase'
 import { SubscribeCriteriaOptions, FindCriteriaOptions } from '../options'
-import { Payload } from '../models'
-import { mapToIfDefined } from './helpers'
+import {
+  mapToIfDefined,
+  callDocumentMutation,
+  callCollectionMutation,
+  notifyNotFound,
+  notifyErrorOccurred,
+  notifyCompletionIfDefined
+} from './helpers'
 
 interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
   ref: U
@@ -19,31 +25,23 @@ export class FirestoreService {
     callMutation,
     mapper,
     errorHandler,
-    onCompleted,
-    afterMutationCalled
+    completionHandler,
+    afterMutationCalled,
+    notFoundHandler,
+    onCompleted
   }: SubscribeCriteria<T, firebase.firestore.DocumentReference>): Unsubscribe {
     return ref.onSnapshot(
-      (doc) => {
-        if (!doc.exists) {
-          return
-        }
-        const data = mapToIfDefined(doc, mapper)
-        const payload: Payload = { data, isLast: true }
-
-        callMutation('added', payload)
-
-        if (afterMutationCalled) {
-          afterMutationCalled(payload)
-        }
-      },
-      (error: any) =>
-        errorHandler ? errorHandler(error) : console.error(error),
-      () => {
-        if (!onCompleted) {
-          return
-        }
-        onCompleted()
-      }
+      (doc) =>
+        !doc.exists
+          ? notifyNotFound('document', notFoundHandler)
+          : callDocumentMutation<T>({
+              snapshot: doc,
+              callMutation,
+              mapper,
+              afterMutationCalled
+            }),
+      (error: any) => notifyErrorOccurred(error, errorHandler),
+      () => notifyCompletionIfDefined(completionHandler ? completionHandler : onCompleted)
     )
   }
 
@@ -52,37 +50,28 @@ export class FirestoreService {
     callMutation,
     mapper,
     errorHandler,
-    onCompleted,
-    afterMutationCalled
+    completionHandler,
+    afterMutationCalled,
+    notFoundHandler,
+    onCompleted
   }: SubscribeCriteria<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
   >): Unsubscribe {
     return ref.onSnapshot(
-      (snapshot) => {
-        const length = snapshot.docChanges().length
-        snapshot.docChanges().forEach((change, index) => {
-          if (!change.doc.exists) {
-            return
-          }
-          const data = mapToIfDefined(change.doc, mapper)
-          const payload: Payload = { data, isLast: length === index + 1 }
-
-          callMutation(change.type, payload)
-
-          if (afterMutationCalled) {
-            afterMutationCalled(payload)
-          }
-        })
-      },
-      (error: any) =>
-        errorHandler ? errorHandler(error) : console.error(error),
-      () => {
-        if (!onCompleted) {
-          return
-        }
-        onCompleted()
-      }
+      (snapshot) =>
+        snapshot.empty
+          ? notifyNotFound('collection', notFoundHandler, true)
+          : callCollectionMutation<T>({
+              snapshot,
+              callMutation,
+              mapper,
+              afterMutationCalled,
+              notifyNotFound: () =>
+                notifyNotFound('collection', notFoundHandler, false)
+            }),
+      (error: any) => notifyErrorOccurred(error, errorHandler),
+      () => notifyCompletionIfDefined(completionHandler ? completionHandler : onCompleted)
     )
   }
 
@@ -90,6 +79,7 @@ export class FirestoreService {
     ref,
     mapper,
     errorHandler,
+    completionHandler,
     onCompleted
   }: FindCriteria<T, firebase.firestore.DocumentReference>): Promise<
     NullOr<T | any>
@@ -97,13 +87,9 @@ export class FirestoreService {
     const result = await ref
       .get()
       .then((doc) => (!doc.exists ? null : mapToIfDefined(doc, mapper)))
-      .catch((error: any) =>
-        errorHandler ? errorHandler(error) : console.error(error)
-      )
+      .catch((error: any) => notifyErrorOccurred(error, errorHandler))
 
-    if (onCompleted) {
-      onCompleted()
-    }
+    notifyCompletionIfDefined(completionHandler ? completionHandler : onCompleted)
     return result
   }
 
@@ -111,6 +97,7 @@ export class FirestoreService {
     ref,
     mapper,
     errorHandler,
+    completionHandler,
     onCompleted
   }: FindCriteria<
     T,
@@ -126,16 +113,12 @@ export class FirestoreService {
             )
       )
       .then((documentResults) => {
-        const resultWithoutNull = documentResults.filter((it) => it !== null)
-        return resultWithoutNull.length > 0 ? resultWithoutNull : null
+        const resultsWithoutNull = documentResults.filter((it) => it !== null)
+        return resultsWithoutNull.length > 0 ? resultsWithoutNull : null
       })
-      .catch((error: any) =>
-        errorHandler ? errorHandler(error) : console.error(error)
-      )
+      .catch((error: any) => notifyErrorOccurred(error, errorHandler))
 
-    if (onCompleted) {
-      onCompleted()
-    }
+    notifyCompletionIfDefined(completionHandler ? completionHandler : onCompleted)
 
     return result
   }
