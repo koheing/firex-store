@@ -2,7 +2,7 @@ import { CallMutation, NullOr } from '../types'
 import { Unsubscribe } from 'firebase'
 import { SubscribeCriteriaOptions, FindCriteriaOptions } from '../options'
 import {
-  mapToIfDefined,
+  toDocumentResult,
   callDocumentMutation,
   callCollectionMutation,
   notifyNotFound,
@@ -31,17 +31,20 @@ export class FirestoreService {
     onCompleted
   }: SubscribeCriteria<T, firebase.firestore.DocumentReference>): Unsubscribe {
     return ref.onSnapshot(
-      (doc) =>
-        !doc.exists
+      (snapshot) =>
+        !snapshot.exists
           ? notifyNotFound('document', notFoundHandler)
           : callDocumentMutation<T>({
-              snapshot: doc,
+              snapshot,
               callMutation,
               mapper,
               afterMutationCalled
             }),
       (error: any) => notifyErrorOccurred(error, errorHandler),
-      () => notifyCompletionIfDefined(completionHandler ? completionHandler : onCompleted)
+      () =>
+        notifyCompletionIfDefined(
+          completionHandler ? completionHandler : onCompleted
+        )
     )
   }
 
@@ -71,7 +74,10 @@ export class FirestoreService {
                 notifyNotFound('collection', notFoundHandler, false)
             }),
       (error: any) => notifyErrorOccurred(error, errorHandler),
-      () => notifyCompletionIfDefined(completionHandler ? completionHandler : onCompleted)
+      () =>
+        notifyCompletionIfDefined(
+          completionHandler ? completionHandler : onCompleted
+        )
     )
   }
 
@@ -86,10 +92,12 @@ export class FirestoreService {
   > {
     const result = await ref
       .get()
-      .then((doc) => (!doc.exists ? null : mapToIfDefined(doc, mapper)))
+      .then((doc) => (!doc.exists ? null : toDocumentResult(doc, mapper)))
       .catch((error: any) => notifyErrorOccurred(error, errorHandler))
 
-    notifyCompletionIfDefined(completionHandler ? completionHandler : onCompleted)
+    notifyCompletionIfDefined(
+      completionHandler ? completionHandler : onCompleted
+    )
     return result
   }
 
@@ -109,7 +117,7 @@ export class FirestoreService {
         snapshot.empty
           ? []
           : snapshot.docs.map((doc) =>
-              !doc.exists ? null : mapToIfDefined(doc, mapper)
+              !doc.exists ? null : toDocumentResult(doc, mapper)
             )
       )
       .then((documentResults) => {
@@ -118,7 +126,9 @@ export class FirestoreService {
       })
       .catch((error: any) => notifyErrorOccurred(error, errorHandler))
 
-    notifyCompletionIfDefined(completionHandler ? completionHandler : onCompleted)
+    notifyCompletionIfDefined(
+      completionHandler ? completionHandler : onCompleted
+    )
 
     return result
   }
