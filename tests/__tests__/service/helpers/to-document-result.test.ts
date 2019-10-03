@@ -1,12 +1,12 @@
-import { mapToIfDefined } from '../../../../src/service/helpers'
+import { toDocumentResult } from '../../../../src/service/helpers'
 import { MockDocumentSnapshot } from '../../../mocks/mock-document-snapshot'
 import * as jest from 'jest'
 
-describe('mapToIfDefined', () => {
+describe('toDocumentResult', () => {
   it('mapper not defined', () => {
     const snapshot: firebase.firestore.DocumentSnapshot = new MockDocumentSnapshot()
 
-    const result = mapToIfDefined(snapshot)
+    const result = toDocumentResult(snapshot)
 
     expect(result.name).toBe('test')
     expect(result.count).toBe(0)
@@ -19,7 +19,7 @@ describe('mapToIfDefined', () => {
       name: data.name,
       count: data.count + 1
     })
-    const result = mapToIfDefined(snapshot, mapper)
+    const result = toDocumentResult(snapshot, mapper)
 
     expect(result.docId).toBe('test0001')
     expect(result.name).toBe('test')

@@ -1,5 +1,5 @@
 import { Mapper, CallMutation, AfterMutationCalled } from '../../types'
-import { mapToIfDefined } from './map-to-if-defined'
+import { toDocumentResult } from './to-document-result'
 import { Payload } from '../../models'
 
 interface DocumentCriteria<T> {
@@ -30,7 +30,7 @@ export const callDocumentMutation = <T = any>({
   const _type = type ? type : 'added'
   const _isLast: boolean = typeof isLast !== 'undefined' ? isLast : true
 
-  const data = mapToIfDefined(snapshot, mapper)
+  const data = toDocumentResult(snapshot, mapper)
   const payload: Payload = { data, isLast: _isLast }
 
   callMutation(_type, payload)
