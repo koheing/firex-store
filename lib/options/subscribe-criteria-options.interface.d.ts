@@ -2,7 +2,7 @@ import { CriteriaOptions } from './criteria-options.interface';
 import { AfterMutationCalled, NotFoundHandler } from '../types';
 export interface SubscribeCriteriaOptions<T> extends CriteriaOptions<T> {
     /**
-     * @param afterMutationCalled convert subscribed data to something, if defined
+     * @param afterMutationCalled This method called after mutation called
      *   - `subscribeFirestore` and `subscribeFirestoreActions` only.
      *   - type: (payload: Payload) => void
      *     - payload = { data: { docId: string, [key: string]: any }, isLast: boolean }
