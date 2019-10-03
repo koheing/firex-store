@@ -326,6 +326,14 @@ export default {
     - If it defined, call it when completed
     - This method called after mutation called
 
+  - notFoundHandler
+    - If it defined, call it when snapshot doesn't exist
+    - type: 'document' | 'collection'
+    - isAll:
+      - undefined  when subscribe Document data
+      - true       when subscribe Collection data
+      - false      when subscribe Collection data and document in Collection is not existed
+    
 Ex.
 
 ```javascript
@@ -362,6 +370,12 @@ const afterMutationCalled = (payload) => {
 ```
 
 ```javascript
+const notFoundHandler = (type, isAll) => {
+  console.log('not found')
+}
+```
+
+```javascript
 export default {
   namespaced: true,
   state: {
@@ -381,8 +395,9 @@ export default {
           mapper: mapUser,
           errorHandler,
           completionHandler,
-          // onCompleted, <- obsoleted
-          afterMutationCalled
+          // onCompleted, <- deprecated
+          afterMutationCalled,
+          notFoundHandler
         }
       })
     }
