@@ -328,7 +328,7 @@ export default {
     - @param payload
       - type payload = {
          - data: { docId: string | null, [key: string]: any }, <-- subscribed data
-        - isLast: boolean,  <-- In subscribed 'document', it undefined. In subscribed 'collection', true or false.
+        - isLast: boolean,  <-- In 'document' subscribed , it undefined. In 'collection' subscribed, true or false.
           - UseCase: disappear and appear loading bar when subscribed 'collection' data at first 
         - [key: string]: any }
 
