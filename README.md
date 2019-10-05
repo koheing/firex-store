@@ -325,11 +325,18 @@ export default {
     - `subscribeFirestore` and `subscribeFirestoreActions` only.
     - If it defined, call it when completed
     - This method called after mutation called
+    - @param payload
+      - type payload = {
+         - data: { docId: string | null, [key: string]: any }, <-- subscribed data
+        - isLast: boolean,  <-- In subscribed 'document', it undefined. In subscribed 'collection', true or false.
+          - UseCase: disappear and appear loading bar when subscribed 'collection' data at first 
+        - [key: string]: any }
+
 
   - notFoundHandler
     - If it defined, call it when snapshot doesn't exist
-    - type: 'document' | 'collection'
-    - isAll:
+    - @param type: 'document' | 'collection'
+    - @param isAll:
       - undefined  when subscribe Document data
       - true       when subscribe Collection data
       - false      when subscribe Collection data and document in Collection is not existed
@@ -365,7 +372,11 @@ const afterMutationCalled = (payload) => {
    *   [key: string]: any
    * }
    * */
-  console.log(payload)
+  if (payload.isLast === false) {
+    commit('SET_LOADING', true)
+  } else if (payload.isLast === true) {
+    commit('SET_LOADING', false)
+  }
 }
 ```
 
@@ -380,10 +391,14 @@ export default {
   namespaced: true,
   state: {
     comments: [],
-    comment: null
+    comment: null,
+    isLoading: false
   },
   mutations: {
-    ...firestoreMutations({ statePropName: 'users', type: 'document' })
+    ...firestoreMutations({ statePropName: 'users', type: 'document' }),
+    SET_LOADING(state, isLoading) {
+      state.isLoading = isLoading
+    }
   },
   actions: {
     subscribe: ({ state, commit }) => {
