@@ -395,7 +395,7 @@ export default {
     isLoading: false
   },
   mutations: {
-    ...firestoreMutations({ statePropName: 'users', type: 'collection' }),
+    ...firestoreMutations({ statePropName: 'comments', type: 'collection' }),
     SET_LOADING(state, isLoading) {
       state.isLoading = isLoading
     }
@@ -405,7 +405,7 @@ export default {
       subscribeFirestore({
         state,
         commit,
-        ref: firestore.collection('/users'),
+        ref: firestore.collection('/comments'),
         options: {
           mapper: mapUser,
           errorHandler,
