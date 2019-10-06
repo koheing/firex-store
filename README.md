@@ -387,6 +387,12 @@ const notFoundHandler = (type, isAll) => {
 ```
 
 ```javascript
+const notFoundHandler = (type, isAll) => {
+  console.log('not found')
+}
+```
+
+```javascript
 export default {
   namespaced: true,
   state: {
