@@ -9,6 +9,11 @@ interface Criteria {
   type: MutationType
 }
 
+/**
+ * @description unsubscribe firestore data
+ * @param type 'document' | 'collection'
+ * @param state any. vuex's state
+ */
 export const unsubscribeFirestore = ({ state, type }: Criteria) => {
   const prop =
     type === 'document'

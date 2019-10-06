@@ -10,6 +10,18 @@ interface Criteria<T = any> {
   options?: SubscribeCriteriaOptions<T>
 }
 
+/**
+ * @description subscribe firestore data to state property
+ * @param actionName custom action name. can undefined
+ * @param ref firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
+ * @param options optional methods. can undefined
+ *   - mapper
+ *   - errorHandler
+ *   - completionHandler
+ *   - notFoundHandler
+ *   - afterMutationCalled
+ *   - onCompleted `deprecated`
+ */
 export const firestoreSubscribeActions = <T = any>({
   ref,
   actionName,

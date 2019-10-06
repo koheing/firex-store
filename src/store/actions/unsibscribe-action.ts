@@ -8,6 +8,11 @@ interface Criteria {
   actionName?: string
 }
 
+/**
+ * @description unsubscribe firestore data
+ * @param type 'document' | 'collection'
+ * @param actionName can undefined. But if you define actionName in `firestoreSubscribeActions`, set same name.
+ */
 export const firestoreUnsubscribeActions = ({
   type,
   actionName
