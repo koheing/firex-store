@@ -17,5 +17,5 @@ export class MockQueryReference {
   get(options?: any) {
     return this.promiseResult
   }
-  onSnapshot = (observer: any) => () => jest.fn()
+  onSnapshot = jest.fn()
 }

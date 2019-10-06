@@ -19,7 +19,7 @@ describe('callDocumentMutation', () => {
     expect(callMutation.mock.calls[0][0]).toBe('added')
     expect(callMutation.mock.calls[0][1].data.docId).toEqual('test0001')
     expect(callMutation.mock.calls[0][1].data.count).toEqual(0)
-    expect(callMutation.mock.calls[0][1].isLast).toBeTruthy()
+    expect(callMutation.mock.calls[0][1].isLast).toBeUndefined()
     expect(afterMutationCalled).toHaveBeenCalled()
   })
 
@@ -61,5 +61,7 @@ describe('callCollectionMutation', () => {
 
     expect(callMutation).toHaveBeenCalled()
     expect(afterMutationCalled).toHaveBeenCalled()
+    expect(callMutation.mock.calls[0][1].isLast).toBeFalsy()
+    expect(callMutation.mock.calls[1][1].isLast).toBeTruthy()
   })
 })
