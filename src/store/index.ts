@@ -1,6 +1,8 @@
 export { firestoreMutations } from './mutations'
 export {
+  firestoreSubscribeAction,
   firestoreSubscribeActions,
+  firestoreUnsubscribeAction,
   firestoreUnsubscribeActions
 } from './actions'
 
