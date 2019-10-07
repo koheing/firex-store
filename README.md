@@ -192,7 +192,7 @@ export default {
 
 Ex. Unsubscribe collection
 
-#### part1. Add `firestoreUnsubscribeActions` in actions
+#### part1. Add `firestoreUnsubscribeAction` in actions
 
 - method: `firestoreUnsubscribeAction` or `firestoreUnsubscribeActions`
   - `firestoreUnsubscribeActions` is deprecated. It will be removed at `^1.0.0~`
