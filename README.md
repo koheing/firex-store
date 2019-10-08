@@ -81,8 +81,8 @@ export default {
 ```
 
 #### part2. Add below actions to namespaced Store
-
-- method: `firestoreSubscribeActions`
+- method: `firestoreSubscribeAction` or `firestoreSubscribeActions`
+  - `firestoreSubscribeActions` is deprecated. It will be removed at `^1.0.0~`
 - argments:
 
   - ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
@@ -104,7 +104,7 @@ export default {
     ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
   },
   actions: {
-    ...firestoreSubscribeActions({ ref: firestore.collection('/comments') })
+    ...firestoreSubscribeAction({ ref: firestore.collection('/comments') })
   }
 .....
 }
@@ -192,9 +192,10 @@ export default {
 
 Ex. Unsubscribe collection
 
-#### part1. Add `firestoreUnsubscribeActions` in actions
+#### part1. Add `firestoreUnsubscribeAction` in actions
 
-- method: `firestoreUnsubscribeActions`
+- method: `firestoreUnsubscribeAction` or `firestoreUnsubscribeActions`
+  - `firestoreUnsubscribeActions` is deprecated. It will be removed at `^1.0.0~`
 - argments:
 
   - type: 'document' | 'collection'
@@ -211,8 +212,8 @@ export default {
     ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
   },
   actions: {
-    ...firestoreSubscribeActions({ ref: firestore.collection('/comments') }),
-    ...firestoreUnsubscribeActions({ type: 'collection' })
+    ...firestoreSubscribeAction({ ref: firestore.collection('/comments') }),
+    ...firestoreUnsubscribeAction({ type: 'collection' })
   }
 .....
 }

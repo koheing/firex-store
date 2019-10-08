@@ -1,2 +1,8 @@
-export { firestoreSubscribeActions } from './subscribe-action'
-export { firestoreUnsubscribeActions } from './unsibscribe-action'
+export {
+  firestoreSubscribeActions,
+  firestoreSubscribeAction
+} from './subscribe-action'
+export {
+  firestoreUnsubscribeActions,
+  firestoreUnsubscribeAction
+} from './unsibscribe-action'
