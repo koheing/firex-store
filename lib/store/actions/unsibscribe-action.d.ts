@@ -5,9 +5,16 @@ interface Criteria {
     actionName?: string;
 }
 /**
+ * @warn It is deprecated. It will be removed at `^1.0.0~`
  * @description unsubscribe firestore data
  * @param type 'document' | 'collection'
  * @param actionName can undefined. But if you define actionName in `firestoreSubscribeActions`, set same name.
  */
 export declare const firestoreUnsubscribeActions: ({ type, actionName }: Criteria) => ActionTree<any, any>;
+/**
+ * @description unsubscribe firestore data
+ * @param type 'document' | 'collection'
+ * @param actionName can undefined. But if you define actionName in `firestoreSubscribeAction`, set same name.
+ */
+export declare const firestoreUnsubscribeAction: ({ type, actionName }: Criteria) => ActionTree<any, any>;
 export {};
