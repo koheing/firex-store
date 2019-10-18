@@ -2,7 +2,6 @@ import {
   FIREX_COLLECTION_UNSUBSCRIBER,
   FIREX_DOCUMENT_UNSUBSCRIBER
 } from '../configurations'
-import { MutationType } from '../../types'
 import { UnsubscribeCriteria } from '../../criterias'
 
 /**

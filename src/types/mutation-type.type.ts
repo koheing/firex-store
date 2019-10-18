@@ -1,1 +1,1 @@
-export type MutationType = 'document' | 'collection'
+export type MutationType = 'document' | 'collection' | 'all'

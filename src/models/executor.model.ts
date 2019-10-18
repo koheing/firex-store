@@ -1,8 +1,4 @@
-import {
-  FindCriteria,
-  SubscribeCriteria,
-  UnsubscribeCriteria
-} from '../criterias'
+import { FindCriteria, SubscribeCriteria } from '../criterias'
 import { FirestoreRef } from '../types'
 
 export interface Reference {
@@ -13,5 +9,5 @@ export interface Reference {
     commit,
     options
   }: SubscribeCriteria<FirestoreRef, T>) => void
-  unsubscribe: ({ state, type }: UnsubscribeCriteria) => void
+  unsubscribe: ({ state }: { state: any }) => void
 }
