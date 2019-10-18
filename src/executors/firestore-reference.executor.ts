@@ -1,5 +1,4 @@
 import { Reference } from '../models'
-import { FindCriteria, SubscribeCriteria } from '../criterias'
 import { FirestoreService } from '../service'
 import { FirestoreRef } from '../types'
 import {
@@ -12,9 +11,22 @@ import {
   subscribeFirestoreDocument,
   subscribeFirestoreCollection
 } from './helpers'
+import { Commit } from 'vuex'
+import { SubscribeCriteriaOptions, FindCriteriaOptions } from '../options'
 
 interface Criteria {
   ref: FirestoreRef
+}
+
+interface SubscribeCriteria<T> {
+  statePropName: string
+  state: any
+  commit: Commit
+  options?: SubscribeCriteriaOptions<T>
+}
+
+interface FindCriteria<T> {
+  options?: FindCriteriaOptions<T>
 }
 
 export class FirestoreReferenceExecutor implements Reference {
@@ -25,30 +37,38 @@ export class FirestoreReferenceExecutor implements Reference {
     this.ref = ref
   }
 
-  find<T = any>({ options }: FindCriteria<FirestoreRef, T>): Promise<any> {
+  find<T = any>({ options }: FindCriteria<T>): Promise<any> {
     return isDocumentRef(this.ref)
       ? FirestoreService.find({ ref: this.ref, ...options })
       : FirestoreService.findAll({ ref: this.ref, ...options })
   }
 
-  bindTo(statePropName: string): FirestoreReferenceExecutor {
+  bindTo({ statePropName }: { statePropName: string }): FirestoreReferenceExecutor {
     this.statePropName = statePropName
     return this
   }
 
-  subscribe<T = any>({
-    state,
-    commit,
-    options
-  }: SubscribeCriteria<FirestoreRef, T>) {
+  subscribe<T = any>({ state, commit, options }: SubscribeCriteria<T>) {
     if (!this.statePropName) {
       console.error(NOT_CALL_BIND_TO_METHOD_YET)
       return
     }
 
     isDocumentRef(this.ref)
-      ? subscribeFirestoreDocument({ state, commit, ref: this.ref, options })
-      : subscribeFirestoreCollection({ state, commit, ref: this.ref, options })
+      ? subscribeFirestoreDocument({
+          statePropName: this.statePropName,
+          state,
+          commit,
+          ref: this.ref,
+          options
+        })
+      : subscribeFirestoreCollection({
+          statePropName: this.statePropName,
+          state,
+          commit,
+          ref: this.ref,
+          options
+        })
   }
 
   unsubscribe({ state }: { state: any }) {

@@ -11,6 +11,7 @@ import {
 } from './helpers'
 
 interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
+  statePropName?: string
   ref: U
   callMutation: CallMutation
 }
@@ -21,6 +22,7 @@ interface FindCriteria<T, U> extends FindCriteriaOptions<T> {
 
 export class FirestoreService {
   static subscribe<T = any>({
+    statePropName,
     ref,
     callMutation,
     mapper,
@@ -35,6 +37,7 @@ export class FirestoreService {
         !snapshot.exists
           ? notifyNotFound('document', notFoundHandler)
           : callDocumentMutation<T>({
+              statePropName,
               snapshot,
               callMutation,
               mapper,
@@ -49,6 +52,7 @@ export class FirestoreService {
   }
 
   static subscribeAll<T = any>({
+    statePropName,
     ref,
     callMutation,
     mapper,
@@ -66,6 +70,7 @@ export class FirestoreService {
         snapshot.empty
           ? notifyNotFound('collection', notFoundHandler, true)
           : callCollectionMutation<T>({
+              statePropName,
               snapshot,
               callMutation,
               mapper,

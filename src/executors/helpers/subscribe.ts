@@ -1,4 +1,3 @@
-import { SubscribeCriteria } from '../../criterias'
 import {
   FIREX_COLLECTION_UNSUBSCRIBER,
   FIREX_DOCUMENT_UNSUBSCRIBER
@@ -7,9 +6,19 @@ import { CallMutation } from '../../types'
 import { callMutation } from '../../store/helpers/call-mutation'
 import { FirestoreService } from '../../service'
 import { Payload } from '../../models/payload.model'
+import { Commit } from 'vuex'
+import { SubscribeCriteriaOptions } from '../../options'
 
+interface SubscribeCriteria<T, U> {
+  statePropName: string
+  state: any
+  commit: Commit
+  ref: T
+  options?: SubscribeCriteriaOptions<U>
+}
 
 export const subscribeFirestoreCollection = <T = any>({
+  statePropName,
   state,
   commit,
   ref,
@@ -27,6 +36,7 @@ export const subscribeFirestoreCollection = <T = any>({
     payload: any
   ) => callMutation({ mutationType: 'collection', changeType, commit, payload })
   const unsubscriber = FirestoreService.subscribeAll({
+    statePropName,
     ref,
     callMutation: mutation,
     ...options
@@ -36,6 +46,7 @@ export const subscribeFirestoreCollection = <T = any>({
 }
 
 export const subscribeFirestoreDocument = <T = any>({
+  statePropName,
   state,
   commit,
   ref,
@@ -50,6 +61,7 @@ export const subscribeFirestoreDocument = <T = any>({
     payload: Payload
   ) => callMutation({ mutationType: 'document', changeType, commit, payload })
   const unsubscriber = FirestoreService.subscribe({
+    statePropName,
     ref,
     callMutation: mutation,
     ...options

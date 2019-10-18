@@ -2,7 +2,12 @@ import {
   FIREX_COLLECTION_UNSUBSCRIBER,
   FIREX_DOCUMENT_UNSUBSCRIBER
 } from '../configurations'
-import { UnsubscribeCriteria } from '../../criterias'
+import { MutationType } from '../../types'
+
+interface UnsubscribeCriteria {
+  state: any
+  type: MutationType
+}
 
 /**
  * @description unsubscribe firestore data

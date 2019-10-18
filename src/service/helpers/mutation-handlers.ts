@@ -3,6 +3,7 @@ import { toDocumentResult } from './to-document-result'
 import { Payload } from '../../models'
 
 interface DocumentCriteria<T> {
+  statePropName?: string
   snapshot: firebase.firestore.DocumentSnapshot
   callMutation: CallMutation
   isLast?: boolean
@@ -12,6 +13,7 @@ interface DocumentCriteria<T> {
 }
 
 interface CollectionCriteria<T> {
+  statePropName?: string
   snapshot: firebase.firestore.QuerySnapshot
   callMutation: CallMutation
   notifyNotFound: () => void
@@ -20,6 +22,7 @@ interface CollectionCriteria<T> {
 }
 
 export const callDocumentMutation = <T = any>({
+  statePropName,
   snapshot,
   callMutation,
   isLast,
@@ -30,7 +33,7 @@ export const callDocumentMutation = <T = any>({
   const _type = type ? type : 'added'
 
   const data = toDocumentResult(snapshot, mapper)
-  const payload: Payload = { data, isLast }
+  const payload: Payload = { data, isLast, statePropName }
 
   callMutation(_type, payload)
 
@@ -40,6 +43,7 @@ export const callDocumentMutation = <T = any>({
 }
 
 export const callCollectionMutation = <T = any>({
+  statePropName,
   snapshot,
   callMutation,
   mapper,
@@ -51,6 +55,7 @@ export const callCollectionMutation = <T = any>({
     !change.doc.exists
       ? notifyNotFound()
       : callDocumentMutation<T>({
+          statePropName,
           snapshot: change.doc,
           callMutation,
           isLast: length === index + 1,

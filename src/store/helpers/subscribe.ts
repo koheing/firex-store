@@ -7,7 +7,15 @@ import { FirestoreRef, CallMutation } from '../../types'
 import { isDocumentRef } from './is-document-ref'
 import { callMutation } from './call-mutation'
 import { Payload } from '../../models'
-import { SubscribeCriteria } from '../../criterias'
+import { Commit } from 'vuex'
+import { SubscribeCriteriaOptions } from '../../options'
+
+interface SubscribeCriteria<T, U> {
+  state: any
+  commit: Commit
+  ref: T
+  options?: SubscribeCriteriaOptions<U>
+}
 
 const subscribeFirestoreCollection = <T = any>({
   state,

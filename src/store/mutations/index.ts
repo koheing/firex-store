@@ -5,62 +5,71 @@ import { Payload } from '../../models'
 
 interface Criteria {
   type: MutationType
+  statePropName?: string
 }
 
-const documentMutations = (): MutationTree<any> => {
+const documentMutations = (statePropName?: string): MutationTree<any> => {
   const types = mutationTypes.document
   return {
     [types.ADD](state, payload: Payload) {
-      state[payload.statePropName!] = payload.data
+      const prop = statePropName ? statePropName : payload.statePropName!
+      state[prop] = payload.data
     },
     [types.MODIFY](state, payload: Payload) {
-      state[payload.statePropName!] = payload.data
+      const prop = statePropName ? statePropName : payload.statePropName!
+      state[prop] = payload.data
     },
     [types.REMOVE](state, payload: Payload) {
-      state[payload.statePropName!] = null
+      const prop = statePropName ? statePropName : payload.statePropName!
+      state[prop] = null
     }
   }
 }
 
-const collectionMutations = (): MutationTree<any> => {
+const collectionMutations = (statePropName?: string): MutationTree<any> => {
   const types = mutationTypes.collection
   return {
     [types.ADD](state, payload: Payload) {
-      if (state[payload.statePropName!] == null) {
-        state[payload.statePropName!] = []
+      const prop = statePropName ? statePropName : payload.statePropName!
+      if (state[prop] == null) {
+        state[prop] = []
       }
-      ;(state[payload.statePropName!] as Array<any>).push(payload.data)
+      ;(state[prop] as Array<any>).push(payload.data)
     },
     [types.MODIFY](state, payload: Payload) {
-      const index = (state[payload.statePropName!] as Array<any>).findIndex(
+      const prop = statePropName ? statePropName : payload.statePropName!
+      const index = (state[prop] as Array<any>).findIndex(
         (data) => data.docId === payload.data.docId
       )
       if (index === -1) {
         return
       }
-      ;(state[payload.statePropName!] as Array<any>).splice(index, 1, payload.data)
+      ;(state[prop] as Array<any>).splice(
+        index,
+        1,
+        payload.data
+      )
     },
     [types.REMOVE](state, payload: Payload) {
-      const index = (state[payload.statePropName!] as Array<any>).findIndex(
+      const prop = statePropName ? statePropName : payload.statePropName!
+      const index = (state[prop] as Array<any>).findIndex(
         (data) => data.docId === payload.data.docId
       )
       if (index === -1) {
         return
       }
-      ;(state[payload.statePropName!] as Array<any>).splice(index, 1)
+      ;(state[prop] as Array<any>).splice(index, 1)
     }
   }
 }
 
-export const firestoreMutations = ({
-  type
-}: Criteria): MutationTree<any> => {
+export const firestoreMutations = ({ type, statePropName }: Criteria): MutationTree<any> => {
   switch (type) {
     case 'document':
-      return { ...documentMutations() }
+      return { ...documentMutations(statePropName) }
     case 'collection':
-      return { ...collectionMutations() }
+      return { ...collectionMutations(statePropName) }
     default:
-      return { ...documentMutations(), ...collectionMutations() }
+      return { ...documentMutations(statePropName), ...collectionMutations(statePropName) }
   }
 }

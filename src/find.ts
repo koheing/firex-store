@@ -1,7 +1,12 @@
 import { FirestoreService } from './service'
 import { FirestoreRef, NullOr } from './types'
 import { isDocumentRef } from './store/helpers/is-document-ref'
-import { FindCriteria } from './criterias'
+import { FindCriteriaOptions } from './options'
+
+interface FindCriteria<T, U> {
+  ref: T
+  options?: FindCriteriaOptions<U>
+}
 
 /**
  * @description fetch firestore data at once
