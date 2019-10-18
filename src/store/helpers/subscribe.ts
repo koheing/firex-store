@@ -1,28 +1,20 @@
-import { Commit } from 'vuex'
 import {
   FIREX_COLLECTION_UNSUBSCRIBER,
   FIREX_DOCUMENT_UNSUBSCRIBER
 } from '../configurations'
 import { FirestoreService } from '../../service'
 import { FirestoreRef, CallMutation } from '../../types'
-import { SubscribeCriteriaOptions } from '../../options'
 import { isDocumentRef } from './is-document-ref'
 import { callMutation } from './call-mutation'
 import { Payload } from '../../models'
-
-interface Criteria<T, U> {
-  state: any
-  commit: Commit
-  ref: T
-  options?: SubscribeCriteriaOptions<U>
-}
+import { SubscribeCriteria } from '../../criterias'
 
 const subscribeFirestoreCollection = <T = any>({
   state,
   commit,
   ref,
   options
-}: Criteria<
+}: SubscribeCriteria<
   firebase.firestore.Query | firebase.firestore.CollectionReference,
   T
 >) => {
@@ -48,7 +40,7 @@ const subscribeFirestoreDocument = <T = any>({
   commit,
   ref,
   options
-}: Criteria<firebase.firestore.DocumentReference, T>) => {
+}: SubscribeCriteria<firebase.firestore.DocumentReference, T>) => {
   if (state[FIREX_DOCUMENT_UNSUBSCRIBER]) {
     return
   }
@@ -84,7 +76,7 @@ export const subscribeFirestore = <T = any>({
   commit,
   ref,
   options
-}: Criteria<FirestoreRef, T>) => {
+}: SubscribeCriteria<FirestoreRef, T>) => {
   isDocumentRef(ref)
     ? subscribeFirestoreDocument({
         state,

@@ -1,2 +1,3 @@
-export * from './document-result.interface'
-export * from './payload.interface'
+export * from './document-result.model'
+export * from './payload.model'
+export * from './executor.model'

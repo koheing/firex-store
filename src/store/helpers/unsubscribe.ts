@@ -3,18 +3,14 @@ import {
   FIREX_DOCUMENT_UNSUBSCRIBER
 } from '../configurations'
 import { MutationType } from '../../types'
-
-interface Criteria {
-  state: any
-  type: MutationType
-}
+import { UnsubscribeCriteria } from '../../criterias'
 
 /**
  * @description unsubscribe firestore data
  * @param type 'document' | 'collection'
  * @param state any. vuex's state
  */
-export const unsubscribeFirestore = ({ state, type }: Criteria) => {
+export const unsubscribeFirestore = ({ state, type }: UnsubscribeCriteria) => {
   const prop =
     type === 'document'
       ? FIREX_DOCUMENT_UNSUBSCRIBER
