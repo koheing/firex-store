@@ -9,17 +9,13 @@ interface SubscribeCriteria<T, U> {
   options?: SubscribeCriteriaOptions<U>
 }
 
-interface FindCriteria<T, U> {
-  options?: FindCriteriaOptions<U>
-}
-
-export interface Reference {
-  find: <T = any>({ options }: FindCriteria<FirestoreRef, T>) => Promise<any>
-  bindTo: ({ statePropName }: { statePropName: string }) => any
+export interface Reader {
+  find: <T = any>(options?: FindCriteriaOptions<T>) => Promise<any>
+  bindTo: (statePropName: string) => any
   subscribe: <T = any>({
     state,
     commit,
     options
   }: SubscribeCriteria<FirestoreRef, T>) => void
-  unsubscribe: ({ state }: { state: any }) => void
+  unsubscribe: (state: any) => void
 }

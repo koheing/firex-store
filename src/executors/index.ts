@@ -1,1 +1,1 @@
-export * from './firestore-reference.executor'
+export * from './firestore-reader.executor'

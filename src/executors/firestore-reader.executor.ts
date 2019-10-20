@@ -1,4 +1,4 @@
-import { Reference } from '../models'
+import { Reader } from '../models'
 import { FirestoreService } from '../service'
 import { FirestoreRef } from '../types'
 import {
@@ -14,9 +14,6 @@ import {
 import { Commit } from 'vuex'
 import { SubscribeCriteriaOptions, FindCriteriaOptions } from '../options'
 
-interface Criteria {
-  ref: FirestoreRef
-}
 
 interface SubscribeCriteria<T> {
   statePropName: string
@@ -25,25 +22,21 @@ interface SubscribeCriteria<T> {
   options?: SubscribeCriteriaOptions<T>
 }
 
-interface FindCriteria<T> {
-  options?: FindCriteriaOptions<T>
-}
-
-export class FirestoreReferenceExecutor implements Reference {
+export class FirestoreReader implements Reader {
   private ref: FirestoreRef
   private statePropName?: string
 
-  constructor({ ref }: Criteria) {
+  constructor(ref: FirestoreRef) {
     this.ref = ref
   }
 
-  find<T = any>({ options }: FindCriteria<T>): Promise<any> {
+  find<T = any>(options?: FindCriteriaOptions<T>): Promise<any> {
     return isDocumentRef(this.ref)
       ? FirestoreService.find({ ref: this.ref, ...options })
       : FirestoreService.findAll({ ref: this.ref, ...options })
   }
 
-  bindTo({ statePropName }: { statePropName: string }): FirestoreReferenceExecutor {
+  bindTo(statePropName: string): FirestoreReader {
     this.statePropName = statePropName
     return this
   }
@@ -71,7 +64,7 @@ export class FirestoreReferenceExecutor implements Reference {
         })
   }
 
-  unsubscribe({ state }: { state: any }) {
+  unsubscribe(state:any) {
     const prop = isDocumentRef(this.ref)
       ? FIREX_DOCUMENT_UNSUBSCRIBER
       : FIREX_COLLECTION_UNSUBSCRIBER
