@@ -16,7 +16,6 @@ import { SubscribeCriteriaOptions, FindCriteriaOptions } from '../options'
 
 
 interface SubscribeCriteria<T> {
-  statePropName: string
   state: any
   commit: Commit
   options?: SubscribeCriteriaOptions<T>
@@ -64,7 +63,7 @@ export class FirestoreReader implements Reader {
         })
   }
 
-  unsubscribe(state:any) {
+  unsubscribe(state: any) {
     const prop = isDocumentRef(this.ref)
       ? FIREX_DOCUMENT_UNSUBSCRIBER
       : FIREX_COLLECTION_UNSUBSCRIBER
