@@ -15,7 +15,8 @@ export const firestoreSubscribeAction = (
     ? actionTypes.document.SUBSCRIBE
     : actionTypes.collection.SUBSCRIBE
 
-  const action = options && options.actionName ? options.actionName : defaultActionName
+  const action =
+    options && options.actionName ? options.actionName : defaultActionName
 
   const tree: ActionTree<any, any> = {
     [action]({ state, commit }) {

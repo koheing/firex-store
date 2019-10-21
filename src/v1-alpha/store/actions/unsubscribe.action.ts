@@ -2,7 +2,6 @@ import { ActionTree } from 'vuex'
 import { FirestoreReaderService } from '../../services'
 import { actionTypes } from '../types/action'
 
-
 export const firestoreUnsubscribeAction = (
   type: 'document' | 'collection',
   actionName?: string
