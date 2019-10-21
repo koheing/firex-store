@@ -1,25 +1,25 @@
-import { FirestoreService } from '../../service'
-import { FirestoreRef } from '../../types'
+import { FirestoreRepository } from '../repositories'
+import { FirestoreRef } from '../types'
 import {
   FIREX_COLLECTION_UNSUBSCRIBER,
   FIREX_DOCUMENT_UNSUBSCRIBER
 } from '../configurations'
-import { NOT_CALL_BIND_TO_METHOD_YET } from '../../errors'
-import { isDocumentRef } from '../helpers'
+import { NOT_CALL_BIND_TO_METHOD_YET } from '../errors'
 import {
+  isDocumentRef,
   subscribeFirestoreDocument,
   subscribeFirestoreCollection
-} from './subscribe'
+} from './helpers'
 import { Commit } from 'vuex'
-import { SubscribeCriteriaOptions, FindCriteriaOptions } from '../../options'
-import { Reader } from '../../models'
+import { SubscribeCriteriaOptions, FindCriteriaOptions } from '../options'
+import { Reader } from '../models'
 
-export class FirestoreReader implements Reader {
-  private ref: FirestoreRef
-  private statePropName?: string
+export class FirestoreReaderService implements Reader {
+  private _ref: FirestoreRef
+  private _statePropName?: string
 
-  static from(ref: FirestoreRef): FirestoreReader {
-    return new FirestoreReader(ref)
+  static from(ref: FirestoreRef): FirestoreReaderService {
+    return new FirestoreReaderService(ref)
   }
 
   static unsubscribe(state: any, type: 'document' | 'collection') {
@@ -34,17 +34,25 @@ export class FirestoreReader implements Reader {
   }
 
   constructor(ref: FirestoreRef) {
-    this.ref = ref
+    this._ref = ref
+  }
+
+  get ref(): FirestoreRef {
+    return this._ref
+  }
+
+  get statePropName(): string | undefined {
+    return this._statePropName
   }
 
   find<T = any>(options?: FindCriteriaOptions<T>): Promise<any> {
     return isDocumentRef(this.ref)
-      ? FirestoreService.find({ ref: this.ref, ...options })
-      : FirestoreService.findAll({ ref: this.ref, ...options })
+      ? FirestoreRepository.find({ ref: this.ref, ...options })
+      : FirestoreRepository.findAll({ ref: this.ref, ...options })
   }
 
-  bindTo(statePropName: string): FirestoreReader {
-    this.statePropName = statePropName
+  bindTo(statePropName: string): FirestoreReaderService {
+    this._statePropName = statePropName
     return this
   }
 

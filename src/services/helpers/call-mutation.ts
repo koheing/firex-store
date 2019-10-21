@@ -1,5 +1,5 @@
 import { Commit } from 'vuex'
-import { mutationTypes } from '../types/mutation'
+import { mutationTypes } from '../../store/types/mutation'
 import { MutationType } from '../../types'
 import { Payload } from '../../models'
 

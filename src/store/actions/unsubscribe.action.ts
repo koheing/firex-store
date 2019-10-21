@@ -1,5 +1,5 @@
 import { ActionTree } from 'vuex'
-import { FirestoreReader } from '../helpers'
+import { FirestoreReaderService } from '../../services'
 import { actionTypes } from '../types/action'
 
 
@@ -16,7 +16,7 @@ export const firestoreUnsubscribeAction = (
 
   const tree: ActionTree<any, any> = {
     [action]({ state }) {
-      FirestoreReader.unsubscribe(state, type)
+      FirestoreReaderService.unsubscribe(state, type)
     }
   }
 

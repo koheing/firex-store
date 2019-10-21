@@ -1,6 +1,6 @@
 import { ActionTree } from 'vuex'
 import { SubscribeCriteriaOptions } from '../../options'
-import { FirestoreReader } from '../helpers'
+import { FirestoreReaderService } from '../../services'
 import { actionTypes } from '../types/action'
 
 interface CriteriaOptions<T> extends SubscribeCriteriaOptions<T> {
@@ -8,35 +8,18 @@ interface CriteriaOptions<T> extends SubscribeCriteriaOptions<T> {
 }
 
 export const firestoreSubscribeAction = (
-  firestoreReader: FirestoreReader,
-  {
-    actionName,
-    afterMutationCalled,
-    completionHandler,
-    errorHandler,
-    notFoundHandler,
-    mapper,
-    onCompleted
-  }: CriteriaOptions<any>
+  firestoreReaderService: FirestoreReaderService,
+  options?: CriteriaOptions<any>
 ): ActionTree<any, any> => {
-  const defaultActionName = firestoreReader.isDocumentRef()
+  const defaultActionName = firestoreReaderService.isDocumentRef()
     ? actionTypes.document.SUBSCRIBE
     : actionTypes.collection.SUBSCRIBE
 
-  const action = actionName ? actionName : defaultActionName
-
-  const options = {
-    afterMutationCalled,
-    completionHandler,
-    errorHandler,
-    notFoundHandler,
-    mapper,
-    onCompleted
-  }
+  const action = options && options.actionName ? options.actionName : defaultActionName
 
   const tree: ActionTree<any, any> = {
     [action]({ state, commit }) {
-      firestoreReader.subscribe(state, commit, options)
+      firestoreReaderService.subscribe(state, commit, options)
     }
   }
   return tree

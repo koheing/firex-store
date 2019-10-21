@@ -1,10 +1,10 @@
 import {
   FIREX_COLLECTION_UNSUBSCRIBER,
   FIREX_DOCUMENT_UNSUBSCRIBER
-} from '../configurations'
+} from '../../configurations'
 import { CallMutation } from '../../types'
 import { callMutation } from './call-mutation'
-import { FirestoreService } from '../../service'
+import { FirestoreRepository } from '../../repositories'
 import { Payload } from '../../models/payload.model'
 import { Commit } from 'vuex'
 import { SubscribeCriteriaOptions } from '../../options'
@@ -35,7 +35,7 @@ export const subscribeFirestoreCollection = <T = any>({
     changeType: firebase.firestore.DocumentChangeType,
     payload: any
   ) => callMutation({ mutationType: 'collection', changeType, commit, payload })
-  const unsubscriber = FirestoreService.subscribeAll({
+  const unsubscriber = FirestoreRepository.subscribeAll({
     statePropName,
     ref,
     callMutation: mutation,
@@ -60,7 +60,7 @@ export const subscribeFirestoreDocument = <T = any>({
     changeType: firebase.firestore.DocumentChangeType,
     payload: Payload
   ) => callMutation({ mutationType: 'document', changeType, commit, payload })
-  const unsubscriber = FirestoreService.subscribe({
+  const unsubscriber = FirestoreRepository.subscribe({
     statePropName,
     ref,
     callMutation: mutation,

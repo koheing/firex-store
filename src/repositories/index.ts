@@ -20,7 +20,7 @@ interface FindCriteria<T, U> extends FindCriteriaOptions<T> {
   ref: U
 }
 
-export class FirestoreService {
+export class FirestoreRepository {
   static subscribe<T = any>({
     statePropName,
     ref,

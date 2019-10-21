@@ -1,5 +1,5 @@
 export * from './store'
-export { findFirestore } from './find'
+export { FirestoreReaderService } from './services'
 export {
   Mapper,
   AfterMutationCalled,
