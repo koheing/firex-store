@@ -6,15 +6,15 @@ const documentMutations = (): MutationTree<any> => {
   const types = mutationTypes.document
   return {
     [types.ADD](state, payload: Payload) {
-      const prop = payload.statePropName!
+      const prop = payload.statePropName
       state[prop] = payload.data
     },
     [types.MODIFY](state, payload: Payload) {
-      const prop = payload.statePropName!
+      const prop = payload.statePropName
       state[prop] = payload.data
     },
     [types.REMOVE](state, payload: Payload) {
-      const prop = payload.statePropName!
+      const prop = payload.statePropName
       state[prop] = null
     }
   }
@@ -24,14 +24,14 @@ const collectionMutations = (): MutationTree<any> => {
   const types = mutationTypes.collection
   return {
     [types.ADD](state, payload: Payload) {
-      const prop = payload.statePropName!
+      const prop = payload.statePropName
       if (state[prop] == null) {
         state[prop] = []
       }
       ;(state[prop] as Array<any>).push(payload.data)
     },
     [types.MODIFY](state, payload: Payload) {
-      const prop = payload.statePropName!
+      const prop = payload.statePropName
       const index = (state[prop] as Array<any>).findIndex(
         (data) => data.docId === payload.data.docId
       )
@@ -41,7 +41,7 @@ const collectionMutations = (): MutationTree<any> => {
       ;(state[prop] as Array<any>).splice(index, 1, payload.data)
     },
     [types.REMOVE](state, payload: Payload) {
-      const prop = payload.statePropName!
+      const prop = payload.statePropName
       const index = (state[prop] as Array<any>).findIndex(
         (data) => data.docId === payload.data.docId
       )
