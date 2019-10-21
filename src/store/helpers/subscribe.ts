@@ -2,22 +2,23 @@ import {
   FIREX_COLLECTION_UNSUBSCRIBER,
   FIREX_DOCUMENT_UNSUBSCRIBER
 } from '../configurations'
-import { FirestoreService } from '../../service'
-import { FirestoreRef, CallMutation } from '../../types'
-import { isDocumentRef } from './is-document-ref'
+import { CallMutation } from '../../types'
 import { callMutation } from './call-mutation'
-import { Payload } from '../../models'
+import { FirestoreService } from '../../service'
+import { Payload } from '../../models/payload.model'
 import { Commit } from 'vuex'
 import { SubscribeCriteriaOptions } from '../../options'
 
 interface SubscribeCriteria<T, U> {
+  statePropName: string
   state: any
   commit: Commit
   ref: T
   options?: SubscribeCriteriaOptions<U>
 }
 
-const subscribeFirestoreCollection = <T = any>({
+export const subscribeFirestoreCollection = <T = any>({
+  statePropName,
   state,
   commit,
   ref,
@@ -35,6 +36,7 @@ const subscribeFirestoreCollection = <T = any>({
     payload: any
   ) => callMutation({ mutationType: 'collection', changeType, commit, payload })
   const unsubscriber = FirestoreService.subscribeAll({
+    statePropName,
     ref,
     callMutation: mutation,
     ...options
@@ -43,7 +45,8 @@ const subscribeFirestoreCollection = <T = any>({
   state[FIREX_COLLECTION_UNSUBSCRIBER] = unsubscriber
 }
 
-const subscribeFirestoreDocument = <T = any>({
+export const subscribeFirestoreDocument = <T = any>({
+  statePropName,
   state,
   commit,
   ref,
@@ -58,6 +61,7 @@ const subscribeFirestoreDocument = <T = any>({
     payload: Payload
   ) => callMutation({ mutationType: 'document', changeType, commit, payload })
   const unsubscriber = FirestoreService.subscribe({
+    statePropName,
     ref,
     callMutation: mutation,
     ...options
@@ -79,23 +83,3 @@ const subscribeFirestoreDocument = <T = any>({
  *   - afterMutationCalled
  *   - onCompleted `deprecated`
  */
-export const subscribeFirestore = <T = any>({
-  state,
-  commit,
-  ref,
-  options
-}: SubscribeCriteria<FirestoreRef, T>) => {
-  isDocumentRef(ref)
-    ? subscribeFirestoreDocument({
-        state,
-        commit,
-        ref,
-        options
-      })
-    : subscribeFirestoreCollection({
-        state,
-        commit,
-        ref,
-        options
-      })
-}

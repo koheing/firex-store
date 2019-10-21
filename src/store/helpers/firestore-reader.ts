@@ -1,29 +1,37 @@
-import { Reader } from '../models'
-import { FirestoreService } from '../service'
-import { FirestoreRef } from '../types'
+import { FirestoreService } from '../../service'
+import { FirestoreRef } from '../../types'
 import {
   FIREX_COLLECTION_UNSUBSCRIBER,
   FIREX_DOCUMENT_UNSUBSCRIBER
-} from '../store/configurations'
-import { NOT_CALL_BIND_TO_METHOD_YET } from '../errors'
-import { isDocumentRef } from '../store/helpers'
+} from '../configurations'
+import { NOT_CALL_BIND_TO_METHOD_YET } from '../../errors'
+import { isDocumentRef } from '../helpers'
 import {
   subscribeFirestoreDocument,
   subscribeFirestoreCollection
-} from './helpers'
+} from './subscribe'
 import { Commit } from 'vuex'
-import { SubscribeCriteriaOptions, FindCriteriaOptions } from '../options'
-
-
-interface SubscribeCriteria<T> {
-  state: any
-  commit: Commit
-  options?: SubscribeCriteriaOptions<T>
-}
+import { SubscribeCriteriaOptions, FindCriteriaOptions } from '../../options'
+import { Reader } from '../../models'
 
 export class FirestoreReader implements Reader {
   private ref: FirestoreRef
   private statePropName?: string
+
+  static from(ref: FirestoreRef): FirestoreReader {
+    return new FirestoreReader(ref)
+  }
+
+  static unsubscribe(state: any, type: 'document' | 'collection') {
+    const prop =
+      type === 'document'
+        ? FIREX_DOCUMENT_UNSUBSCRIBER
+        : FIREX_COLLECTION_UNSUBSCRIBER
+    if (state[prop]) {
+      state[prop]()
+      delete state[prop]
+    }
+  }
 
   constructor(ref: FirestoreRef) {
     this.ref = ref
@@ -40,7 +48,11 @@ export class FirestoreReader implements Reader {
     return this
   }
 
-  subscribe<T = any>({ state, commit, options }: SubscribeCriteria<T>) {
+  subscribe<T = any>(
+    state: any,
+    commit: Commit,
+    options?: SubscribeCriteriaOptions<T>
+  ) {
     if (!this.statePropName) {
       console.error(NOT_CALL_BIND_TO_METHOD_YET)
       return
@@ -64,12 +76,16 @@ export class FirestoreReader implements Reader {
   }
 
   unsubscribe(state: any) {
-    const prop = isDocumentRef(this.ref)
+    const prop = this.isDocumentRef()
       ? FIREX_DOCUMENT_UNSUBSCRIBER
       : FIREX_COLLECTION_UNSUBSCRIBER
     if (state[prop]) {
       state[prop]()
       delete state[prop]
     }
+  }
+
+  isDocumentRef(): boolean {
+    return isDocumentRef(this.ref)
   }
 }

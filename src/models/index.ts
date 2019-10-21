@@ -1,3 +1,3 @@
 export * from './document-result.model'
 export * from './payload.model'
-export * from './executor.model'
+export * from './reader.model'

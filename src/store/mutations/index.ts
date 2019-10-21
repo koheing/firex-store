@@ -44,11 +44,7 @@ const collectionMutations = (statePropName?: string): MutationTree<any> => {
       if (index === -1) {
         return
       }
-      ;(state[prop] as Array<any>).splice(
-        index,
-        1,
-        payload.data
-      )
+      ;(state[prop] as Array<any>).splice(index, 1, payload.data)
     },
     [types.REMOVE](state, payload: Payload) {
       const prop = statePropName ? statePropName : payload.statePropName!
@@ -63,13 +59,19 @@ const collectionMutations = (statePropName?: string): MutationTree<any> => {
   }
 }
 
-export const firestoreMutations = ({ type, statePropName }: Criteria): MutationTree<any> => {
+export const firestoreMutations = ({
+  type,
+  statePropName
+}: Criteria): MutationTree<any> => {
   switch (type) {
     case 'document':
       return { ...documentMutations(statePropName) }
     case 'collection':
       return { ...collectionMutations(statePropName) }
     default:
-      return { ...documentMutations(statePropName), ...collectionMutations(statePropName) }
+      return {
+        ...documentMutations(statePropName),
+        ...collectionMutations(statePropName)
+      }
   }
 }
