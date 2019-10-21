@@ -7,7 +7,7 @@ export interface Reader {
   subscribe: <T = any>(
     state: any,
     commit: Commit,
-    options: SubscribeCriteriaOptions<T>
+    options?: SubscribeCriteriaOptions<T>
   ) => void
   unsubscribe: (state: any) => void
 }
