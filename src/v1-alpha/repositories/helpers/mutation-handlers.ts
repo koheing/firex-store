@@ -3,7 +3,7 @@ import { toDocumentResult } from './to-document-result'
 import { Payload } from '../../models'
 
 interface DocumentCriteria<T> {
-  statePropName?: string
+  statePropName: string
   snapshot: firebase.firestore.DocumentSnapshot
   callMutation: CallMutation
   isLast?: boolean
@@ -13,7 +13,7 @@ interface DocumentCriteria<T> {
 }
 
 interface CollectionCriteria<T> {
-  statePropName?: string
+  statePropName: string
   snapshot: firebase.firestore.QuerySnapshot
   callMutation: CallMutation
   notifyNotFound: () => void

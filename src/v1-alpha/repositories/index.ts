@@ -11,7 +11,7 @@ import {
 } from './helpers'
 
 interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
-  statePropName?: string
+  statePropName: string
   ref: U
   callMutation: CallMutation
 }
