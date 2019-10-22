@@ -2,16 +2,17 @@ import { createLocalVue } from '@vue/test-utils'
 import * as Vuex from 'vuex'
 import { Store, Module } from 'vuex'
 import {
-  firestoreSubscribeActions,
+  firestoreSubscribeAction,
   actionTypes,
-  firestoreMutations
-} from '../../../../src'
+  firestoreMutations,
+  FirestoreSubscriber
+} from '../../../../src/v1-alpha'
 import { firestore } from '../../../mocks/firebase'
-import { FirestoreService } from '../../../../src/service/index'
+import { FirestoreRepository } from '../../../../src/v1-alpha/repositories'
 import {
   FIREX_COLLECTION_UNSUBSCRIBER,
   FIREX_DOCUMENT_UNSUBSCRIBER
-} from '../../../../src/store/configurations'
+} from '../../../../src/v1-alpha/configurations'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -30,7 +31,7 @@ describe('subscribe', () => {
   })
 
   it('subscribe collection , default action name', async (done) => {
-    const spy = jest.spyOn(FirestoreService, 'subscribeAll')
+    const spy = jest.spyOn(FirestoreRepository, 'subscribeAll')
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
@@ -38,10 +39,14 @@ describe('subscribe', () => {
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
+        ...firestoreMutations('collection')
       },
       actions: {
-        ...firestoreSubscribeActions({ ref: firestore.collection('/comments') })
+        ...firestoreSubscribeAction(
+          FirestoreSubscriber.from(firestore.collection('/comments')).bindTo(
+            'comments'
+          )
+        )
       }
     }
 
@@ -57,7 +62,7 @@ describe('subscribe', () => {
   })
 
   it('subscribe collection , custom action name', async (done) => {
-    const spy = jest.spyOn(FirestoreService, 'subscribeAll')
+    const spy = jest.spyOn(FirestoreRepository, 'subscribeAll')
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
@@ -65,13 +70,15 @@ describe('subscribe', () => {
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
+        ...firestoreMutations('collection')
       },
       actions: {
-        ...firestoreSubscribeActions({
-          ref: firestore.collection('/comments'),
-          actionName: 'test'
-        })
+        ...firestoreSubscribeAction(
+          FirestoreSubscriber.from(firestore.collection('/comments')).bindTo(
+            'comments'
+          ),
+          { actionName: 'test' }
+        )
       }
     }
 
@@ -85,8 +92,8 @@ describe('subscribe', () => {
     done()
   })
 
-  it('subscribe document , custom action name', async (done) => {
-    const spy = jest.spyOn(FirestoreService, 'subscribe')
+  it('subscribe document , default action name', async (done) => {
+    const spy = jest.spyOn(FirestoreRepository, 'subscribe')
     const userModule: Module<any, any> = {
       namespaced: true,
       state: {
@@ -94,12 +101,14 @@ describe('subscribe', () => {
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'user', type: 'document' })
+        ...firestoreMutations('document')
       },
       actions: {
-        ...firestoreSubscribeActions({
-          ref: firestore.collection('/users').doc('userId')
-        })
+        ...firestoreSubscribeAction(
+          FirestoreSubscriber.from(
+            firestore.collection('/users').doc('userId')
+          ).bindTo('userId')
+        )
       }
     }
 
@@ -114,7 +123,7 @@ describe('subscribe', () => {
   })
 
   it('collection state has Unsubscriber', async (done) => {
-    const spy = jest.spyOn(FirestoreService, 'subscribeAll')
+    const spy = jest.spyOn(FirestoreRepository, 'subscribeAll')
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
@@ -122,13 +131,15 @@ describe('subscribe', () => {
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
+        ...firestoreMutations('collection')
       },
       actions: {
-        ...firestoreSubscribeActions({
-          ref: firestore.collection('/comments'),
-          actionName: 'test'
-        })
+        ...firestoreSubscribeAction(
+          FirestoreSubscriber.from(firestore.collection('/comments')).bindTo(
+            'comments'
+          ),
+          { actionName: 'test' }
+        )
       }
     }
 
@@ -146,7 +157,7 @@ describe('subscribe', () => {
   })
 
   it('document state has Unsubscriber', async (done) => {
-    const spy = jest.spyOn(FirestoreService, 'subscribe')
+    const spy = jest.spyOn(FirestoreRepository, 'subscribe')
     const userModule: Module<any, any> = {
       namespaced: true,
       state: {
@@ -154,12 +165,14 @@ describe('subscribe', () => {
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'user', type: 'document' })
+        ...firestoreMutations('document')
       },
       actions: {
-        ...firestoreSubscribeActions({
-          ref: firestore.collection('/users').doc('userId')
-        })
+        ...firestoreSubscribeAction(
+          FirestoreSubscriber.from(
+            firestore.collection('/users').doc('userId')
+          ).bindTo('user')
+        )
       }
     }
 
@@ -175,7 +188,7 @@ describe('subscribe', () => {
   })
 
   it('cannot call suibscribeAll when it had already called', async (done) => {
-    const spy = jest.spyOn(FirestoreService, 'subscribeAll')
+    const spy = jest.spyOn(FirestoreRepository, 'subscribeAll')
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
@@ -184,13 +197,15 @@ describe('subscribe', () => {
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
+        ...firestoreMutations('collection')
       },
       actions: {
-        ...firestoreSubscribeActions({
-          ref: firestore.collection('/comments'),
-          actionName: 'test'
-        })
+        ...firestoreSubscribeAction(
+          FirestoreSubscriber.from(firestore.collection('/comments')).bindTo(
+            'comments'
+          ),
+          { actionName: 'test' }
+        )
       }
     }
 
@@ -205,7 +220,7 @@ describe('subscribe', () => {
   })
 
   it('cannot call suibscribe when it had already called', async (done) => {
-    const spy = jest.spyOn(FirestoreService, 'subscribe')
+    const spy = jest.spyOn(FirestoreRepository, 'subscribe')
     const userModule: Module<any, any> = {
       namespaced: true,
       state: {
@@ -214,13 +229,15 @@ describe('subscribe', () => {
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'user', type: 'document' })
+        ...firestoreMutations('document')
       },
       actions: {
-        ...firestoreSubscribeActions({
-          ref: firestore.collection('/users').doc('userId'),
-          actionName: 'test'
-        })
+        ...firestoreSubscribeAction(
+          FirestoreSubscriber.from(
+            firestore.collection('/users').doc('userId')
+          ).bindTo('user'),
+          { actionName: 'test' }
+        )
       }
     }
 

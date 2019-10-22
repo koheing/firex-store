@@ -2,14 +2,17 @@ import { createLocalVue } from '@vue/test-utils'
 import * as Vuex from 'vuex'
 import { Store, Module } from 'vuex'
 import {
-  firestoreSubscribeActions,
   firestoreSubscribeAction,
   actionTypes,
   firestoreMutations
-} from '../../../../src'
+} from '../../../../src/v1-alpha'
 import { firestore } from '../../../mocks/firebase'
-import { subscribeFirestore } from '../../../../src/store/helpers/subscribe'
-jest.mock('../../../../src/store/helpers/subscribe')
+import {
+  subscribeFirestoreCollection,
+  subscribeFirestoreDocument
+} from '../../../../src/v1-alpha/services/helpers/subscribe'
+import { FirestoreSubscriber } from '../../../../src/v1-alpha/services'
+jest.mock('../../../../src/v1-alpha/services/helpers/subscribe')
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
@@ -25,7 +28,7 @@ describe('subscribe-action', () => {
     })
   })
 
-  it('subscribe collection , default action name and', async (done) => {
+  it('subscribe collection , default action name', async (done) => {
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
@@ -33,10 +36,14 @@ describe('subscribe-action', () => {
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
+        ...firestoreMutations('collection')
       },
       actions: {
-        ...firestoreSubscribeActions({ ref: firestore.collection('/comments') })
+        ...firestoreSubscribeAction(
+          FirestoreSubscriber.from(firestore.collection('/comments')).bindTo(
+            'comments'
+          )
+        )
       }
     }
 
@@ -44,7 +51,7 @@ describe('subscribe-action', () => {
 
     await store.dispatch(`comment/${actionTypes.COLLECTION_SUBSCRIBE}`)
 
-    expect(subscribeFirestore).toHaveBeenCalledTimes(1)
+    expect(subscribeFirestoreCollection).toHaveBeenCalledTimes(1)
 
     done()
   })
@@ -57,13 +64,15 @@ describe('subscribe-action', () => {
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
+        ...firestoreMutations('collection')
       },
       actions: {
-        ...firestoreSubscribeActions({
-          ref: firestore.collection('/comments'),
-          actionName: 'test'
-        })
+        ...firestoreSubscribeAction(
+          FirestoreSubscriber.from(firestore.collection('/comments')).bindTo(
+            'comments'
+          ),
+          { actionName: 'test' }
+        )
       }
     }
 
@@ -71,12 +80,12 @@ describe('subscribe-action', () => {
 
     await store.dispatch(`comment/test`)
 
-    expect(subscribeFirestore).toHaveBeenCalledTimes(2)
+    expect(subscribeFirestoreCollection).toHaveBeenCalledTimes(2)
 
     done()
   })
 
-  it('subscribe document , custom action name', async (done) => {
+  it('subscribe document , default action name', async (done) => {
     const userModule: Module<any, any> = {
       namespaced: true,
       state: {
@@ -84,12 +93,14 @@ describe('subscribe-action', () => {
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'user', type: 'document' })
+        ...firestoreMutations('document')
       },
       actions: {
-        ...firestoreSubscribeActions({
-          ref: firestore.collection('/users').doc('userId')
-        })
+        ...firestoreSubscribeAction(
+          FirestoreSubscriber.from(
+            firestore.collection('/users').doc('docId')
+          ).bindTo('userId')
+        )
       }
     }
 
@@ -97,98 +108,7 @@ describe('subscribe-action', () => {
 
     await store.dispatch(`user/${actionTypes.DOCUMENT_SUBSCRIBE}`)
 
-    expect(subscribeFirestore).toHaveBeenCalledTimes(3)
-
-    done()
-  })
-})
-
-
-describe('subscribe-action', () => {
-  let store: Store<any>
-  beforeEach(() => {
-    store = new Store({
-      modules: {},
-      state: {},
-      getters: {},
-      mutations: {},
-      actions: {}
-    })
-  })
-
-  it('subscribe collection , default action name and', async (done) => {
-    const commentModule: Module<any, any> = {
-      namespaced: true,
-      state: {
-        comments: null
-      },
-      getters: {},
-      mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
-      },
-      actions: {
-        ...firestoreSubscribeAction({ ref: firestore.collection('/comments') })
-      }
-    }
-
-    store.registerModule('comment', commentModule)
-
-    await store.dispatch(`comment/${actionTypes.COLLECTION_SUBSCRIBE}`)
-
-    expect(subscribeFirestore).toHaveBeenCalledTimes(4)
-
-    done()
-  })
-
-  it('subscribe collection , custom action name', async (done) => {
-    const commentModule: Module<any, any> = {
-      namespaced: true,
-      state: {
-        comments: null
-      },
-      getters: {},
-      mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
-      },
-      actions: {
-        ...firestoreSubscribeAction({
-          ref: firestore.collection('/comments'),
-          actionName: 'test'
-        })
-      }
-    }
-
-    store.registerModule('comment', commentModule)
-
-    await store.dispatch(`comment/test`)
-
-    expect(subscribeFirestore).toHaveBeenCalledTimes(5)
-
-    done()
-  })
-
-  it('subscribe document , custom action name', async (done) => {
-    const userModule: Module<any, any> = {
-      namespaced: true,
-      state: {
-        user: null
-      },
-      getters: {},
-      mutations: {
-        ...firestoreMutations({ statePropName: 'user', type: 'document' })
-      },
-      actions: {
-        ...firestoreSubscribeAction({
-          ref: firestore.collection('/users').doc('userId')
-        })
-      }
-    }
-
-    store.registerModule('user', userModule)
-
-    await store.dispatch(`user/${actionTypes.DOCUMENT_SUBSCRIBE}`)
-
-    expect(subscribeFirestore).toHaveBeenCalledTimes(6)
+    expect(subscribeFirestoreDocument).toHaveBeenCalledTimes(1)
 
     done()
   })

@@ -29,8 +29,9 @@ export class FirestoreSubscriber implements Subscribe {
     return this._statePropName
   }
 
-  bindTo(statePropName: string) {
+  bindTo(statePropName: string): FirestoreSubscriber {
     this._statePropName = statePropName
+    return this
   }
 
   subscribe<T = any>(

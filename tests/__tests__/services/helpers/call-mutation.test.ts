@@ -1,8 +1,8 @@
 import { createLocalVue } from '@vue/test-utils'
 import * as Vuex from 'vuex'
 import { Store } from 'vuex'
-import { firestoreMutations } from '../../../../src'
-import { callMutation } from '../../../../src/store/helpers/call-mutation'
+import { firestoreMutations } from '../../../../src/v1-alpha'
+import { callMutation } from '../../../../src/v1-alpha/services/helpers/call-mutation'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -20,7 +20,7 @@ describe('call-mutations', () => {
           },
           getters: {},
           mutations: {
-            ...firestoreMutations({ statePropName: 'user', type: 'document' })
+            ...firestoreMutations('document')
           },
           actions: {
             add: ({ state, commit }, payload) => {
@@ -56,10 +56,7 @@ describe('call-mutations', () => {
           },
           getters: {},
           mutations: {
-            ...firestoreMutations({
-              statePropName: 'comments',
-              type: 'collection'
-            })
+            ...firestoreMutations('collection')
           },
           actions: {
             add: ({ state, commit }, payload) => {
@@ -81,24 +78,35 @@ describe('call-mutations', () => {
   })
 
   it('document types.Add called', () => {
-    store.dispatch('user/add', { data: { docId: 'user1', name: 'testName1' } })
+    store.dispatch('user/add', {
+      data: { docId: 'user1', name: 'testName1' },
+      statePropName: 'user'
+    })
 
     expect(store.state.user.user.docId).toEqual('user1')
   })
 
   it('document types.MODIFY called', () => {
-    store.dispatch('user/add', { data: { docId: 'user1', name: 'testName1' } })
+    store.dispatch('user/add', {
+      data: { docId: 'user1', name: 'testName1' },
+      statePropName: 'user'
+    })
     store.dispatch('user/modify', {
-      data: { docId: 'user1', name: 'testName2' }
+      data: { docId: 'user1', name: 'testName2' },
+      statePropName: 'user'
     })
 
     expect(store.state.user.user.name).toEqual('testName2')
   })
 
   it('document types.REMOVE called', () => {
-    store.dispatch('user/add', { data: { docId: 'user1', name: 'testName1' } })
+    store.dispatch('user/add', {
+      data: { docId: 'user1', name: 'testName1' },
+      statePropName: 'user'
+    })
     store.dispatch('user/remove', {
-      data: { docId: 'user1', name: 'testName1' }
+      data: { docId: 'user1', name: 'testName1' },
+      statePropName: 'user'
     })
 
     expect(store.state.user.user).toBeNull()
@@ -106,7 +114,8 @@ describe('call-mutations', () => {
 
   it('collection types.ADD called', () => {
     store.dispatch('comment/add', {
-      data: { docId: 'comment1', message: 'test' }
+      data: { docId: 'comment1', message: 'test' },
+      statePropName: 'comments'
     })
 
     expect(store.state.comment.comments[0].docId).toEqual('comment1')
