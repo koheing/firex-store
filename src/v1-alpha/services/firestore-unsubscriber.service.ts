@@ -7,6 +7,10 @@ import {
 export class FirestoreUnsubscriber implements Unsubscribe {
   private _type: 'document' | 'collection'
 
+  static unbind(type: 'document' | 'collection'): FirestoreUnsubscriber {
+    return new FirestoreUnsubscriber(type)
+  }
+
   constructor(type: 'document' | 'collection') {
     this._type = type
   }

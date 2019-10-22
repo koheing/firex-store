@@ -7,6 +7,10 @@ import { FirestoreRepository } from '../repositories'
 export class FirestoreFetcher implements Fetch {
   private _ref: FirestoreRef
 
+  static where(ref: FirestoreRef): FirestoreFetcher {
+    return new FirestoreFetcher(ref)
+  }
+
   constructor(ref: FirestoreRef) {
     this._ref = ref
   }

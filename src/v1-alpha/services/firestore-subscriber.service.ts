@@ -13,6 +13,10 @@ export class FirestoreSubscriber implements Subscribe {
   private _ref: FirestoreRef
   private _statePropName?: string
 
+  static from(ref: FirestoreRef): FirestoreSubscriber {
+    return new FirestoreSubscriber(ref)
+  }
+
   constructor(ref: FirestoreRef) {
     this._ref = ref
   }
