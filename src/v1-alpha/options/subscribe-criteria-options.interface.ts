@@ -8,6 +8,7 @@ export interface SubscribeCriteriaOptions<T> extends CriteriaOptions<T> {
    *   @param: (payload: Payload) => void
    *     + payload = { data: { docId: string, [key: string]: any }, isLast: boolean }
    *        + data: subscribed data
+   *        + statePropName: state property bound subscribe data to
    *        + isLast:
    *          + undefined: subscribed 'document' data
    *          + true: subscribed multiple data(subscribe 'collection' data), and it is last data
@@ -18,11 +19,11 @@ export interface SubscribeCriteriaOptions<T> extends CriteriaOptions<T> {
   afterMutationCalled?: AfterMutationCalled
   /**
    * @description (type?: string, isAll?: boolean) => void
-   *   - type: 'document' | 'collection'
-   *   - isAll:
-   *     - undefined  when subscribe Document data
-   *     - true       when subscribe Collection data
-   *     - false      when subscribe Collection data and document in Collection is not existed
+   * @param type: 'document' | 'collection'
+   * @param isAll:
+   *     + undefined  when subscribe Document data
+   *     + true       when subscribe Collection data
+   *     + false      when subscribe Collection data and document in Collection is not existed
    */
   notFoundHandler?: NotFoundHandler
 }

@@ -16,10 +16,4 @@ export interface CriteriaOptions<T> {
    *   - type: () => void
    */
   completionHandler?: CompletionHandler
-  /**
-   * @param onCompleted it is called when completed fetching data , if defined.
-   * @warning Deprecated. It is removed on v1.0.0~. So, use `completionHandler`, please
-   *   - type: () => void
-   */
-  onCompleted?: OnCompleted
 }
