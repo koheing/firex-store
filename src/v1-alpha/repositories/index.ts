@@ -29,8 +29,7 @@ export class FirestoreRepository {
     errorHandler,
     completionHandler,
     afterMutationCalled,
-    notFoundHandler,
-    onCompleted
+    notFoundHandler
   }: SubscribeCriteria<T, firebase.firestore.DocumentReference>): Unsubscribe {
     return ref.onSnapshot(
       (snapshot) =>
@@ -44,10 +43,7 @@ export class FirestoreRepository {
               afterMutationCalled
             }),
       (error: any) => notifyErrorOccurred(error, errorHandler),
-      () =>
-        notifyCompletionIfDefined(
-          completionHandler ? completionHandler : onCompleted
-        )
+      () => notifyCompletionIfDefined(completionHandler)
     )
   }
 
@@ -59,8 +55,7 @@ export class FirestoreRepository {
     errorHandler,
     completionHandler,
     afterMutationCalled,
-    notFoundHandler,
-    onCompleted
+    notFoundHandler
   }: SubscribeCriteria<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
@@ -79,10 +74,7 @@ export class FirestoreRepository {
                 notifyNotFound('collection', notFoundHandler, false)
             }),
       (error: any) => notifyErrorOccurred(error, errorHandler),
-      () =>
-        notifyCompletionIfDefined(
-          completionHandler ? completionHandler : onCompleted
-        )
+      () => notifyCompletionIfDefined(completionHandler)
     )
   }
 
@@ -90,8 +82,7 @@ export class FirestoreRepository {
     ref,
     mapper,
     errorHandler,
-    completionHandler,
-    onCompleted
+    completionHandler
   }: FindCriteria<T, firebase.firestore.DocumentReference>): Promise<
     NullOr<T | any>
   > {
@@ -100,9 +91,7 @@ export class FirestoreRepository {
       .then((doc) => (!doc.exists ? null : toDocumentResult(doc, mapper)))
       .catch((error: any) => notifyErrorOccurred(error, errorHandler))
 
-    notifyCompletionIfDefined(
-      completionHandler ? completionHandler : onCompleted
-    )
+    notifyCompletionIfDefined(completionHandler)
     return result
   }
 
@@ -110,8 +99,7 @@ export class FirestoreRepository {
     ref,
     mapper,
     errorHandler,
-    completionHandler,
-    onCompleted
+    completionHandler
   }: FindCriteria<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
@@ -131,9 +119,7 @@ export class FirestoreRepository {
       })
       .catch((error: any) => notifyErrorOccurred(error, errorHandler))
 
-    notifyCompletionIfDefined(
-      completionHandler ? completionHandler : onCompleted
-    )
+    notifyCompletionIfDefined(completionHandler)
 
     return result
   }
