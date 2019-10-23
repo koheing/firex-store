@@ -1,5 +1,9 @@
 export * from './store'
-export { findFirestore } from './find'
+export {
+  FirestoreFinder,
+  FirestoreSubscriber,
+  FirestoreUnsubscriber
+} from './services'
 export {
   Mapper,
   AfterMutationCalled,
@@ -8,5 +12,7 @@ export {
   NotFoundHandler
 } from './types'
 export { Payload, DocumentResult } from './models'
-import * as v1alpha from './v1-alpha'
-export { v1alpha }
+export { from } from './factories'
+
+import * as v0 from './v0'
+export { v0 }

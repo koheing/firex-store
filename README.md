@@ -29,8 +29,9 @@ npm install --save firex-store
 ## v0 Usage
 - See [here](docs/v0/v0-usage.md), please
 
-## Difference from v0
-- See [here](docs/v1-alpha/v1-alpha-difference-from-v0.md), please
 
 ## v1-alpha Usage
 - See [here](docs/v1-alpha/v1-alpha-usage.md), please
+
+### Difference from v0
+- See [here](docs/v1-alpha/v1-alpha-difference-from-v0.md), please
