@@ -26,7 +26,7 @@ export const firestore = firebase.firestore()
 
 ### Import Path
 
-- `import { } from 'firex-store/v1alpha'`
+- `import { } from 'firex-store'`
 
 ### 1. Subscribe Firestore, using firex-store actions
 

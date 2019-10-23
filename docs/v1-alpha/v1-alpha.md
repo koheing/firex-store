@@ -6,7 +6,6 @@
 - If you use this npm, you can reference firestore data, easily
 - It is inspired by [vuexfire](https://github.com/vuejs/vuefire)
 
-- node v8.9.4 ~
 
 ## Installation
 

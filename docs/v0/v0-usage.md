@@ -24,6 +24,11 @@ firebase.initializeApp({
 export const firestore = firebase.firestore()
 ```
 
+### Import Path
+
+- `import { } from 'firex-store/v0'`
+
+
 ### 1. Subscribe Firestore, using firex-store actions
 
 #### part1. Add below mutations to namespaced Store
