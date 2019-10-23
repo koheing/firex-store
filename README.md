@@ -10,7 +10,7 @@
 ## Installation
 
 ```
-npm install --save firex-store
+npm install --save firex-store@1.0.0-alpha1
 ```
 
 ## Example
