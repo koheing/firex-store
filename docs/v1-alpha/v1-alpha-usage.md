@@ -62,7 +62,7 @@ Ex. Subscribe collection and document
 #### part1. Set Store
 
 ```javascript
-import { firestoreMutations, firestoreSubscribeAction, FirestoreSubscriber } from 'firex-store/v1alpha'
+import { firestoreMutations, firestoreSubscribeAction, FirestoreSubscriber } from 'firex-store'
 
 // modules: comment
 export default {
@@ -97,7 +97,7 @@ export default {
 
 ```javascript
 <script>
-import { actionTypes } from 'firex-store/v1alpha'
+import { actionTypes } from 'firex-store'
 
 export default {
   name: 'Comments',
@@ -142,7 +142,7 @@ Ex. Subscribe collection
 #### part1. Set Store
 
 ```javascript
-import { firestoreMutations, firestoreSubscribeAction, FirestoreSubscriber } from 'firex-store/v1alpha'
+import { firestoreMutations, firestoreSubscribeAction, FirestoreSubscriber } from 'firex-store'
 
 // modules: comment
 export default {
@@ -201,7 +201,7 @@ Ex. Unsubscribe collection
       - FirestoreUnsubscriber
 
 ```javascript
-import { firestoreMutations, firestoreSubscribeAction, firestoreUnsubscribeAction, FirestoreSubscriber, FirestoreUnsubscriber } from 'firex-store/v1alpha'
+import { firestoreMutations, firestoreSubscribeAction, firestoreUnsubscribeAction, FirestoreSubscriber, FirestoreUnsubscriber } from 'firex-store'
 // modules: comment
 export default {
   namespaced: true,
@@ -241,7 +241,7 @@ export default {
 
 ```javascript
 <script>
-import { actionTypes } from 'firex-store/v1alpha'
+import { actionTypes } from 'firex-store'
 
 export default {
   name: 'Comments',
@@ -270,7 +270,7 @@ export default {
       - state: any
 
 ```javascript
-import { firestoreMutations, firestoreSubscribeAction, FirestoreSubscriber } from 'firex-store/v1alpha'
+import { firestoreMutations, firestoreSubscribeAction, FirestoreSubscriber } from 'firex-store'
 
 // modules: comment
 export default {
@@ -375,7 +375,7 @@ export default {
 #### Ex.
 
 ```javascript
-import { firestoreMutations, firestoreSubscribeAction, FirestoreSubscriber } from 'firex-store/v1alpha'
+import { firestoreMutations, firestoreSubscribeAction, FirestoreSubscriber } from 'firex-store'
 
 // modules: comment
 export default {

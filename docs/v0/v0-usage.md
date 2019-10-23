@@ -41,7 +41,7 @@ export const firestore = firebase.firestore()
 Ex. Subscribe collection
 
 ```javascript
-
+import { firestoreMutations } from 'firex-store/v0'
 export default {
   namespaced: true,
   state: {
@@ -68,7 +68,7 @@ export default {
 Ex. Subscribe collection
 
 ```javascript
-
+import { firestoreMutations, firestoreSubscribeAction } from 'firex-store/v0'
 // modules: comment
 export default {
   namespaced: true,
@@ -92,7 +92,7 @@ Ex. Subscribe collection
 
 ```javascript
 <script>
-import { actionTypes } from 'firex-store'
+import { actionTypes } from 'firex-store/v0'
 
 export default {
   name: 'Comments',
@@ -116,7 +116,7 @@ export default {
 Ex. Subscribe collection
 
 ```javascript
-
+import { firestoreMutations } from 'firex-store/v0'
 export default {
   namespaced: true,
   state: {
@@ -141,6 +141,7 @@ export default {
   - options?: see [Options](#options)
 
 ```javascript
+import { firestoreMutations, subscribeFirestore } from 'firex-store/v0'
 export default {
   namespaced: true,
   state: {
@@ -178,6 +179,7 @@ Ex. Unsubscribe collection
   - actionName?: string
 
 ```javascript
+import { firestoreMutations, firestoreSubscribeAction, firestoreUnsubscribeAction } from 'firex-store/v0'
 export default {
   namespaced: true,
   state: {
@@ -199,7 +201,7 @@ export default {
 
 ```javascript
 <script>
-import { actionTypes } from 'firex-store'
+import { actionTypes } from 'firex-store/v0'
 
 export default {
   name: 'Comments',
@@ -220,6 +222,7 @@ export default {
   - state: State
 
 ```javascript
+import { firestoreMutations, subscribeFirestore, unsubscribeFirestore } from 'firex-store/v0'
 export default {
   namespaced: true,
   state: {
@@ -262,6 +265,8 @@ export default {
 EX. Call in Store Action, to fetch collection
 
 ```javascript
+import { findFirestore } from 'firex-store/v0'
+
 export default {
   namespaced: true,
   state: {},
@@ -370,6 +375,7 @@ const notFoundHandler = (type, isAll) => {
 ```
 
 ```javascript
+import { firestoreMutations, subscribeFirestore } from 'firex-store/v0'
 export default {
   namespaced: true,
   state: {
