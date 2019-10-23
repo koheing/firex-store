@@ -26,7 +26,8 @@ export const firestoreUnsubscribeAction = (
       ? actionTypes.document.UNSUBSCRIBE
       : actionTypes.collection.UNSUBSCRIBE
 
-  const action = options && options.actionName ? options.actionName : defaultActionName
+  const action =
+    options && options.actionName ? options.actionName : defaultActionName
 
   const tree: ActionTree<any, any> = {
     [action]({ state }) {
