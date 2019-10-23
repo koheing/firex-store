@@ -1,19 +1,19 @@
-import { FirestoreFetcher } from '../../../../src/v1-alpha/services'
+import { FirestoreFinder } from '../../../../src/v1-alpha/services'
 import { FirestoreRepository } from '../../../../src/v1-alpha/repositories/index'
 import { firestore } from '../../../mocks/firebase'
 jest.mock('../../../../src/v1-alpha/repositories/index')
 
-describe('FirestoreFetcher', () => {
+describe('FirestoreFinder', () => {
   it('find method called', () => {
-    FirestoreFetcher.where(
+    FirestoreFinder.from(
       firestore.collection('comments').doc('commentId')
-    ).fetch()
+    ).find()
 
     expect(FirestoreRepository.find).toHaveBeenCalled()
   })
 
   it('findAll method called', () => {
-    FirestoreFetcher.where(firestore.collection('comments')).fetch()
+    FirestoreFinder.from(firestore.collection('comments')).find()
 
     expect(FirestoreRepository.findAll).toHaveBeenCalled()
   })

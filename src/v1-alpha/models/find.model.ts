@@ -1,7 +1,7 @@
 import { FirestoreRef } from '../types'
 import { FindCriteriaOptions } from '../options'
 
-export interface Fetch {
+export interface Find {
   readonly ref: FirestoreRef
-  fetch: <T = any>(options?: FindCriteriaOptions<T>) => Promise<any>
+  find: <T = any>(options?: FindCriteriaOptions<T>) => Promise<any>
 }

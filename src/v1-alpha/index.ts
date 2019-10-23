@@ -1,6 +1,6 @@
 export * from './store'
 export {
-  FirestoreFetcher,
+  FirestoreFinder,
   FirestoreSubscriber,
   FirestoreUnsubscriber
 } from './services'
@@ -12,3 +12,4 @@ export {
   NotFoundHandler
 } from './types'
 export { Payload, DocumentResult } from './models'
+export { from } from './factories'

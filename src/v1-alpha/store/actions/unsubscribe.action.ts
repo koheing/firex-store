@@ -5,14 +5,13 @@ import { FirestoreUnsubscriber } from '../../services/firestore-unsubscriber.ser
 /**
  * @description unsubscribe firestore data to state property
  * @param firestoreUnsubscriber: FirestoreUnsubscriber instance
- * @param actionName: string | undefined
+ * @param options: { actionName: string } | undefined
  *
  * @example
  *   actions: {
- *     ...firestoreSubscribeAction(
- *       FirestoreSubscriber
- *         .from(firebase.firestore().collection('/comments'))
- *         .bindTo('comments'),
+ *     ...firestoreUnsubscribeAction(
+ *       FirestoreUnsubscriber
+ *         .unbind('collection'),
  *       { actionName: 'subscribeAll' }
  *     )
  *   }
@@ -20,14 +19,14 @@ import { FirestoreUnsubscriber } from '../../services/firestore-unsubscriber.ser
  */
 export const firestoreUnsubscribeAction = (
   firestoreUnsubscriber: FirestoreUnsubscriber,
-  actionName?: string
+  options?: { actionName: string }
 ) => {
   const defaultActionName =
     firestoreUnsubscriber.type === 'document'
       ? actionTypes.document.UNSUBSCRIBE
       : actionTypes.collection.UNSUBSCRIBE
 
-  const action = actionName ? actionName : defaultActionName
+  const action = options && options.actionName ? options.actionName : defaultActionName
 
   const tree: ActionTree<any, any> = {
     [action]({ state }) {

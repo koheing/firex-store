@@ -1,22 +1,22 @@
-import { Fetch } from '../models'
+import { Find } from '../models'
 import { FirestoreRef } from '../types'
 import { FindCriteriaOptions } from '../options'
 import { isDocumentRef } from './helpers'
 import { FirestoreRepository } from '../repositories'
 
 /**
- * @description class fetch firestore data at once
+ * @description class find firestore data at once
  *
  * @example
- *   FirestoreFetcher
- *     .where(firebase.firestore().collection('collection'))
- *     .fetch({
+ *   FirestoreFinder
+ *     .from(firebase.firestore().collection('collection'))
+ *     .find({
  *         mapper,
  *         errorHandler,
  *         completionHandler
  *     })
  */
-export class FirestoreFetcher implements Fetch {
+export class FirestoreFinder implements Find {
   private _ref: FirestoreRef
 
   /**
@@ -24,8 +24,8 @@ export class FirestoreFetcher implements Fetch {
    * @param ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
    * @returns FirestoreFetcher
    */
-  static where(ref: FirestoreRef): FirestoreFetcher {
-    return new FirestoreFetcher(ref)
+  static from(ref: FirestoreRef): FirestoreFinder {
+    return new FirestoreFinder(ref)
   }
 
   constructor(ref: FirestoreRef) {
@@ -37,12 +37,12 @@ export class FirestoreFetcher implements Fetch {
   }
 
   /**
-   * @description fetch firestore data at once
+   * @description find firestore data at once
    * @param options: { mapper,
    *         errorHandler,
    *         completionHandler } | undefined
    */
-  fetch<T = any>(options?: FindCriteriaOptions<T>): Promise<any> {
+  find<T = any>(options?: FindCriteriaOptions<T>): Promise<any> {
     return isDocumentRef(this.ref)
       ? FirestoreRepository.find({ ref: this.ref, ...options })
       : FirestoreRepository.findAll({ ref: this.ref, ...options })

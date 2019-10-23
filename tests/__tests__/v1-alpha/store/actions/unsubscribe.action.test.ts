@@ -69,7 +69,7 @@ describe('unsubscribe-action', () => {
       actions: {
         ...firestoreUnsubscribeAction(
           FirestoreUnsubscriber.unbind('collection'),
-          'test'
+          { actionName: 'test' }
         )
       }
     }

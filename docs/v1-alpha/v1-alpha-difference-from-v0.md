@@ -1,15 +1,16 @@
 ## Difference from v0
 
 ### Add
-- `FirestoreFetcher` class: find firestore class
+- `FirestoreFinder` class: find firestore class
 - `FirestoreSubscriber` class: subscribe firestore class
 - `FirestoreUnsibscriber` class: unsubscribe firestore class
+- `from` method: Factory of FirestoreFinder and FirestoreSubscriber
 - Payload interface property
   - add property: statePropName(string)
 
 ### Change
 - Find method changed:
-  - [v1-alpha] `FirestoreFetcher` class
+  - [v1-alpha] `FirestoreFinder` class
   - [v0] `findFirestore` method
 
 - Subscribe method changed:
@@ -23,7 +24,7 @@
 - firestoreSubscribeAction param changed
   - [v1-alpha] param
     - FirestoreSubscriber instance
-    - json
+    - json | undefined
       - actionName           : string | undefined
       - mapper               : Mapper | undefined
       - afterMutationCalled  : AfterMutationCalled | undefined
@@ -46,7 +47,8 @@
     - actionName: string | undefined
   - [v0] param
     - type: 'document' | 'collection'
-    - actionName: string | undefined
+    - json | undefined
+      - actionName: string
 
 - firestoreMutations param changed
   - [v1-alpha] param
