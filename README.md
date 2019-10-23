@@ -26,12 +26,14 @@ npm install --save firex-store
 
 - If you want to subscribe again after unsubscribing 'collection', set the property of the store you want to subscribe to `[]` and then subscribe.
 
-## v0 Usage
-- See [here](docs/v0/v0-usage.md), please
-
 
 ## v1-alpha Usage
 - See [here](docs/v1-alpha/v1-alpha-usage.md), please
 
+
 ### Difference from v0
 - See [here](docs/v1-alpha/v1-alpha-difference-from-v0.md), please
+
+
+## v0 Usage
+- See [here](docs/v0/v0-usage.md), please

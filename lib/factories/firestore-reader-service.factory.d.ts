@@ -25,5 +25,5 @@ declare class FirestoreReaderServiceFactory {
  * @description return factory of FirestoreSubscriber and FirestoreFinder
  * @param ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
  */
-export declare const from: (ref: import("../v0/types").FirestoreRef) => FirestoreReaderServiceFactory;
+export declare const from: (ref: FirestoreRef) => FirestoreReaderServiceFactory;
 export {};
