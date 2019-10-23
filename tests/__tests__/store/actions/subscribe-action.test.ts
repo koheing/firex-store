@@ -103,7 +103,6 @@ describe('subscribe-action', () => {
   })
 })
 
-
 describe('subscribe-action', () => {
   let store: Store<any>
   beforeEach(() => {

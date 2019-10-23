@@ -1,8 +1,9 @@
-import { 
-  callDocumentMutation, callCollectionMutation
+import {
+  callDocumentMutation,
+  callCollectionMutation
 } from '../../../../src/service/helpers/mutation-handlers'
-import{ MockDocumentSnapshot } from '../../../mocks/mock-document-snapshot'
-import{ MockQuerySnapshot } from '../../../mocks/mock-query-snapshot'
+import { MockDocumentSnapshot } from '../../../mocks/mock-document-snapshot'
+import { MockQuerySnapshot } from '../../../mocks/mock-query-snapshot'
 import { Payload } from '../../../../src/models'
 
 describe('callDocumentMutation', () => {
@@ -14,7 +15,7 @@ describe('callDocumentMutation', () => {
       callMutation,
       afterMutationCalled
     })
-  
+
     expect(callMutation).toHaveBeenCalled()
     expect(callMutation.mock.calls[0][0]).toBe('added')
     expect(callMutation.mock.calls[0][1].data.docId).toEqual('test0001')
@@ -33,7 +34,7 @@ describe('callDocumentMutation', () => {
       type: 'modified',
       isLast: false
     })
-  
+
     expect(callMutation).toHaveBeenCalled()
     expect(callMutation.mock.calls[0][0]).toBe('modified')
     expect(callMutation.mock.calls[0][1].data.docId).toEqual('test0001')
@@ -49,11 +50,10 @@ describe('callCollectionMutation', () => {
     const afterMutationCalled = jest.fn()
     const notifyNotFound = jest.fn()
     callCollectionMutation({
-      snapshot: new MockQuerySnapshot(true,
-        [
-          new MockDocumentSnapshot(),
-          new MockDocumentSnapshot(true, { name: 'test0002', count: 1 })
-        ]),
+      snapshot: new MockQuerySnapshot(true, [
+        new MockDocumentSnapshot(),
+        new MockDocumentSnapshot(true, { name: 'test0002', count: 1 })
+      ]),
       callMutation,
       afterMutationCalled,
       notifyNotFound

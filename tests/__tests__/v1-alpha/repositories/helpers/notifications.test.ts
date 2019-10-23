@@ -1,4 +1,3 @@
-import * as flushPromises from 'flush-promises'
 import {
   notifyNotFound,
   notifyCompletionIfDefined,
@@ -41,7 +40,6 @@ describe('notifyNotFound', () => {
     const notFoundHandler = jest.fn()
     const notify = () => notifyNotFound('document', notFoundHandler)
     notify()
-    await flushPromises()
     expect(notFoundHandler).toHaveBeenCalled()
   })
 

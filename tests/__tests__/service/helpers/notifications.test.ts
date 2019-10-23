@@ -1,10 +1,14 @@
-import * as flushPromises from 'flush-promises'
-import { notifyNotFound, notifyCompletionIfDefined, notifyErrorOccurred } from '../../../../src/service/helpers/notifications'
+import {
+  notifyNotFound,
+  notifyCompletionIfDefined,
+  notifyErrorOccurred
+} from '../../../../src/service/helpers/notifications'
 
 describe('notifyErrorHandler', () => {
   it('call errorHandler', () => {
     const errorHandler = jest.fn((error) => console.log(error))
-    const notify = () => notifyErrorOccurred('Sample Message: Error!', errorHandler)
+    const notify = () =>
+      notifyErrorOccurred('Sample Message: Error!', errorHandler)
     notify()
     expect(errorHandler).toHaveBeenCalled()
   })
@@ -36,13 +40,12 @@ describe('notifyNotFound', () => {
     const notFoundHandler = jest.fn()
     const notify = () => notifyNotFound('document', notFoundHandler)
     notify()
-    await flushPromises()
     expect(notFoundHandler).toHaveBeenCalled()
   })
 
   it('call notifyNotFound: document type, output default log', () => {
     const spyLog = jest.spyOn(console, 'log')
-    spyLog.mockImplementation(x => x)
+    spyLog.mockImplementation((x) => x)
     const notify = () => notifyNotFound('document')
     notify()
     expect(console.log).toHaveBeenCalled()
@@ -51,7 +54,7 @@ describe('notifyNotFound', () => {
 
   it('call notifyNotFound: collection type and isAll is true, output default log', () => {
     const spyLog = jest.spyOn(console, 'log')
-    spyLog.mockImplementation(x => x)
+    spyLog.mockImplementation((x) => x)
     const notify = () => notifyNotFound('collection', undefined, true)
     notify()
     expect(console.log).toHaveBeenCalled()
@@ -60,7 +63,7 @@ describe('notifyNotFound', () => {
 
   it('call notifyNotFound: collection type and isAll is false, output default log', () => {
     const spyLog = jest.spyOn(console, 'log')
-    spyLog.mockImplementation(x => x)
+    spyLog.mockImplementation((x) => x)
     const notify = () => notifyNotFound('collection', undefined, false)
     notify()
     expect(console.log).toHaveBeenCalled()

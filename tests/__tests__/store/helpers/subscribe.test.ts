@@ -1,236 +1,65 @@
-import { createLocalVue } from '@vue/test-utils'
-import * as Vuex from 'vuex'
-import { Store, Module } from 'vuex'
-import {
-  firestoreSubscribeActions,
-  actionTypes,
-  firestoreMutations
-} from '../../../../src'
-import { firestore } from '../../../mocks/firebase'
+import { subscribeFirestore } from '../../../../src'
 import { FirestoreService } from '../../../../src/service/index'
 import {
   FIREX_COLLECTION_UNSUBSCRIBER,
   FIREX_DOCUMENT_UNSUBSCRIBER
 } from '../../../../src/store/configurations'
+import { MockQueryReference } from '../../../mocks/mock-query-reference'
+import { MockQuerySnapshot } from '../../../mocks/mock-query-snapshot'
+import { MockDocumentReference } from '../../../mocks/mock-document-reference'
+import { MockDocumentSnapshot } from '../../../mocks/mock-document-snapshot'
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
-
-describe('subscribe', () => {
-  let store: Store<any>
-
-  beforeEach(() => {
-    store = new Store({
-      modules: {},
+describe('subscribe test', () => {
+  it('subscribe collection', () => {
+    const spy = jest.spyOn(FirestoreService, 'subscribeAll')
+    subscribeFirestore({
       state: {},
-      getters: {},
-      mutations: {},
-      actions: {}
+      commit: jest.fn(),
+      ref: new MockQueryReference(Promise.resolve(new MockQuerySnapshot()))
     })
-  })
-
-  it('subscribe collection , default action name', async (done) => {
-    const spy = jest.spyOn(FirestoreService, 'subscribeAll')
-    const commentModule: Module<any, any> = {
-      namespaced: true,
-      state: {
-        comments: null
-      },
-      getters: {},
-      mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
-      },
-      actions: {
-        ...firestoreSubscribeActions({ ref: firestore.collection('/comments') })
-      }
-    }
-
-    store.registerModule('comment', commentModule)
-
-    await store.dispatch(`comment/${actionTypes.COLLECTION_SUBSCRIBE}`)
-
-    expect(spy).toHaveBeenCalled()
-
-    spy.mockClear()
-
-    done()
-  })
-
-  it('subscribe collection , custom action name', async (done) => {
-    const spy = jest.spyOn(FirestoreService, 'subscribeAll')
-    const commentModule: Module<any, any> = {
-      namespaced: true,
-      state: {
-        comments: null
-      },
-      getters: {},
-      mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
-      },
-      actions: {
-        ...firestoreSubscribeActions({
-          ref: firestore.collection('/comments'),
-          actionName: 'test'
-        })
-      }
-    }
-
-    store.registerModule('comment', commentModule)
-
-    await store.dispatch(`comment/test`)
 
     expect(spy).toHaveBeenCalled()
     spy.mockClear()
-
-    done()
   })
 
-  it('subscribe document , custom action name', async (done) => {
-    const spy = jest.spyOn(FirestoreService, 'subscribe')
-    const userModule: Module<any, any> = {
-      namespaced: true,
-      state: {
-        user: null
-      },
-      getters: {},
-      mutations: {
-        ...firestoreMutations({ statePropName: 'user', type: 'document' })
-      },
-      actions: {
-        ...firestoreSubscribeActions({
-          ref: firestore.collection('/users').doc('userId')
-        })
-      }
-    }
-
-    store.registerModule('user', userModule)
-
-    await store.dispatch(`user/${actionTypes.DOCUMENT_SUBSCRIBE}`)
-
-    expect(spy).toHaveBeenCalled()
-    spy.mockClear()
-
-    done()
-  })
-
-  it('collection state has Unsubscriber', async (done) => {
+  it('call subscribe collection, but cannot called', () => {
     const spy = jest.spyOn(FirestoreService, 'subscribeAll')
-    const commentModule: Module<any, any> = {
-      namespaced: true,
-      state: {
-        comments: null
-      },
-      getters: {},
-      mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
-      },
-      actions: {
-        ...firestoreSubscribeActions({
-          ref: firestore.collection('/comments'),
-          actionName: 'test'
-        })
-      }
-    }
-
-    store.registerModule('comment', commentModule)
-    expect(store.state.comment[FIREX_COLLECTION_UNSUBSCRIBER]).toBeUndefined()
-
-    await store.dispatch(`comment/test`)
-
-    expect(
-      store.state.comment[FIREX_COLLECTION_UNSUBSCRIBER]
-    ).not.toBeUndefined()
-    spy.mockClear()
-
-    done()
-  })
-
-  it('document state has Unsubscriber', async (done) => {
-    const spy = jest.spyOn(FirestoreService, 'subscribe')
-    const userModule: Module<any, any> = {
-      namespaced: true,
-      state: {
-        user: null
-      },
-      getters: {},
-      mutations: {
-        ...firestoreMutations({ statePropName: 'user', type: 'document' })
-      },
-      actions: {
-        ...firestoreSubscribeActions({
-          ref: firestore.collection('/users').doc('userId')
-        })
-      }
-    }
-
-    store.registerModule('user', userModule)
-    expect(store.state.user[FIREX_DOCUMENT_UNSUBSCRIBER]).toBeUndefined()
-
-    await store.dispatch(`user/${actionTypes.DOCUMENT_SUBSCRIBE}`)
-
-    expect(store.state.user[FIREX_DOCUMENT_UNSUBSCRIBER]).not.toBeUndefined()
-    spy.mockClear()
-
-    done()
-  })
-
-  it('cannot call suibscribeAll when it had already called', async (done) => {
-    const spy = jest.spyOn(FirestoreService, 'subscribeAll')
-    const commentModule: Module<any, any> = {
-      namespaced: true,
-      state: {
-        comments: null,
-        [FIREX_COLLECTION_UNSUBSCRIBER]: jest.fn()
-      },
-      getters: {},
-      mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
-      },
-      actions: {
-        ...firestoreSubscribeActions({
-          ref: firestore.collection('/comments'),
-          actionName: 'test'
-        })
-      }
-    }
-
-    store.registerModule('comment', commentModule)
-
-    await store.dispatch(`comment/test`)
+    subscribeFirestore({
+      state: { [FIREX_COLLECTION_UNSUBSCRIBER]: jest.fn() },
+      commit: jest.fn(),
+      ref: new MockQueryReference(Promise.resolve(new MockQuerySnapshot()))
+    })
 
     expect(spy).not.toHaveBeenCalled()
     spy.mockClear()
-
-    done()
   })
 
-  it('cannot call suibscribe when it had already called', async (done) => {
+  it('subscribe document', async () => {
     const spy = jest.spyOn(FirestoreService, 'subscribe')
-    const userModule: Module<any, any> = {
-      namespaced: true,
-      state: {
-        user: null,
-        [FIREX_DOCUMENT_UNSUBSCRIBER]: jest.fn()
-      },
-      getters: {},
-      mutations: {
-        ...firestoreMutations({ statePropName: 'user', type: 'document' })
-      },
-      actions: {
-        ...firestoreSubscribeActions({
-          ref: firestore.collection('/users').doc('userId'),
-          actionName: 'test'
-        })
-      }
-    }
-
-    store.registerModule('user', userModule)
-
-    await store.dispatch(`user/test`)
+    subscribeFirestore({
+      state: {},
+      commit: jest.fn(),
+      ref: new MockDocumentReference(
+        Promise.resolve(new MockDocumentSnapshot())
+      ) as firebase.firestore.DocumentReference
+    })
 
     expect(spy).not.toHaveBeenCalled()
     spy.mockClear()
+  })
 
-    done()
+  it('call subscribe document, but cannot called', () => {
+    const spy = jest.spyOn(FirestoreService, 'subscribe')
+    const documentRef: firebase.firestore.DocumentReference = new MockDocumentReference(
+      Promise.resolve(new MockDocumentSnapshot())
+    ) as firebase.firestore.DocumentReference
+    subscribeFirestore({
+      state: { [FIREX_DOCUMENT_UNSUBSCRIBER]: jest.fn() },
+      commit: jest.fn(),
+      ref: documentRef
+    })
+
+    expect(spy).not.toHaveBeenCalled()
+    spy.mockClear()
   })
 })
