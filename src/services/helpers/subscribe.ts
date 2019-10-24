@@ -2,7 +2,7 @@ import {
   FIREX_COLLECTION_UNSUBSCRIBER,
   FIREX_DOCUMENT_UNSUBSCRIBER
 } from '../../configurations'
-import { CallMutation } from '../../types'
+import { CallMutation, Unsubscribers } from '../../types'
 import { callMutation } from './call-mutation'
 import { FirestoreRepository } from '../../repositories'
 import { Payload } from '../../models/payload.model'
@@ -27,7 +27,11 @@ export const subscribeFirestoreCollection = <T = any>({
   firebase.firestore.Query | firebase.firestore.CollectionReference,
   T
 >) => {
-  if (state[FIREX_COLLECTION_UNSUBSCRIBER]) {
+  if (!state[FIREX_COLLECTION_UNSUBSCRIBER]) {
+    state[FIREX_COLLECTION_UNSUBSCRIBER] = new Map<string, any>()
+  }
+
+  if ((state[FIREX_COLLECTION_UNSUBSCRIBER] as Unsubscribers).has(statePropName)) {
     return
   }
 
@@ -42,7 +46,8 @@ export const subscribeFirestoreCollection = <T = any>({
     ...options
   })
 
-  state[FIREX_COLLECTION_UNSUBSCRIBER] = unsubscriber
+  const unsubscribers: Unsubscribers = state[FIREX_COLLECTION_UNSUBSCRIBER]
+  unsubscribers.set(statePropName, unsubscriber)
 }
 
 export const subscribeFirestoreDocument = <T = any>({
@@ -52,7 +57,11 @@ export const subscribeFirestoreDocument = <T = any>({
   ref,
   options
 }: SubscribeCriteria<firebase.firestore.DocumentReference, T>) => {
-  if (state[FIREX_DOCUMENT_UNSUBSCRIBER]) {
+  if (!state[FIREX_DOCUMENT_UNSUBSCRIBER]) {
+    state[FIREX_DOCUMENT_UNSUBSCRIBER] = new Map<string, any>()
+  }
+
+  if ((state[FIREX_DOCUMENT_UNSUBSCRIBER] as Unsubscribers).has(statePropName)) {
     return
   }
 
@@ -67,5 +76,6 @@ export const subscribeFirestoreDocument = <T = any>({
     ...options
   })
 
-  state[FIREX_DOCUMENT_UNSUBSCRIBER] = unsubscriber
+  const unsubscribers: Unsubscribers = state[FIREX_DOCUMENT_UNSUBSCRIBER]
+  unsubscribers.set(statePropName, unsubscriber)
 }
