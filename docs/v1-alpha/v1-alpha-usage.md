@@ -190,13 +190,16 @@ Ex. Unsubscribe collection
 - argments:
 
   - firestoreUnsubscriber: FirestoreUnsubscriber instance
-  - options: { actionName: string } | undefined
+  - criteria: {
+      type: 'document' | 'collection',
+      actionName: string | undefined 
+    }
 
 - class `FirestoreUnsubscriber`
 - class method:
   - unbind: Make FirestoreUnsubscriber instance
     - parameter:
-      - type: 'document' | 'collection'
+      - statePropName: string. state property
     - return:
       - FirestoreUnsubscriber
 
@@ -225,12 +228,13 @@ export default {
     )
     ...firestoreUnsubscribeAction(
       FirestoreUnsubscriber
-        .unbind('collection')
+        .unbind('comments'),
+      { type: 'collection' }
     )
     ...firestoreUnsubscribeAction(
       FirestoreUnsubscriber
-        .unbind('document'),
-      { actionName: 'unsubscribe' }
+        .unbind('comment'),
+      { type: 'document' }
     )
   }
 .....
@@ -249,7 +253,7 @@ export default {
     this.$store.dispatch(`comment/${actionTypes.collection.SUBSCRIBE}`)
     this.$store.dispatch(`comment/${actionTypes.document.SUBSCRIBE}`)
     this.$store.dispatch(`comment/${actionTypes.collection.UNSUBSCRIBE}`)
-    this.$store.dispatch(`comment/unsubscribe`)
+    this.$store.dispatch(`comment/${actionTypes.document.UNSUBSCRIBE}`)
   }
 }
 
@@ -262,7 +266,7 @@ export default {
 - class method:
   - unbind: Make FirestoreUnsubscriber instance
     - parameter:
-      - type: 'document' | 'collection'
+      - statePropName: string. state property
     - return:
       - FirestoreUnsubscriber
   - unsubscribe:
@@ -270,7 +274,7 @@ export default {
       - state: any
 
 ```javascript
-import { firestoreMutations, firestoreSubscribeAction, FirestoreSubscriber } from 'firex-store'
+import { firestoreMutations, firestoreSubscribeAction, FirestoreSubscriber, FirestoreUnsubscriber } from 'firex-store'
 
 // modules: comment
 export default {
@@ -290,7 +294,7 @@ export default {
     },
     unsubscribeAll: ({ state }) => {
       FirestoreUnsubscriber
-        .unbind('collection')
+        .unbind('comments')
         .unsubscribe(state)
     }
   }
@@ -331,6 +335,7 @@ export default {
 EX. Call in Store Action, to fetch collection
 
 ```javascript
+import { FirestoreFinder } from 'firex-store'
 export default {
   namespaced: true,
   state: {},
@@ -375,7 +380,7 @@ export default {
 #### Ex.
 
 ```javascript
-import { firestoreMutations, firestoreSubscribeAction, FirestoreSubscriber } from 'firex-store'
+import { firestoreMutations, from } from 'firex-store'
 
 // modules: comment
 export default {
@@ -393,11 +398,9 @@ export default {
         .subscribe(state, commit)
     },
     find: () => {
-      return from(
-                firebase.firestore().collection('/comments').doc('commentId')
-              )
-              .once()
-              .find()
+      return from(firebase.firestore().collection('/comments').doc('commentId'))
+               .once()
+               .find()
     }
   }
 .....
@@ -495,6 +498,7 @@ const notFoundHandler = (type, isAll) => {
 ```
 
 ```javascript
+import { firestoreMutations, FirestoreSubscriber } from 'firex-store'
 export default {
   namespaced: true,
   state: {
