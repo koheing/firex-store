@@ -58,6 +58,11 @@
       - statePropName: string
       - type: 'document' | 'collection'
     
+- default return value of find and findAll, FirestoreFinder method in case of error occured
+  - [v1-alpha] 
+    - return value: void
+  - [v0] 
+    - return value: any(error)
 
 ### Delete
 - `OnCompletion` method

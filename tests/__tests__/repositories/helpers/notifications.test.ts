@@ -13,11 +13,13 @@ describe('notifyErrorHandler', () => {
     expect(errorHandler).toHaveBeenCalled()
   })
 
-  it('not error if errorHandler not defined', () => {
+  it('return error if errorHandler not defined', () => {
     jest.spyOn(console, 'error')
     const error = 'Sample Message: Error!'
     const notify = () => notifyErrorOccurred(error)
-    notify()
+    const result = notify()
+
+    expect(result).toEqual(error)
     expect(console.error).toHaveBeenCalled()
     jest.clearAllMocks()
   })

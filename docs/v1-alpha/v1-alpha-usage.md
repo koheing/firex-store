@@ -322,7 +322,7 @@ export default {
     - parameter:
       - ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
     - return:
-      - FirestoreSubscriber
+      - FirestoreFinder
   - find: fetch firestore data at once
     - parameter:
       - options?:
@@ -414,7 +414,7 @@ export default {
 
   - errorHandler
 
-    - If it defined, call it when error occured. But if not, call `console.error(error)`
+    - If it defined, call it when error occured. But if not, call `console.error(error)` and return `error`
 
   - CompletionHandler
 
