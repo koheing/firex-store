@@ -4,19 +4,19 @@ import { Unsubscribe } from '../models';
  *
  * @example
  *   FirestoreUnsubscriber
- *     .unbind('collection')
+ *     .unbind('comments')
  *     .unsubscribe(state)
  */
 export declare class FirestoreUnsubscriber implements Unsubscribe {
-    private _type;
+    private _statePropName;
     /**
      * @description Make FirestoreUnsubscriber instance
-     * @param type: 'document' | 'collection'
+     * @param statePropName: string
      * @returns FirestoreUnsubscriber
      */
-    static unbind(type: 'document' | 'collection'): FirestoreUnsubscriber;
-    constructor(type: 'document' | 'collection');
-    readonly type: 'document' | 'collection';
+    static unbind(statePropName: string): FirestoreUnsubscriber;
+    constructor(statePropName: string);
+    readonly statePropName: string;
     /**
      * @description unsubscribe firestore data
      * @param state: any

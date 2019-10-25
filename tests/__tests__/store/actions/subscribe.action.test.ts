@@ -49,7 +49,7 @@ describe('subscribe-action', () => {
 
     store.registerModule('comment', commentModule)
 
-    await store.dispatch(`comment/${actionTypes.COLLECTION_SUBSCRIBE}`)
+    await store.dispatch(`comment/${actionTypes.collection.SUBSCRIBE}`)
 
     expect(subscribeFirestoreCollection).toHaveBeenCalledTimes(1)
 
@@ -106,7 +106,7 @@ describe('subscribe-action', () => {
 
     store.registerModule('user', userModule)
 
-    await store.dispatch(`user/${actionTypes.DOCUMENT_SUBSCRIBE}`)
+    await store.dispatch(`user/${actionTypes.document.SUBSCRIBE}`)
 
     expect(subscribeFirestoreDocument).toHaveBeenCalledTimes(1)
 

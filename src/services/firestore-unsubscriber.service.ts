@@ -1,35 +1,34 @@
 import { Unsubscribe } from '../models'
-import {
-  FIREX_DOCUMENT_UNSUBSCRIBER,
-  FIREX_COLLECTION_UNSUBSCRIBER
-} from '../configurations'
+import { FIREX_UNSUBSCRIBERS } from '../configurations'
+import { Unsubscribers } from '../types'
+import { UNSUBSCRIBE_METHOD_NOT_CALLED } from '../errors'
 
 /**
  * @description class unsubscribe firestore data to state property
  *
  * @example
  *   FirestoreUnsubscriber
- *     .unbind('collection')
+ *     .unbind('comments')
  *     .unsubscribe(state)
  */
 export class FirestoreUnsubscriber implements Unsubscribe {
-  private _type: 'document' | 'collection'
+  private _statePropName: string
 
   /**
    * @description Make FirestoreUnsubscriber instance
-   * @param type: 'document' | 'collection'
+   * @param statePropName: string
    * @returns FirestoreUnsubscriber
    */
-  static unbind(type: 'document' | 'collection'): FirestoreUnsubscriber {
-    return new FirestoreUnsubscriber(type)
+  static unbind(statePropName: string): FirestoreUnsubscriber {
+    return new FirestoreUnsubscriber(statePropName)
   }
 
-  constructor(type: 'document' | 'collection') {
-    this._type = type
+  constructor(statePropName: string) {
+    this._statePropName = statePropName
   }
 
-  get type(): 'document' | 'collection' {
-    return this._type
+  get statePropName(): string {
+    return this._statePropName
   }
 
   /**
@@ -37,13 +36,16 @@ export class FirestoreUnsubscriber implements Unsubscribe {
    * @param state: any
    */
   unsubscribe(state: any) {
-    const prop =
-      this.type === 'document'
-        ? FIREX_DOCUMENT_UNSUBSCRIBER
-        : FIREX_COLLECTION_UNSUBSCRIBER
-    if (state[prop]) {
-      state[prop]()
-      delete state[prop]
+    const unsubscribers: Unsubscribers | undefined = state[FIREX_UNSUBSCRIBERS]
+    if (!unsubscribers || unsubscribers.has(this.statePropName) === false) {
+      console.error(UNSUBSCRIBE_METHOD_NOT_CALLED)
+      return
     }
+
+    const unsubscribe = unsubscribers.get(this.statePropName)
+    if (unsubscribe) {
+      unsubscribe()
+    }
+    unsubscribers.delete(this.statePropName)
   }
 }

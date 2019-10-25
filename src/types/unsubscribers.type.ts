@@ -1,3 +1,1 @@
-import { Unsubscribe } from "firebase";
-
-export type Unsubscribers = Map<string, Unsubscribe>
+export type Unsubscribers = Map<string, firebase.Unsubscribe>

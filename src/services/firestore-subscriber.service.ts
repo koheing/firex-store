@@ -1,13 +1,14 @@
 import { Subscribe } from '../models'
-import { FirestoreRef } from '../types'
+import { FirestoreRef, Unsubscribers } from '../types'
 import { Commit } from 'vuex'
 import { SubscribeCriteriaOptions } from '../options'
-import { NOT_CALL_BIND_TO_METHOD_YET } from '../errors'
+import { BIND_TO_METHOD_NOT_CALLED } from '../errors'
 import {
   isDocumentRef,
   subscribeFirestoreDocument,
   subscribeFirestoreCollection
 } from './helpers'
+import { FIREX_UNSUBSCRIBERS } from '../configurations'
 
 /**
  * @description class subscribe firestore data to state property
@@ -74,7 +75,15 @@ export class FirestoreSubscriber implements Subscribe {
     options?: SubscribeCriteriaOptions<T>
   ) {
     if (!this.statePropName) {
-      console.error(NOT_CALL_BIND_TO_METHOD_YET)
+      console.error(BIND_TO_METHOD_NOT_CALLED)
+      return
+    }
+
+    if (!state[FIREX_UNSUBSCRIBERS]) {
+      state[FIREX_UNSUBSCRIBERS] = new Map<string, any>()
+    }
+
+    if ((state[FIREX_UNSUBSCRIBERS] as Unsubscribers).has(this.statePropName)) {
       return
     }
 

@@ -1,9 +1,14 @@
 import { FirestoreSubscriber } from '../../../src/services'
 import { FirestoreRepository } from '../../../src/repositories/index'
 import { firestore } from '../../mocks/firebase'
+import { FIREX_UNSUBSCRIBERS } from '../../../src/configurations'
 jest.mock('../../../src/repositories/index')
 
 describe('FirestoreFetcher', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
   it('subscribe method called', () => {
     FirestoreSubscriber.from(firestore.collection('comments').doc('commentId'))
       .bindTo('comment')
@@ -17,6 +22,18 @@ describe('FirestoreFetcher', () => {
       .subscribe({}, jest.fn())
 
     expect(FirestoreRepository.subscribeAll).toHaveBeenCalled()
+  })
+
+  it('subscribeAll or subscribe method not called', () => {
+    const mockMap = new Map<string, any>()
+    mockMap.set('comments', jest.fn())
+    const mockState: any = {}
+    mockState[FIREX_UNSUBSCRIBERS] = mockMap
+    FirestoreSubscriber.from(firestore.collection('comments'))
+      .bindTo('comments')
+      .subscribe(mockState, jest.fn())
+
+    expect(FirestoreRepository.subscribeAll).not.toHaveBeenCalled()
   })
 
   it('not bindTo method call yet error', () => {

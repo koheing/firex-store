@@ -1,4 +1,4 @@
 export interface Unsubscribe {
-    readonly type: 'document' | 'collection';
+    readonly statePropName: string;
     unsubscribe: (state: any) => void;
 }
