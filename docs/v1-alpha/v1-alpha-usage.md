@@ -197,7 +197,7 @@ Ex. Unsubscribe collection
 
 - class `FirestoreUnsubscriber`
 - class method:
-  - unbind: Make FirestoreUnsubscriber instance
+  - on: Make FirestoreUnsubscriber instance
     - parameter:
       - statePropName: string. state property
     - return:
@@ -228,12 +228,12 @@ export default {
     )
     ...firestoreUnsubscribeAction(
       FirestoreUnsubscriber
-        .unbind('comments'),
+        .on('comments'),
       { type: 'collection' }
     )
     ...firestoreUnsubscribeAction(
       FirestoreUnsubscriber
-        .unbind('comment'),
+        .on('comment'),
       { type: 'document' }
     )
   }
@@ -264,7 +264,7 @@ export default {
 
 - class `FirestoreUnsubscriber`
 - class method:
-  - unbind: Make FirestoreUnsubscriber instance
+  - on: Make FirestoreUnsubscriber instance
     - parameter:
       - statePropName: string. state property
     - return:
@@ -294,7 +294,7 @@ export default {
     },
     unsubscribeAll: ({ state }) => {
       FirestoreUnsubscriber
-        .unbind('comments')
+        .on('comments')
         .unsubscribe(state)
     }
   }

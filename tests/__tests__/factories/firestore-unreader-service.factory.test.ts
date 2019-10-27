@@ -1,11 +1,11 @@
-import { unbind } from '../../../src/factories'
+import { on } from '../../../src/factories'
 import { FirestoreUnsubscriber } from '../../../src'
 
 describe('unbind method', () => {
   it('return FirestoreUnsubscriber instance', () => {
-    const unsubscriber = unbind('test')
+    const unsubscriber = on('test')
 
-    expect(unsubscriber).toBeInstanceOf(FirestoreUnsubscriber)
-    expect(unsubscriber.statePropName).toEqual('test')
+    expect(unsubscriber.unbind()).toBeInstanceOf(FirestoreUnsubscriber)
+    expect(unsubscriber.unbind().statePropName).toEqual('test')
   })
 })

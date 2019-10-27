@@ -1,20 +1,29 @@
 import { FirestoreUnsubscriber } from '../services'
 
-// class FirestoreUnreaderServiceFactory {
-//   private _statePropName: string
+/**
+ * @description factory of FirestoreUnsubscriber
+ * @param statePropName: state property bound to firestore data
+ * @method on: return FirestoreUnsubscriber
+ */
+class FirestoreUnreaderServiceFactory {
+  private _statePropName: string
 
-//   constructor(statePropName: string) {
-//     this._statePropName = statePropName
-//   }
+  constructor(statePropName: string) {
+    this._statePropName = statePropName
+  }
 
-//   unbind(): FirestoreUnsubscriber {
-//     return FirestoreUnsubscriber.unbind(this._statePropName)
-//   }
-// }
+  /**
+   * @description return FirestoreUnsubscriber instance
+   * @param statePropName : state property bound to firestore data
+   */
+  unbind(): FirestoreUnsubscriber {
+    return FirestoreUnsubscriber.on(this._statePropName)
+  }
+}
 
 /**
- * @description return firestoreUnsubscriber instance
+ * @description return factory of FirestoreUnsubscriber
  * @param statePropName : state property bound to firestore data
  */
-export const unbind = (statePropName: string): FirestoreUnsubscriber =>
-  FirestoreUnsubscriber.unbind(statePropName)
+export const on = (statePropName: string): FirestoreUnreaderServiceFactory =>
+  new FirestoreUnreaderServiceFactory(statePropName)

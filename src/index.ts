@@ -12,7 +12,7 @@ export {
   NotFoundHandler
 } from './types'
 export { Payload, DocumentResult } from './models'
-export { from, unbind } from './factories'
+export { from, on } from './factories'
 
 import * as v0 from './v0'
 export { v0 }

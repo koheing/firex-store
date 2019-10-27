@@ -19,7 +19,7 @@ export class FirestoreUnsubscriber implements Unsubscriber {
    * @param statePropName: string
    * @returns FirestoreUnsubscriber
    */
-  static unbind(statePropName: string): FirestoreUnsubscriber {
+  static on(statePropName: string): FirestoreUnsubscriber {
     return new FirestoreUnsubscriber(statePropName)
   }
 
