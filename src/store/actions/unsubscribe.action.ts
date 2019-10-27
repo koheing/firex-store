@@ -11,7 +11,7 @@ import { FirestoreUnsubscriber } from '../../services/firestore-unsubscriber.ser
  *   actions: {
  *     ...firestoreUnsubscribeAction(
  *       FirestoreUnsubscriber
- *         .unbind('comments'),
+ *         .on('comments'),
  *       { type: 'collection', actionName: 'subscribeAll' }
  *     )
  *   }

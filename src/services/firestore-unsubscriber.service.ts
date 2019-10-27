@@ -8,7 +8,7 @@ import { UNSUBSCRIBE_METHOD_NOT_CALLED } from '../errors'
  *
  * @example
  *   FirestoreUnsubscriber
- *     .unbind('comments')
+ *     .on('comments')
  *     .unsubscribe(state)
  */
 export class FirestoreUnsubscriber implements Unsubscriber {
