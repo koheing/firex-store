@@ -436,14 +436,14 @@ export default {
         - statePropName: string <-- state property bound subscribe data to
         - [key: string]: any }
 
-* notFoundHandler
+  - notFoundHandler
 
-  - If it defined, call it when snapshot doesn't exist
-  - @param type: 'document' | 'collection'
-  - @param isAll:
-    - undefined when subscribe Document data
-    - true when subscribe Collection data
-    - false when subscribe Collection data and document in Collection is not existed
+    - If it defined, call it when snapshot doesn't exist
+    - @param type: 'document' | 'collection'
+    - @param isAll:
+      - undefined when subscribe Document data
+      - true when subscribe Collection data
+      - false when subscribe Collection data and document in Collection is not existed
 
 Ex.
 
