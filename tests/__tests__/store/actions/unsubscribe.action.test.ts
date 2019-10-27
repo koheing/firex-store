@@ -7,7 +7,7 @@ import {
   firestoreUnsubscribeAction
 } from '../../../../src'
 import { FirestoreUnsubscriber } from '../../../../src/services'
-import { FIREX_UNSUBSCRIBERS } from '../../../../src/configurations'
+import { FIREX_UNSUBSCRIBES } from '../../../../src/configurations'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
@@ -31,7 +31,7 @@ describe('unsubscribe-action', () => {
       namespaced: true,
       state: {
         comments: null,
-        [FIREX_UNSUBSCRIBERS]: mockMap
+        [FIREX_UNSUBSCRIBES]: mockMap
       },
       getters: {},
       mutations: {
@@ -59,7 +59,7 @@ describe('unsubscribe-action', () => {
       namespaced: true,
       state: {
         comments: null,
-        [FIREX_UNSUBSCRIBERS]: mockMap
+        [FIREX_UNSUBSCRIBES]: mockMap
       },
       getters: {},
       mutations: {
@@ -90,7 +90,7 @@ describe('unsubscribe-action', () => {
       namespaced: true,
       state: {
         user: null,
-        [FIREX_UNSUBSCRIBERS]: mockMap
+        [FIREX_UNSUBSCRIBES]: mockMap
       },
       getters: {},
       mutations: {

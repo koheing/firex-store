@@ -1,5 +1,5 @@
-import { FIREX_UNSUBSCRIBERS } from '../../configurations'
-import { CallMutation, Unsubscribers } from '../../types'
+import { FIREX_UNSUBSCRIBES } from '../../configurations'
+import { CallMutation, Unsubscribes } from '../../types'
 import { callMutation } from './call-mutation'
 import { FirestoreRepository } from '../../repositories'
 import { Payload } from '../../models/payload.model'
@@ -28,15 +28,15 @@ export const subscribeFirestoreCollection = <T = any>({
     changeType: firebase.firestore.DocumentChangeType,
     payload: any
   ) => callMutation({ mutationType: 'collection', changeType, commit, payload })
-  const unsubscriber = FirestoreRepository.subscribeAll({
+  const unsubscribe = FirestoreRepository.subscribeAll({
     statePropName,
     ref,
     callMutation: mutation,
     ...options
   })
 
-  const unsubscribers: Unsubscribers = state[FIREX_UNSUBSCRIBERS]
-  unsubscribers.set(statePropName, unsubscriber)
+  const unsubscribers: Unsubscribes = state[FIREX_UNSUBSCRIBES]
+  unsubscribers.set(statePropName, unsubscribe)
 }
 
 export const subscribeFirestoreDocument = <T = any>({
@@ -50,13 +50,13 @@ export const subscribeFirestoreDocument = <T = any>({
     changeType: firebase.firestore.DocumentChangeType,
     payload: Payload
   ) => callMutation({ mutationType: 'document', changeType, commit, payload })
-  const unsubscriber = FirestoreRepository.subscribe({
+  const unsubscribe = FirestoreRepository.subscribe({
     statePropName,
     ref,
     callMutation: mutation,
     ...options
   })
 
-  const unsubscribers: Map<string, any> = state[FIREX_UNSUBSCRIBERS]
-  unsubscribers.set(statePropName, unsubscriber)
+  const unsubscribes: Unsubscribes = state[FIREX_UNSUBSCRIBES]
+  unsubscribes.set(statePropName, unsubscribe)
 }

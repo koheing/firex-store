@@ -1,4 +1,4 @@
-import { Find } from '../models'
+import { Finder } from '../models'
 import { FirestoreRef } from '../types'
 import { FindCriteriaOptions } from '../options'
 import { isDocumentRef } from './helpers'
@@ -16,7 +16,7 @@ import { FirestoreRepository } from '../repositories'
  *         completionHandler
  *     })
  */
-export class FirestoreFinder implements Find {
+export class FirestoreFinder implements Finder {
   private _ref: FirestoreRef
 
   /**

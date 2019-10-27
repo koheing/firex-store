@@ -1,1 +1,1 @@
-export declare const FIREX_UNSUBSCRIBERS = "[firex-store] Firex Unsubscribers";
+export declare const FIREX_UNSUBSCRIBES = "[firex-store] Firex Unsubscribes";

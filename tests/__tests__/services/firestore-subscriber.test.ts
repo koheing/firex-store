@@ -1,7 +1,7 @@
 import { FirestoreSubscriber } from '../../../src/services'
 import { FirestoreRepository } from '../../../src/repositories/index'
 import { firestore } from '../../mocks/firebase'
-import { FIREX_UNSUBSCRIBERS } from '../../../src/configurations'
+import { FIREX_UNSUBSCRIBES } from '../../../src/configurations'
 jest.mock('../../../src/repositories/index')
 
 describe('FirestoreFetcher', () => {
@@ -28,7 +28,7 @@ describe('FirestoreFetcher', () => {
     const mockMap = new Map<string, any>()
     mockMap.set('comments', jest.fn())
     const mockState: any = {}
-    mockState[FIREX_UNSUBSCRIBERS] = mockMap
+    mockState[FIREX_UNSUBSCRIBES] = mockMap
     FirestoreSubscriber.from(firestore.collection('comments'))
       .bindTo('comments')
       .subscribe(mockState, jest.fn())

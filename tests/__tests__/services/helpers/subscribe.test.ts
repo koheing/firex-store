@@ -6,7 +6,7 @@ import {
 } from '../../../../src/services/helpers'
 import { MockQuerySnapshot } from '../../../mocks/mock-query-snapshot'
 import { FirestoreRepository } from '../../../../src/repositories'
-import { FIREX_UNSUBSCRIBERS } from '../../../../src/configurations'
+import { FIREX_UNSUBSCRIBES } from '../../../../src/configurations'
 import { MockDocumentSnapshot } from '../../../mocks/mock-document-snapshot'
 
 describe('subscribe test', () => {
@@ -14,7 +14,7 @@ describe('subscribe test', () => {
     const spy = jest.spyOn(FirestoreRepository, 'subscribeAll')
     const mockMap = new Map<string, any>()
     mockMap.set('dummy', jest.fn())
-    const mockState = { [FIREX_UNSUBSCRIBERS]: mockMap }
+    const mockState = { [FIREX_UNSUBSCRIBES]: mockMap }
     subscribeFirestoreCollection({
       statePropName: 'test',
       state: mockState,
@@ -22,7 +22,7 @@ describe('subscribe test', () => {
       ref: new MockQueryReference(Promise.resolve(new MockQuerySnapshot()))
     })
 
-    expect(mockState[FIREX_UNSUBSCRIBERS].size).toEqual(2)
+    expect(mockState[FIREX_UNSUBSCRIBES].size).toEqual(2)
     expect(spy).toHaveBeenCalled()
     spy.mockClear()
   })
@@ -31,7 +31,7 @@ describe('subscribe test', () => {
     const spy = jest.spyOn(FirestoreRepository, 'subscribe')
     const mockMap = new Map<string, any>()
     mockMap.set('dummy', jest.fn())
-    const mockState = { [FIREX_UNSUBSCRIBERS]: mockMap }
+    const mockState = { [FIREX_UNSUBSCRIBES]: mockMap }
     subscribeFirestoreDocument({
       statePropName: 'test',
       state: mockState,
@@ -41,7 +41,7 @@ describe('subscribe test', () => {
       )
     })
 
-    expect(mockState[FIREX_UNSUBSCRIBERS].size).toEqual(2)
+    expect(mockState[FIREX_UNSUBSCRIBES].size).toEqual(2)
     expect(spy).toHaveBeenCalled()
     spy.mockClear()
   })

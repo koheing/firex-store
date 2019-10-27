@@ -1,6 +1,6 @@
-import { Unsubscribe } from '../models'
-import { FIREX_UNSUBSCRIBERS } from '../configurations'
-import { Unsubscribers } from '../types'
+import { Unsubscriber } from '../models'
+import { FIREX_UNSUBSCRIBES } from '../configurations'
+import { Unsubscribes } from '../types'
 import { UNSUBSCRIBE_METHOD_NOT_CALLED } from '../errors'
 
 /**
@@ -11,7 +11,7 @@ import { UNSUBSCRIBE_METHOD_NOT_CALLED } from '../errors'
  *     .unbind('comments')
  *     .unsubscribe(state)
  */
-export class FirestoreUnsubscriber implements Unsubscribe {
+export class FirestoreUnsubscriber implements Unsubscriber {
   private _statePropName: string
 
   /**
@@ -36,16 +36,16 @@ export class FirestoreUnsubscriber implements Unsubscribe {
    * @param state: any
    */
   unsubscribe(state: any) {
-    const unsubscribers: Unsubscribers | undefined = state[FIREX_UNSUBSCRIBERS]
-    if (!unsubscribers || unsubscribers.has(this.statePropName) === false) {
+    const unsubscribes: Unsubscribes | undefined = state[FIREX_UNSUBSCRIBES]
+    if (!unsubscribes || unsubscribes.has(this.statePropName) === false) {
       console.error(UNSUBSCRIBE_METHOD_NOT_CALLED)
       return
     }
 
-    const unsubscribe = unsubscribers.get(this.statePropName)
+    const unsubscribe = unsubscribes.get(this.statePropName)
     if (unsubscribe) {
       unsubscribe()
     }
-    unsubscribers.delete(this.statePropName)
+    unsubscribes.delete(this.statePropName)
   }
 }

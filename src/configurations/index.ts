@@ -1,1 +1,1 @@
-export const FIREX_UNSUBSCRIBERS = '[firex-store] Firex Unsubscribers'
+export const FIREX_UNSUBSCRIBES = '[firex-store] Firex Unsubscribes'
