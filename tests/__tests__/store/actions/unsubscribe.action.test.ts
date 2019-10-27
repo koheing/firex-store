@@ -7,10 +7,7 @@ import {
   firestoreUnsubscribeAction
 } from '../../../../src'
 import { FirestoreUnsubscriber } from '../../../../src/services'
-import {
-  FIREX_COLLECTION_UNSUBSCRIBER,
-  FIREX_DOCUMENT_UNSUBSCRIBER
-} from '../../../../src/configurations'
+import { FIREX_UNSUBSCRIBES } from '../../../../src/configurations'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
@@ -26,28 +23,28 @@ describe('unsubscribe-action', () => {
     })
   })
 
-  it('unsubscribe collection , default action name and', async (done) => {
+  it('unsubscribe collection , default action name', async (done) => {
     const mockUnsubscribe = jest.fn()
+    const mockMap = new Map<string, any>()
+    mockMap.set('comments', mockUnsubscribe)
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
         comments: null,
-        [FIREX_COLLECTION_UNSUBSCRIBER]: mockUnsubscribe
+        [FIREX_UNSUBSCRIBES]: mockMap
       },
       getters: {},
       mutations: {
         ...firestoreMutations('collection')
       },
       actions: {
-        ...firestoreUnsubscribeAction(
-          FirestoreUnsubscriber.unbind('collection')
-        )
+        ...firestoreUnsubscribeAction(FirestoreUnsubscriber.unbind('comments'), { type: 'collection' })
       }
     }
 
     store.registerModule('comment', commentModule)
 
-    await store.dispatch(`comment/${actionTypes.COLLECTION_UNSUBSCRIBE}`)
+    await store.dispatch(`comment/${actionTypes.collection.UNSUBSCRIBE}`)
 
     expect(mockUnsubscribe).toHaveBeenCalled()
 
@@ -56,11 +53,13 @@ describe('unsubscribe-action', () => {
 
   it('unsubscribe collection , custom action name', async (done) => {
     const mockUnsubscribe = jest.fn()
+    const mockMap = new Map<string, any>()
+    mockMap.set('comments', mockUnsubscribe)
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
         comments: null,
-        [FIREX_COLLECTION_UNSUBSCRIBER]: mockUnsubscribe
+        [FIREX_UNSUBSCRIBES]: mockMap
       },
       getters: {},
       mutations: {
@@ -68,8 +67,8 @@ describe('unsubscribe-action', () => {
       },
       actions: {
         ...firestoreUnsubscribeAction(
-          FirestoreUnsubscriber.unbind('collection'),
-          { actionName: 'test' }
+          FirestoreUnsubscriber.unbind('comments'),
+          { type: 'collection', actionName: 'test' }
         )
       }
     }
@@ -85,24 +84,26 @@ describe('unsubscribe-action', () => {
 
   it('unsubscribe document , custom action name', async (done) => {
     const mockUnsubscribe = jest.fn()
+    const mockMap = new Map<string, any>()
+    mockMap.set('user', mockUnsubscribe)
     const userModule: Module<any, any> = {
       namespaced: true,
       state: {
         user: null,
-        [FIREX_DOCUMENT_UNSUBSCRIBER]: mockUnsubscribe
+        [FIREX_UNSUBSCRIBES]: mockMap
       },
       getters: {},
       mutations: {
         ...firestoreMutations('document')
       },
       actions: {
-        ...firestoreUnsubscribeAction(FirestoreUnsubscriber.unbind('document'))
+        ...firestoreUnsubscribeAction(FirestoreUnsubscriber.unbind('user'), { type: 'document' })
       }
     }
 
     store.registerModule('user', userModule)
 
-    await store.dispatch(`user/${actionTypes.DOCUMENT_UNSUBSCRIBE}`)
+    await store.dispatch(`user/${actionTypes.document.UNSUBSCRIBE}`)
 
     expect(mockUnsubscribe).toHaveBeenCalled()
 

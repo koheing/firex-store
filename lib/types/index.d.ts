@@ -7,3 +7,4 @@ export * from './firestore-ref.type';
 export * from './null-or.type';
 export * from './after-mutation-called.type';
 export * from './not-found-handler.type';
+export * from './unsubscribes.type';

@@ -44,7 +44,9 @@
 - firestoreUnubscribeAction param changed
   - [v1-alpha] param
     - FirestoreUnsubscriber instance
-    - actionName: string | undefined
+    - json
+      - type: 'collection' | 'document'
+      - actionName: string | undefined
   - [v0] param
     - type: 'document' | 'collection'
     - json | undefined

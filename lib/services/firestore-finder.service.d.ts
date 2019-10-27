@@ -1,4 +1,4 @@
-import { Find } from '../models';
+import { Finder } from '../models';
 import { FirestoreRef } from '../types';
 import { FindCriteriaOptions } from '../options';
 /**
@@ -13,7 +13,7 @@ import { FindCriteriaOptions } from '../options';
  *         completionHandler
  *     })
  */
-export declare class FirestoreFinder implements Find {
+export declare class FirestoreFinder implements Finder {
     private _ref;
     /**
      * @description Make FirestoreFetcher instance

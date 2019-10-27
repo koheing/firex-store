@@ -1,13 +1,14 @@
-import { Subscribe } from '../models'
-import { FirestoreRef } from '../types'
+import { Subscriber } from '../models'
+import { FirestoreRef, Unsubscribes } from '../types'
 import { Commit } from 'vuex'
 import { SubscribeCriteriaOptions } from '../options'
-import { NOT_CALL_BIND_TO_METHOD_YET } from '../errors'
+import { BIND_TO_METHOD_NOT_CALLED } from '../errors'
 import {
   isDocumentRef,
   subscribeFirestoreDocument,
   subscribeFirestoreCollection
 } from './helpers'
+import { FIREX_UNSUBSCRIBES } from '../configurations'
 
 /**
  * @description class subscribe firestore data to state property
@@ -23,7 +24,7 @@ import {
  *         afterMutationCalled
  *     })
  */
-export class FirestoreSubscriber implements Subscribe {
+export class FirestoreSubscriber implements Subscriber {
   private _ref: FirestoreRef
   private _statePropName?: string
 
@@ -74,7 +75,15 @@ export class FirestoreSubscriber implements Subscribe {
     options?: SubscribeCriteriaOptions<T>
   ) {
     if (!this.statePropName) {
-      console.error(NOT_CALL_BIND_TO_METHOD_YET)
+      console.error(BIND_TO_METHOD_NOT_CALLED)
+      return
+    }
+
+    if (!state[FIREX_UNSUBSCRIBES]) {
+      state[FIREX_UNSUBSCRIBES] = new Map<string, any>()
+    }
+
+    if ((state[FIREX_UNSUBSCRIBES] as Unsubscribes).has(this.statePropName)) {
       return
     }
 
