@@ -7,7 +7,7 @@ import { FirestoreSubscriber, FirestoreFinder } from '../services'
  * @method bindTo(statePropName): return FirestoreSubscriber
  * @method once: return FirestoreFinder
  */
-class FirestoreReaderServiceFactory {
+export class FirestoreReaderServiceFactory {
   private _ref: FirestoreRef
 
   constructor(ref: FirestoreRef) {
@@ -31,10 +31,3 @@ class FirestoreReaderServiceFactory {
     return FirestoreFinder.from(this._ref)
   }
 }
-
-/**
- * @description return factory of FirestoreSubscriber and FirestoreFinder
- * @param ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
- */
-export const from = (ref: FirestoreRef) =>
-  new FirestoreReaderServiceFactory(ref)
