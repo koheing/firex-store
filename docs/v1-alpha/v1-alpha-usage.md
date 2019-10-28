@@ -191,8 +191,8 @@ Ex. Unsubscribe collection
 
   - firestoreUnsubscriber: FirestoreUnsubscriber instance
   - criteria: {
-      type: 'document' | 'collection',
-      actionName: string | undefined 
+    type: 'document' | 'collection',
+    actionName: string | undefined
     }
 
 - class `FirestoreUnsubscriber`
@@ -407,6 +407,53 @@ export default {
 }
 ```
 
+### on
+
+- `on`: Method, return FirestoreUnsubscriber instance
+
+  - parameter:
+    - statePropName: state property bound to subscribe data
+  - return: FirestoreUnsubscriber
+
+#### Ex.
+
+```javascript
+import { firestoreMutations, from, on, firestoreUnsubscriber } from 'firex-store'
+
+// modules: comment
+export default {
+  namespaced: true,
+  state: {
+    comments: [],
+    comment: null
+  },
+  mutations: {
+    ...firestoreMutations('collection')
+  },
+  actions: {
+    subscribeAll: ({ state, commit }) => {
+      from(firebase.firestore().collection('/comments'))
+        .bindTo('comments')
+        .subscribe(state, commit)
+    },
+    find: () => {
+      return from(firebase.firestore().collection('/comments').doc('commentId'))
+               .once()
+               .find()
+    },
+    unsubscribe: ({ state }) => {
+      on('comments').unsubscribe(state)
+    },
+    ...firestoreUnsubscriber(
+      on('comment'),
+      { type: 'document' }
+    )
+  }
+.....
+}
+```
+
+
 ## Options
 
 - Options
@@ -433,7 +480,7 @@ export default {
         - data: { docId: string | null, [key: string]: any }, <-- subscribed data
         - isLast: boolean, <-- In 'document' subscribed , it undefined. In 'collection' subscribed, true or false.
           - UseCase: disappear and appear loading bar when subscribed 'collection' data at first
-        - statePropName: string <-- state property bound subscribe data to
+        - statePropName: string <-- state property bound to subscribe data
         - [key: string]: any }
 
   - notFoundHandler

@@ -6,7 +6,6 @@
 - If you use this npm, you can reference firestore data, easily
 - It is inspired by [vuexfire](https://github.com/vuejs/vuefire)
 
-
 ## Installation
 
 ```
@@ -28,7 +27,9 @@ others comming soon
 - If you want to subscribe again after unsubscribing 'collection', set the property of the store you want to subscribe to `[]` and then subscribe.
 
 ## Difference from v0
+
 - See [here](v1-alpha-difference-from-v0.md), please
 
 ## Usage
+
 - See [here](v1-alpha-usage.md), please

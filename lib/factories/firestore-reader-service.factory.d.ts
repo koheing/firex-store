@@ -6,7 +6,7 @@ import { FirestoreSubscriber, FirestoreFinder } from '../services';
  * @method bindTo(statePropName): return FirestoreSubscriber
  * @method once: return FirestoreFinder
  */
-declare class FirestoreReaderServiceFactory {
+export declare class FirestoreReaderServiceFactory {
     private _ref;
     constructor(ref: FirestoreRef);
     /**
@@ -21,9 +21,3 @@ declare class FirestoreReaderServiceFactory {
      */
     once(): FirestoreFinder;
 }
-/**
- * @description return factory of FirestoreSubscriber and FirestoreFinder
- * @param ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
- */
-export declare const from: (ref: FirestoreRef) => FirestoreReaderServiceFactory;
-export {};

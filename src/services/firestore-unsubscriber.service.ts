@@ -8,7 +8,7 @@ import { UNSUBSCRIBE_METHOD_NOT_CALLED } from '../errors'
  *
  * @example
  *   FirestoreUnsubscriber
- *     .on('comments')
+ *     .on('statePropName')
  *     .unsubscribe(state)
  */
 export class FirestoreUnsubscriber implements Unsubscriber {
@@ -37,7 +37,7 @@ export class FirestoreUnsubscriber implements Unsubscriber {
    */
   unsubscribe(state: any) {
     const unsubscribes: Unsubscribes | undefined = state[FIREX_UNSUBSCRIBES]
-    if (!unsubscribes || unsubscribes.has(this.statePropName) === false) {
+    if (!unsubscribes || !unsubscribes.has(this.statePropName)) {
       console.error(UNSUBSCRIBE_METHOD_NOT_CALLED)
       return
     }
