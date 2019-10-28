@@ -1,1 +1,3 @@
-export type Unsubscribes = Map<string, firebase.Unsubscribe>
+type StatePropName = string
+
+export type Unsubscribes = Map<StatePropName, firebase.Unsubscribe>

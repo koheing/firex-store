@@ -4,7 +4,7 @@ import { Unsubscriber } from '../models';
  *
  * @example
  *   FirestoreUnsubscriber
- *     .unbind('comments')
+ *     .on('statePropName')
  *     .unsubscribe(state)
  */
 export declare class FirestoreUnsubscriber implements Unsubscriber {
@@ -14,7 +14,7 @@ export declare class FirestoreUnsubscriber implements Unsubscriber {
      * @param statePropName: string
      * @returns FirestoreUnsubscriber
      */
-    static unbind(statePropName: string): FirestoreUnsubscriber;
+    static on(statePropName: string): FirestoreUnsubscriber;
     constructor(statePropName: string);
     readonly statePropName: string;
     /**

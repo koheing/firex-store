@@ -8,7 +8,7 @@ describe('FirestoreFetcher', () => {
     const mockMap = new Map<string, any>()
     mockMap.set('comments', mockUnsubscriber)
     mockState[FIREX_UNSUBSCRIBES] = mockMap
-    FirestoreUnsubscriber.unbind('comments').unsubscribe(mockState)
+    FirestoreUnsubscriber.on('comments').unsubscribe(mockState)
 
     expect(mockUnsubscriber).toHaveBeenCalled()
     expect(mockMap.has('comments')).toBeFalsy()
@@ -19,7 +19,7 @@ describe('FirestoreFetcher', () => {
     const mockMap = new Map<string, any>()
     mockMap.set('user', undefined)
     mockState[FIREX_UNSUBSCRIBES] = mockMap
-    FirestoreUnsubscriber.unbind('user').unsubscribe(mockState)
+    FirestoreUnsubscriber.on('user').unsubscribe(mockState)
 
     expect(mockMap.size).toEqual(0)
   })
@@ -31,7 +31,7 @@ describe('FirestoreFetcher', () => {
     const mockMap = new Map<string, any>()
     mockMap.set('comments', mockUnsubscriber)
     mockState[FIREX_UNSUBSCRIBES] = mockMap
-    FirestoreUnsubscriber.unbind('user').unsubscribe(mockState)
+    FirestoreUnsubscriber.on('user').unsubscribe(mockState)
 
     expect(mockUnsubscriber).not.toHaveBeenCalled()
     expect(mockMap.has('comments')).toBeTruthy()

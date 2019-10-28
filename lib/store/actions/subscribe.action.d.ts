@@ -17,14 +17,21 @@ interface CriteriaOptions<T> extends SubscribeCriteriaOptions<T> {
  *         notFoundHandler,
  *         completionHandler
  *         afterMutationCalled } | undefined
+ * @returns ActionTree<any, any>
  *
  * @example
+ *   import { firestoreSubscribeAction, FirestoreSubscriber, from } from 'firex-store'
  *   actions: {
  *     ...firestoreSubscribeAction(
  *       FirestoreSubscriber
- *         .from(firebase.firestore().collection('/comments'))
- *         .bindTo('comments'),
- *       { actionName: 'subscribeAll' }
+ *         .from(firebase.firestore().collection('collection'))
+ *         .bindTo('statePropName'),
+ *       { actionName: 'customActionName' }
+ *     ),
+ *     ...firestoreSubscribeAction(
+ *       from(firebase.firestore().collection('collection'))
+ *         .bindTo('statePropName'),
+ *       { actionName: 'customActionName2' }
  *     )
  *   }
  *

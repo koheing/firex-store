@@ -35,8 +35,8 @@ export const subscribeFirestoreCollection = <T = any>({
     ...options
   })
 
-  const unsubscribers: Unsubscribes = state[FIREX_UNSUBSCRIBES]
-  unsubscribers.set(statePropName, unsubscribe)
+  const unsubscribes: Unsubscribes = state[FIREX_UNSUBSCRIBES]
+  unsubscribes.set(statePropName, unsubscribe)
 }
 
 export const subscribeFirestoreDocument = <T = any>({

@@ -4,13 +4,20 @@ import { FirestoreUnsubscriber } from '../../services/firestore-unsubscriber.ser
  * @description unsubscribe firestore data to state property
  * @param firestoreUnsubscriber: FirestoreUnsubscriber instance
  * @param criteria: { type: 'document' | 'collection', actionName?: string }
+ * @returns ActionTree<any, any>
  *
  * @example
+ *   import { firestoreUnsubscribeAction, FirestoreUnsubscriber, on } from 'firex-store'
+ *
  *   actions: {
  *     ...firestoreUnsubscribeAction(
  *       FirestoreUnsubscriber
- *         .unbind('comments'),
- *       { type: 'collection', actionName: 'subscribeAll' }
+ *         .on('statePropName'),
+ *       { type: 'collection', actionName: 'customActionName' }
+ *     ),
+ *     ....firestoreUnsubscribeAction(
+ *       on('statePropName'),
+ *       { type: 'collection', actionName: 'customActionName2' }
  *     )
  *   }
  *
