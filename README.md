@@ -10,7 +10,7 @@
 ## Installation
 
 ```
-npm install --save firex-store@1.0.0-alpha1
+npm install --save firex-store
 ```
 
 ## Example
@@ -27,12 +27,12 @@ npm install --save firex-store@1.0.0-alpha1
 - If you want to subscribe again after unsubscribing 'collection', set the property of the store you want to subscribe to `[]` and then subscribe.
 
 
-## v1-alpha Usage
-- See [here](docs/v1-alpha/v1-alpha-usage.md), please
+## v1 Usage
+- See [here](docs/v1-alpha/v1-usage.md), please
 
 
 ### Difference from v0
-- See [here](docs/v1-alpha/v1-alpha-difference-from-v0.md), please
+- See [here](docs/v1-alpha/v1-difference-from-v0.md), please
 
 
 ## v0 Usage
