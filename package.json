@@ -1,6 +1,6 @@
 {
   "name": "firex-store",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "subscribe firebase data to vuex",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -14,9 +14,7 @@
     "test": "jest -w 1",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
-    "preversion": "npm run lint",
-    "version": "npm run format && git add -A src",
-    "postversion": "git push && git push --tags"
+    "preversion": "npm run lint"
   },
   "repository": {
     "type": "git",
