@@ -475,22 +475,23 @@ export default {
     - `subscribeFirestore` and `subscribeFirestoreActions` only.
     - If it defined, call it when completed
     - This method called after mutation called
-    - @param payload
-      - type payload = {
-        - data: { docId: string | null, [key: string]: any }, <-- subscribed data
-        - isLast: boolean, <-- In 'document' subscribed , it undefined. In 'collection' subscribed, true or false.
-          - UseCase: disappear and appear loading bar when subscribed 'collection' data at first
-        - statePropName: string <-- state property bound to subscribe data
-        - [key: string]: any }
+    - parameters
+      - payload
+        - type payload = {
+          - data: { docId: string | null, [key: string]: any }, <-- subscribed data
+          - isLast: boolean, <-- In 'document' subscribed , it undefined. In 'collection' subscribed, true or false.
+            - UseCase: disappear and appear loading bar when subscribed 'collection' data at first
+          - statePropName: string <-- state property bound to subscribe data
+          - [key: string]: any }
 
   - notFoundHandler
-
     - If it defined, call it when snapshot doesn't exist
-    - @param type: 'document' | 'collection'
-    - @param isAll:
-      - undefined when subscribe Document data
-      - true when subscribe Collection data
-      - false when subscribe Collection data and document in Collection is not existed
+      - parameters
+        - type: 'document' | 'collection'
+        - isAll:
+          - undefined when subscribe Document data
+          - true when subscribe Collection data
+          - false when subscribe Collection data and document in Collection is not existed
 
 Ex.
 
