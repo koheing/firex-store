@@ -18,8 +18,16 @@ export const notifyNotFound = (
           : 'PARTIAL DATA NOT FOUND'
       )
 
-export const notifyErrorOccurred = (error: any, errorHandler?: ErrorHandler) =>
-  errorHandler ? errorHandler(error) : console.error(error)
+export const notifyErrorOccurred = (
+  error: any,
+  errorHandler?: ErrorHandler
+) => {
+  const defaultErrorHandler: ErrorHandler = (error: any) => {
+    console.error(error)
+    return error
+  }
+  return errorHandler ? errorHandler(error) : defaultErrorHandler(error)
+}
 
 export const notifyCompletionIfDefined = (
   completionHandler?: CompletionHandler

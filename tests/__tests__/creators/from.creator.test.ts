@@ -1,4 +1,4 @@
-import { from } from '../../../src/factories'
+import { from } from '../../../src/creators'
 import {
   FirestoreFinder,
   FirestoreSubscriber

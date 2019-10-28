@@ -1,7 +1,7 @@
 import { Commit } from 'vuex';
 import { SubscribeCriteriaOptions } from '../options';
 import { FirestoreRef } from '../types';
-export interface Subscribe {
+export interface Subscriber {
     readonly ref: FirestoreRef;
     readonly statePropName: string | undefined;
     bindTo: (statePropName: string) => any;

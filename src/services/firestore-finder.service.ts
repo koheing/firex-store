@@ -1,11 +1,14 @@
-import { Find } from '../models'
-import { FirestoreRef } from '../types'
+import { Finder } from '../models'
+import { FirestoreRef, NullOr } from '../types'
 import { FindCriteriaOptions } from '../options'
 import { isDocumentRef } from './helpers'
 import { FirestoreRepository } from '../repositories'
 
 /**
  * @description class find firestore data at once
+ * @returns null | error | any
+ *   - error: if you defined errorHandler, it changed any
+ *
  *
  * @example
  *   FirestoreFinder
@@ -16,13 +19,13 @@ import { FirestoreRepository } from '../repositories'
  *         completionHandler
  *     })
  */
-export class FirestoreFinder implements Find {
+export class FirestoreFinder implements Finder {
   private _ref: FirestoreRef
 
   /**
-   * @description Make FirestoreFetcher instance
+   * @description Make FirestoreFinder instance
    * @param ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
-   * @returns FirestoreFetcher
+   * @returns FirestoreFinder
    */
   static from(ref: FirestoreRef): FirestoreFinder {
     return new FirestoreFinder(ref)
@@ -38,11 +41,14 @@ export class FirestoreFinder implements Find {
 
   /**
    * @description find firestore data at once
-   * @param options: { mapper,
+   * @param options: {
+   *         mapper,
    *         errorHandler,
    *         completionHandler } | undefined
+   * @returns null | error | any
+   *   - error: if you defined errorHandler, it changed any
    */
-  find<T = any>(options?: FindCriteriaOptions<T>): Promise<any> {
+  find<T = any>(options?: FindCriteriaOptions<T>): Promise<NullOr<T | any>> {
     return isDocumentRef(this.ref)
       ? FirestoreRepository.find({ ref: this.ref, ...options })
       : FirestoreRepository.findAll({ ref: this.ref, ...options })

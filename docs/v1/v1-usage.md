@@ -190,13 +190,16 @@ Ex. Unsubscribe collection
 - argments:
 
   - firestoreUnsubscriber: FirestoreUnsubscriber instance
-  - options: { actionName: string } | undefined
+  - criteria: {
+    type: 'document' | 'collection',
+    actionName: string | undefined
+    }
 
 - class `FirestoreUnsubscriber`
 - class method:
-  - unbind: Make FirestoreUnsubscriber instance
+  - on: Make FirestoreUnsubscriber instance
     - parameter:
-      - type: 'document' | 'collection'
+      - statePropName: string. state property
     - return:
       - FirestoreUnsubscriber
 
@@ -225,12 +228,13 @@ export default {
     )
     ...firestoreUnsubscribeAction(
       FirestoreUnsubscriber
-        .unbind('collection')
+        .on('comments'),
+      { type: 'collection' }
     )
     ...firestoreUnsubscribeAction(
       FirestoreUnsubscriber
-        .unbind('document'),
-      { actionName: 'unsubscribe' }
+        .on('comment'),
+      { type: 'document' }
     )
   }
 .....
@@ -249,7 +253,7 @@ export default {
     this.$store.dispatch(`comment/${actionTypes.collection.SUBSCRIBE}`)
     this.$store.dispatch(`comment/${actionTypes.document.SUBSCRIBE}`)
     this.$store.dispatch(`comment/${actionTypes.collection.UNSUBSCRIBE}`)
-    this.$store.dispatch(`comment/unsubscribe`)
+    this.$store.dispatch(`comment/${actionTypes.document.UNSUBSCRIBE}`)
   }
 }
 
@@ -260,9 +264,9 @@ export default {
 
 - class `FirestoreUnsubscriber`
 - class method:
-  - unbind: Make FirestoreUnsubscriber instance
+  - on: Make FirestoreUnsubscriber instance
     - parameter:
-      - type: 'document' | 'collection'
+      - statePropName: string. state property
     - return:
       - FirestoreUnsubscriber
   - unsubscribe:
@@ -270,7 +274,7 @@ export default {
       - state: any
 
 ```javascript
-import { firestoreMutations, firestoreSubscribeAction, FirestoreSubscriber } from 'firex-store'
+import { firestoreMutations, firestoreSubscribeAction, FirestoreSubscriber, FirestoreUnsubscriber } from 'firex-store'
 
 // modules: comment
 export default {
@@ -290,7 +294,7 @@ export default {
     },
     unsubscribeAll: ({ state }) => {
       FirestoreUnsubscriber
-        .unbind('collection')
+        .on('comments')
         .unsubscribe(state)
     }
   }
@@ -322,7 +326,7 @@ export default {
     - parameter:
       - ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
     - return:
-      - FirestoreSubscriber
+      - FirestoreFinder
   - find: fetch firestore data at once
     - parameter:
       - options?:
@@ -331,6 +335,7 @@ export default {
 EX. Call in Store Action, to fetch collection
 
 ```javascript
+import { FirestoreFinder } from 'firex-store'
 export default {
   namespaced: true,
   state: {},
@@ -375,7 +380,7 @@ export default {
 #### Ex.
 
 ```javascript
-import { firestoreMutations, firestoreSubscribeAction, FirestoreSubscriber } from 'firex-store'
+import { firestoreMutations, from } from 'firex-store'
 
 // modules: comment
 export default {
@@ -393,16 +398,61 @@ export default {
         .subscribe(state, commit)
     },
     find: () => {
-      return from(
-                firebase.firestore().collection('/comments').doc('commentId')
-              )
-              .once()
-              .find()
+      return from(firebase.firestore().collection('/comments').doc('commentId'))
+               .once()
+               .find()
     }
   }
 .....
 }
 ```
+
+### on
+
+- `on`: Method, return FirestoreUnsubscriber instance
+
+  - parameter:
+    - statePropName: state property bound to subscribe data
+  - return: FirestoreUnsubscriber
+
+#### Ex.
+
+```javascript
+import { firestoreMutations, from, on, firestoreUnsubscriber } from 'firex-store'
+
+// modules: comment
+export default {
+  namespaced: true,
+  state: {
+    comments: [],
+    comment: null
+  },
+  mutations: {
+    ...firestoreMutations('collection')
+  },
+  actions: {
+    subscribeAll: ({ state, commit }) => {
+      from(firebase.firestore().collection('/comments'))
+        .bindTo('comments')
+        .subscribe(state, commit)
+    },
+    find: () => {
+      return from(firebase.firestore().collection('/comments').doc('commentId'))
+               .once()
+               .find()
+    },
+    unsubscribe: ({ state }) => {
+      on('comments').unsubscribe(state)
+    },
+    ...firestoreUnsubscriber(
+      on('comment'),
+      { type: 'document' }
+    )
+  }
+.....
+}
+```
+
 
 ## Options
 
@@ -414,7 +464,7 @@ export default {
 
   - errorHandler
 
-    - If it defined, call it when error occured. But if not, call `console.error(error)`
+    - If it defined, call it when error occured. But if not, call `console.error(error)` and return `error`
 
   - CompletionHandler
 
@@ -425,22 +475,23 @@ export default {
     - `subscribeFirestore` and `subscribeFirestoreActions` only.
     - If it defined, call it when completed
     - This method called after mutation called
-    - @param payload
-      - type payload = {
-        - data: { docId: string | null, [key: string]: any }, <-- subscribed data
-        - isLast: boolean, <-- In 'document' subscribed , it undefined. In 'collection' subscribed, true or false.
-          - UseCase: disappear and appear loading bar when subscribed 'collection' data at first
-        - statePropName: string <-- state property bound subscribe data to
-        - [key: string]: any }
+    - parameters
+      - payload
+        - type payload = {
+          - data: { docId: string | null, [key: string]: any }, <-- subscribed data
+          - isLast: boolean, <-- In 'document' subscribed , it undefined. In 'collection' subscribed, true or false.
+            - UseCase: disappear and appear loading bar when subscribed 'collection' data at first
+          - statePropName: string <-- state property bound to subscribe data
+          - [key: string]: any }
 
-* notFoundHandler
-
-  - If it defined, call it when snapshot doesn't exist
-  - @param type: 'document' | 'collection'
-  - @param isAll:
-    - undefined when subscribe Document data
-    - true when subscribe Collection data
-    - false when subscribe Collection data and document in Collection is not existed
+  - notFoundHandler
+    - If it defined, call it when snapshot doesn't exist
+      - parameters
+        - type: 'document' | 'collection'
+        - isAll:
+          - undefined when subscribe Document data
+          - true when subscribe Collection data
+          - false when subscribe Collection data and document in Collection is not existed
 
 Ex.
 
@@ -495,6 +546,7 @@ const notFoundHandler = (type, isAll) => {
 ```
 
 ```javascript
+import { firestoreMutations, FirestoreSubscriber } from 'firex-store'
 export default {
   namespaced: true,
   state: {

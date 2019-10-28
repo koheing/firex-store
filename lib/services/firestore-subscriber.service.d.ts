@@ -1,4 +1,4 @@
-import { Subscribe } from '../models';
+import { Subscriber } from '../models';
 import { FirestoreRef } from '../types';
 import { Commit } from 'vuex';
 import { SubscribeCriteriaOptions } from '../options';
@@ -16,7 +16,7 @@ import { SubscribeCriteriaOptions } from '../options';
  *         afterMutationCalled
  *     })
  */
-export declare class FirestoreSubscriber implements Subscribe {
+export declare class FirestoreSubscriber implements Subscriber {
     private _ref;
     private _statePropName?;
     /**
