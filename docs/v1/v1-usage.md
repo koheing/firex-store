@@ -466,13 +466,13 @@ export default {
 
     - If it defined, call it when error occured. But if not, call `console.error(error)` and return `error`
 
-  - CompletionHandler
+  - completionHandler
 
     - If it defined, call it when completed
 
   - afterMutationCalled
 
-    - `subscribeFirestore` and `subscribeFirestoreActions` only.
+    - `FirestoreSubscriber` and `firestoreSubscribeAction` only.
     - If it defined, call it when completed
     - This method called after mutation called
     - parameters
@@ -485,6 +485,8 @@ export default {
           - [key: string]: any }
 
   - notFoundHandler
+
+    - `FirestoreSubscriber` and `firestoreSubscribeAction` only.
     - If it defined, call it when snapshot doesn't exist
       - parameters
         - type: 'document' | 'collection'
