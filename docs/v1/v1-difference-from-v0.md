@@ -14,22 +14,22 @@
 
 - Find method changed:
 
-  - [v1-alpha] `FirestoreFinder` class
+  - [v1] `FirestoreFinder` class
   - [v0] `findFirestore` method
 
 - Subscribe method changed:
 
-  - [v1-alpha] `FirestoreSubscriber` class
+  - [v1] `FirestoreSubscriber` class
   - [v0] `subscribeFirestore` method
 
 - Unsubscribe method changed:
 
-  - [v1-alpha] `FirestoreUnsubscriber` class
+  - [v1] `FirestoreUnsubscriber` class
   - [v0] `unsubscribeFirestore` method
 
 - firestoreSubscribeAction param changed
 
-  - [v1-alpha] param
+  - [v1] param
     - FirestoreSubscriber instance
     - json | undefined
       - actionName : string | undefined
@@ -50,7 +50,7 @@
 
 - firestoreUnubscribeAction param changed
 
-  - [v1-alpha] param
+  - [v1] param
     - FirestoreUnsubscriber instance
     - json
       - type: 'collection' | 'document'
@@ -61,7 +61,7 @@
       - actionName: string
 
 - firestoreMutations param changed
-  - [v1-alpha] param
+  - [v1] param
     - type: 'document' | 'collection' | 'all'
   - [v0] param
 
@@ -69,7 +69,7 @@
       - statePropName: string
       - type: 'document' | 'collection'
 - default return value of find and findAll, FirestoreFinder method in case of error occured
-  - [v1-alpha]
+  - [v1]
     - return value: void
   - [v0]
     - return value: any(error)
