@@ -26,6 +26,8 @@ describe('subscribe-action', () => {
       mutations: {},
       actions: {}
     })
+
+    jest.clearAllMocks()
   })
 
   it('subscribe collection , default action name', async (done) => {
@@ -51,7 +53,7 @@ describe('subscribe-action', () => {
 
     await store.dispatch(`comment/${actionTypes.collection.SUBSCRIBE}`)
 
-    expect(subscribeFirestoreCollection).toHaveBeenCalledTimes(1)
+    expect(subscribeFirestoreCollection).toHaveBeenCalled()
 
     done()
   })
@@ -80,7 +82,7 @@ describe('subscribe-action', () => {
 
     await store.dispatch(`comment/test`)
 
-    expect(subscribeFirestoreCollection).toHaveBeenCalledTimes(2)
+    expect(subscribeFirestoreCollection).toHaveBeenCalled()
 
     done()
   })
@@ -108,7 +110,7 @@ describe('subscribe-action', () => {
 
     await store.dispatch(`user/${actionTypes.document.SUBSCRIBE}`)
 
-    expect(subscribeFirestoreDocument).toHaveBeenCalledTimes(1)
+    expect(subscribeFirestoreDocument).toHaveBeenCalled()
 
     done()
   })
