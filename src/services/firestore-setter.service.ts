@@ -1,7 +1,7 @@
-import { AppErrorOr, DocumentId } from '../types'
-import { Adder, Setter } from '../models'
+import { AppErrorOr } from '../types'
+import { Setter } from '../models'
 import { FirestoreRepository } from '../repositories'
-import { AddCriteriaOptions, SetCriteriaOptions } from '../options'
+import { SetCriteriaOptions } from '../options'
 
 export class FirestoreSetter implements Setter {
   private _ref: firebase.firestore.DocumentReference
