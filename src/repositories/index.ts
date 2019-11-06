@@ -1,6 +1,9 @@
-import { CallMutation, NullOr } from '../types'
-import { Unsubscribe } from 'firebase'
-import { SubscribeCriteriaOptions, FindCriteriaOptions } from '../options'
+import { CallMutation, NullOr, AppErrorOr, DocumentId } from '../types'
+import {
+  SubscribeCriteriaOptions,
+  FindCriteriaOptions,
+  CriteriaOptions
+} from '../options'
 import {
   toDocumentResult,
   callDocumentMutation,
@@ -9,6 +12,7 @@ import {
   notifyErrorOccurred,
   notifyCompletionIfDefined
 } from './helpers'
+import { AppError } from '../models'
 
 interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
   statePropName: string
@@ -17,6 +21,16 @@ interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
 }
 
 interface FindCriteria<T, U> extends FindCriteriaOptions<T> {
+  ref: U
+}
+
+interface AddCriteria<T, U> extends CriteriaOptions<T> {
+  data: any
+  ref: U
+}
+
+interface SetCriteria<T, U> extends CriteriaOptions<T> {
+  data: any
   ref: U
 }
 
@@ -30,7 +44,10 @@ export class FirestoreRepository {
     completionHandler,
     afterMutationCalled,
     notFoundHandler
-  }: SubscribeCriteria<T, firebase.firestore.DocumentReference>): Unsubscribe {
+  }: SubscribeCriteria<
+    T,
+    firebase.firestore.DocumentReference
+  >): firebase.Unsubscribe {
     return ref.onSnapshot(
       (snapshot) =>
         !snapshot.exists
@@ -59,7 +76,7 @@ export class FirestoreRepository {
   }: SubscribeCriteria<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
-  >): Unsubscribe {
+  >): firebase.Unsubscribe {
     return ref.onSnapshot(
       (snapshot) =>
         snapshot.empty
@@ -118,6 +135,43 @@ export class FirestoreRepository {
         return resultsWithoutNull.length > 0 ? resultsWithoutNull : null
       })
       .catch((error: any) => notifyErrorOccurred(error, errorHandler))
+
+    notifyCompletionIfDefined(completionHandler)
+
+    return result
+  }
+
+  static async add<T = any>({
+    data,
+    ref,
+    mapper,
+    errorHandler,
+    completionHandler
+  }: AddCriteria<T, firebase.firestore.CollectionReference>): Promise<
+    AppErrorOr<DocumentId>
+  > {
+    const result: AppErrorOr<DocumentId> = await ref
+      .add(mapper ? mapper(data) : data)
+      .then((it) => it.id)
+      .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
+
+    notifyCompletionIfDefined(completionHandler)
+
+    return result
+  }
+
+  static async set<T>({
+    data,
+    ref,
+    mapper,
+    errorHandler,
+    completionHandler
+  }: SetCriteria<T, firebase.firestore.DocumentReference>): Promise<
+    AppErrorOr<void>
+  > {
+    const result: AppErrorOr<void> = await ref
+      .set(mapper ? mapper(data) : data)
+      .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
 
     notifyCompletionIfDefined(completionHandler)
 
