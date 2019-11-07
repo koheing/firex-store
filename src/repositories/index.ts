@@ -32,6 +32,8 @@ interface AddCriteria<T, U> extends CriteriaOptions<T> {
 interface SetCriteria<T, U> extends CriteriaOptions<T> {
   data: any
   ref: U
+  merge: boolean
+  isTransaction: boolean
 }
 
 export class FirestoreRepository {
@@ -163,15 +165,34 @@ export class FirestoreRepository {
   static async set<T>({
     data,
     ref,
+    merge,
+    isTransaction,
     mapper,
     errorHandler,
     completionHandler
   }: SetCriteria<T, firebase.firestore.DocumentReference>): Promise<
     AppErrorOr<void>
   > {
-    const result: AppErrorOr<void> = await ref
-      .set(mapper ? mapper(data) : data)
-      .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
+    const result: AppErrorOr<void> = !isTransaction
+      ? await ref
+          .set(mapper ? mapper(data) : data, { merge })
+          .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
+      : await ref.firestore.runTransaction(async (transaction) => {
+          const appErrorOrIsExist = await transaction
+            .get(ref)
+            .then((snapshot) =>
+              snapshot.exists
+                ? true
+                : ({ message: 'This id has already been used.' } as AppError)
+            )
+          
+          if (appErrorOrIsExist === true) {
+            transaction.set(ref, data, { merge })
+            return
+          }
+          const appError = appErrorOrIsExist
+          return appError
+        })
 
     notifyCompletionIfDefined(completionHandler)
 

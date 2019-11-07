@@ -22,9 +22,10 @@ export class FirestoreAdder implements Adder {
     data: any,
     options?: AddCriteriaOptions<T>
   ): Promise<AppErrorOr<DocumentId>> {
+    const d = { ...data }
     const result = await FirestoreRepository.add({
       ref: this._ref,
-      data,
+      data: d,
       ...options
     })
     return result

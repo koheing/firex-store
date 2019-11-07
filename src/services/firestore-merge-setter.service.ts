@@ -1,14 +1,14 @@
 import { AppErrorOr } from '../types'
-import { Setter, Transaction, AppError } from '../models'
+import { MergeSetter, Transaction } from '../models'
 import { FirestoreRepository } from '../repositories'
 import { SetCriteriaOptions } from '../options'
 
-export class FirestoreSetter implements Setter, Transaction {
+export class FirestoreMergeSetter implements MergeSetter, Transaction {
   private _ref: firebase.firestore.DocumentReference
   private _isTransaction = false
 
-  static to(ref: firebase.firestore.DocumentReference): FirestoreSetter {
-    return new FirestoreSetter(ref)
+  static to(ref: firebase.firestore.DocumentReference): FirestoreMergeSetter {
+    return new FirestoreMergeSetter(ref)
   }
 
   constructor(ref: firebase.firestore.DocumentReference) {
@@ -23,12 +23,12 @@ export class FirestoreSetter implements Setter, Transaction {
     return this._isTransaction
   }
 
-  transaction(): FirestoreSetter {
+  transaction(): FirestoreMergeSetter {
     this._isTransaction = true
     return this
   }
 
-  async set<T = any>(
+  async mergeSet<T = any>(
     data: any,
     options?: SetCriteriaOptions<T>
   ): Promise<AppErrorOr<void>> {
@@ -38,7 +38,7 @@ export class FirestoreSetter implements Setter, Transaction {
       ref: this._ref,
       isTransaction: this.isTransaction,
       ...options,
-      merge: false
+      merge: true
     })
 
     return result

@@ -1,25 +1,41 @@
-import { FirestoreSetter, FirestoreAdder } from '../services'
+import {
+  FirestoreSetter,
+  FirestoreAdder,
+  FirestoreMergeSetter
+} from '../services'
 import * as firebase from 'firebase'
+import { DocumentOrCollection } from '../types'
 
-type Reference =
-  | firebase.firestore.DocumentReference
-  | firebase.firestore.CollectionReference
+type AdderOrSetterOn<T> = T extends firebase.firestore.DocumentReference
+  ? FirestoreSetter
+  : FirestoreAdder
 
-type AddOrSet<T> = T extends firebase.firestore.CollectionReference
-  ? FirestoreAdder
-  : FirestoreSetter
+type AdderOrMergeSetterOn<T> = T extends firebase.firestore.DocumentReference
+  ? FirestoreMergeSetter
+  : FirestoreAdder
 
-export class FirestoreWriterFactory<T extends Reference> {
+export class FirestoreWriterFactory<T extends DocumentOrCollection> {
   private _ref: T
 
   constructor(ref: T) {
     this._ref = ref
   }
 
-  newData(): AddOrSet<T> {
+  newData(): AdderOrSetterOn<T> {
     return (this._ref instanceof firebase.firestore.DocumentReference
       ? FirestoreSetter.to(this._ref)
       : FirestoreAdder.to(this
-          ._ref as firebase.firestore.CollectionReference)) as AddOrSet<T>
+          ._ref as firebase.firestore.CollectionReference)) as AdderOrSetterOn<
+      T
+    >
+  }
+
+  existingData(): AdderOrMergeSetterOn<T> {
+    return (this._ref instanceof firebase.firestore.DocumentReference
+      ? FirestoreMergeSetter.to(this._ref)
+      : FirestoreAdder.to(this
+          ._ref as firebase.firestore.CollectionReference)) as AdderOrMergeSetterOn<
+      T
+    >
   }
 }

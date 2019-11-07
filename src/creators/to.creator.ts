@@ -1,8 +1,5 @@
 import { FirestoreWriterFactory } from '../factories'
+import { DocumentOrCollection } from '../types'
 
-type Reference =
-  | firebase.firestore.DocumentReference
-  | firebase.firestore.CollectionReference
-
-export const to = <T extends Reference>(ref: T) =>
+export const to = <T extends DocumentOrCollection>(ref: T) =>
   new FirestoreWriterFactory<T>(ref)
