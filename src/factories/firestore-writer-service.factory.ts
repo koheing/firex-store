@@ -4,14 +4,11 @@ import {
   FirestoreMergeSetter
 } from '../services'
 import * as firebase from 'firebase'
-import { DocumentOrCollection } from '../types'
+import { DocumentOrCollection, Either } from '../types'
+import { CANNOT_CALL_IT_IF_REF_IS_COLLECTION_REFERENCE } from '../errors'
 
 type AdderOrSetterOn<T> = T extends firebase.firestore.DocumentReference
   ? FirestoreSetter
-  : FirestoreAdder
-
-type AdderOrMergeSetterOn<T> = T extends firebase.firestore.DocumentReference
-  ? FirestoreMergeSetter
   : FirestoreAdder
 
 export class FirestoreWriterFactory<T extends DocumentOrCollection> {
@@ -30,12 +27,11 @@ export class FirestoreWriterFactory<T extends DocumentOrCollection> {
     >
   }
 
-  existingData(): AdderOrMergeSetterOn<T> {
-    return (this._ref instanceof firebase.firestore.DocumentReference
-      ? FirestoreMergeSetter.to(this._ref)
-      : FirestoreAdder.to(this
-          ._ref as firebase.firestore.CollectionReference)) as AdderOrMergeSetterOn<
-      T
-    >
+  existingData(): Either<FirestoreMergeSetter, void> {
+    if (this._ref instanceof firebase.firestore.CollectionReference) {
+      console.error(CANNOT_CALL_IT_IF_REF_IS_COLLECTION_REFERENCE)
+      return
+    }
+    return FirestoreMergeSetter.to(this._ref as firebase.firestore.DocumentReference)
   }
 }
