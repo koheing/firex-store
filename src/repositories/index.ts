@@ -185,7 +185,7 @@ export class FirestoreRepository {
                 ? true
                 : ({ message: 'This id has already been used.' } as AppError)
             )
-          
+
           if (appErrorOrIsExist === true) {
             transaction.set(ref, data, { merge })
             return

@@ -11,6 +11,10 @@ type AdderOrSetterOn<T> = T extends firebase.firestore.DocumentReference
   ? FirestoreSetter
   : FirestoreAdder
 
+type MergeSetterOrError<T> = T extends firebase.firestore.DocumentReference
+  ? FirestoreMergeSetter
+  : void
+
 export class FirestoreWriterFactory<T extends DocumentOrCollection> {
   private _ref: T
 
@@ -27,11 +31,11 @@ export class FirestoreWriterFactory<T extends DocumentOrCollection> {
     >
   }
 
-  existingData(): Either<FirestoreMergeSetter, void> {
-    if (this._ref instanceof firebase.firestore.CollectionReference) {
-      console.error(CANNOT_CALL_IT_IF_REF_IS_COLLECTION_REFERENCE)
-      return
-    }
-    return FirestoreMergeSetter.to(this._ref as firebase.firestore.DocumentReference)
+  existingData(): MergeSetterOrError<T> {
+    return (this._ref instanceof firebase.firestore.DocumentReference
+      ? FirestoreMergeSetter.to(this._ref)
+      : console.error(
+          CANNOT_CALL_IT_IF_REF_IS_COLLECTION_REFERENCE
+        )) as MergeSetterOrError<T>
   }
 }
