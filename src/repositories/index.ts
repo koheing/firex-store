@@ -1,4 +1,4 @@
-import { CallMutation, NullOr, AppErrorOr, DocumentId } from '../types'
+import { CallMutation, NullOr, AppErrorOr, DocumentId, Either } from '../types'
 import {
   SubscribeCriteriaOptions,
   FindCriteriaOptions,
@@ -13,6 +13,7 @@ import {
   notifyCompletionIfDefined
 } from './helpers'
 import { AppError } from '../models'
+import { THIS_ID_HAS_BEEN_ALREADY_USED } from '../errors'
 
 interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
   statePropName: string
@@ -178,19 +179,24 @@ export class FirestoreRepository {
           .set(mapper ? mapper(data) : data, { merge })
           .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
       : await ref.firestore.runTransaction(async (transaction) => {
-          const appErrorOrIsExist = await transaction
+          const appErrorOrIsNotExist: Either<AppError, true> = await transaction
             .get(ref)
             .then((snapshot) =>
-              snapshot.exists
-                ? true
-                : ({ message: 'This id has already been used.' } as AppError)
-            )
+              {
+                if (!snapshot.exists) {
+                  return true
+                }
+                const appError = { message: THIS_ID_HAS_BEEN_ALREADY_USED } as AppError
+                throw appError
+              })
+            .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
+            
 
-          if (appErrorOrIsExist === true) {
-            transaction.set(ref, data, { merge })
+          if (appErrorOrIsNotExist === true) {
+            transaction.set(ref, mapper ? mapper(data) : data, { merge })
             return
           }
-          const appError = appErrorOrIsExist
+          const appError = appErrorOrIsNotExist
           return appError
         })
 
