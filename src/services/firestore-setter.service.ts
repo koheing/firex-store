@@ -1,5 +1,5 @@
 import { AppErrorOr } from '../types'
-import { Setter, Transaction, AppError } from '../models'
+import { Setter, Transaction } from '../models'
 import { FirestoreRepository } from '../repositories'
 import { SetCriteriaOptions } from '../options'
 

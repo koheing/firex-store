@@ -1,35 +1,52 @@
 import { firestore } from './firebase'
 
 interface Options {
-  setReturnData: Promise<any>
-  // updateFunction: <T = any>(transaction: firebase.firestore.Transaction) => Promise<T>
+  setReturnData?: Promise<any>
+  runTransactionReturnData?:  Promise<any>
 }
 
 export class MockDocumentReference {
-  promiseResult: Promise<firebase.firestore.DocumentSnapshot>
-  setReturnData: Promise<any>
+  private _promiseResult: Promise<firebase.firestore.DocumentSnapshot>
+  private _setReturnData: Promise<any>
+  firestore: firebase.firestore.Firestore
   constructor(
     promiseResult: Promise<firebase.firestore.DocumentSnapshot>,
     options: Options = {
-      setReturnData: Promise.resolve()
+      setReturnData: Promise.resolve(),
+      runTransactionReturnData: Promise.resolve()
     }
   ) {
-    this.promiseResult = promiseResult
-    this.setReturnData = options.setReturnData
+    this._promiseResult = promiseResult
+    this._setReturnData = options.setReturnData ? options.setReturnData : Promise.resolve()
+    this.firestore = {
+      runTransaction<T>(
+        updateFunction: (transaction: firebase.firestore.Transaction) => Promise<T>
+      ) {
+      return options.runTransactionReturnData ? options.runTransactionReturnData : Promise.resolve()
+    }
+  } as firebase.firestore.Firestore
   }
   id = 'testDoc1'
-  firestore = firestore
+  // firestore = {
+  //   runTransaction<T>(
+  //     updateFunction: (transaction: firebase.firestore.Transaction) => Promise<T>
+  //   ) {
+  //     return new MockDocumentReference(
+  //       Promise.resolve(new MockDocumentSnapshot())
+  //     ).runTransactionReturnData
+  //   }
+  // } as firebase.firestore.Firestore
   parent = firestore.collection('/test')
   path = '/test/testDoc1'
   collection = jest.fn()
   isEqual = jest.fn()
   set(data: any) {
-    return this.setReturnData
+    return this._setReturnData
   }
   update = jest.fn()
   delete = jest.fn()
   onSnapshot = jest.fn()
   get(options?: any) {
-    return this.promiseResult
+    return this._promiseResult
   }
 }

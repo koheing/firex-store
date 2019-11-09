@@ -1,8 +1,9 @@
-import { CallMutation, NullOr, AppErrorOr, DocumentId, Either } from '../types'
+import { CallMutation, NullOr, AppErrorOr, DocumentId } from '../types'
 import {
   SubscribeCriteriaOptions,
   FindCriteriaOptions,
-  CriteriaOptions
+  AddCriteriaOptions,
+  SetCriteriaOptions
 } from '../options'
 import {
   toDocumentResult,
@@ -10,10 +11,10 @@ import {
   callCollectionMutation,
   notifyNotFound,
   notifyErrorOccurred,
-  notifyCompletionIfDefined
+  notifyCompletionIfDefined,
+  transactionOfSet
 } from './helpers'
 import { AppError } from '../models'
-import { THIS_ID_HAS_BEEN_ALREADY_USED } from '../errors'
 
 interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
   statePropName: string
@@ -25,12 +26,12 @@ interface FindCriteria<T, U> extends FindCriteriaOptions<T> {
   ref: U
 }
 
-interface AddCriteria<T, U> extends CriteriaOptions<T> {
+interface AddCriteria<T, U> extends AddCriteriaOptions<T> {
   data: any
   ref: U
 }
 
-interface SetCriteria<T, U> extends CriteriaOptions<T> {
+interface SetCriteria<T, U> extends SetCriteriaOptions<T> {
   data: any
   ref: U
   merge: boolean
@@ -153,8 +154,9 @@ export class FirestoreRepository {
   }: AddCriteria<T, firebase.firestore.CollectionReference>): Promise<
     AppErrorOr<DocumentId>
   > {
+    const document = mapper ? mapper(data) : data
     const result: AppErrorOr<DocumentId> = await ref
-      .add(mapper ? mapper(data) : data)
+      .add(document)
       .then((it) => it.id)
       .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
 
@@ -174,33 +176,22 @@ export class FirestoreRepository {
   }: SetCriteria<T, firebase.firestore.DocumentReference>): Promise<
     AppErrorOr<void>
   > {
+    const document = mapper ? mapper(data) : data
     const result: AppErrorOr<void> = !isTransaction
       ? await ref
-          .set(mapper ? mapper(data) : data, { merge })
+          .set(document, { merge })
           .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
-      : await ref.firestore.runTransaction(async (transaction) => {
-          const appErrorOrIsNotExist: Either<AppError, true> = await transaction
-            .get(ref)
-            .then((snapshot) => {
-              if (!snapshot.exists) {
-                return true
-              }
-              const appError = {
-                message: THIS_ID_HAS_BEEN_ALREADY_USED
-              } as AppError
-              throw appError
+      : await ref.firestore.runTransaction(
+          async (transaction) =>
+            await transactionOfSet({
+              transaction,
+              data: document,
+              ref,
+              merge,
+              mapper,
+              errorHandler
             })
-            .catch((error: AppError) =>
-              notifyErrorOccurred(error, errorHandler)
-            )
-
-          if (appErrorOrIsNotExist === true) {
-            transaction.set(ref, mapper ? mapper(data) : data, { merge })
-            return
-          }
-          const appError = appErrorOrIsNotExist
-          return appError
-        })
+        )
 
     notifyCompletionIfDefined(completionHandler)
 
