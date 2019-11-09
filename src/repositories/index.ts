@@ -181,16 +181,18 @@ export class FirestoreRepository {
       : await ref.firestore.runTransaction(async (transaction) => {
           const appErrorOrIsNotExist: Either<AppError, true> = await transaction
             .get(ref)
-            .then((snapshot) =>
-              {
-                if (!snapshot.exists) {
-                  return true
-                }
-                const appError = { message: THIS_ID_HAS_BEEN_ALREADY_USED } as AppError
-                throw appError
-              })
-            .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
-            
+            .then((snapshot) => {
+              if (!snapshot.exists) {
+                return true
+              }
+              const appError = {
+                message: THIS_ID_HAS_BEEN_ALREADY_USED
+              } as AppError
+              throw appError
+            })
+            .catch((error: AppError) =>
+              notifyErrorOccurred(error, errorHandler)
+            )
 
           if (appErrorOrIsNotExist === true) {
             transaction.set(ref, mapper ? mapper(data) : data, { merge })

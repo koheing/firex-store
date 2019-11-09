@@ -15,7 +15,7 @@ export class MockCollectionReference extends MockQueryReference {
   doc(path: string) {
     return new MockDocumentReference(
         Promise.resolve(new MockDocumentSnapshot())
-      )
+      ) as firebase.firestore.DocumentReference
   }
   add(data: any) {
     return Promise.resolve(new MockDocumentReference(
