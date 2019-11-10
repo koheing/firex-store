@@ -14,6 +14,13 @@ interface TransactionCriteria<T> extends CriteriaOptions<T> {
   merge: boolean
 }
 
+const isAbleToSet = (
+  isMergeSet: boolean,
+  snapshot: firebase.firestore.DocumentSnapshot
+): boolean =>
+  (isMergeSet && snapshot.exists === true) ||
+  (!isMergeSet && !snapshot.data())
+
 export const transactionOfSet = async <T = any>({
   ref,
   data,
@@ -21,15 +28,10 @@ export const transactionOfSet = async <T = any>({
   transaction,
   errorHandler
 }: TransactionCriteria<T>): Promise<AppErrorOr<void>> => {
-  const isMergeSetAction = merge
-  const appErrorOrIsNotExist: Either<AppError, true> = await transaction
+  const isMergeSet = merge
+  const appErrorOrIsAbleToSet: Either<AppError, true> = await transaction
     .get(ref)
-    .then((snapshot) =>
-      (isMergeSetAction && snapshot.exists === true) ||
-      (!isMergeSetAction && !snapshot.data())
-        ? true
-        : false
-    )
+    .then((snapshot) => isAbleToSet(isMergeSet, snapshot))
     .then((isAbleToSet) => {
       if (isAbleToSet) {
         return true
@@ -37,18 +39,16 @@ export const transactionOfSet = async <T = any>({
 
       const appError: AppError = {
         name: 'document id error',
-        message: isMergeSetAction
-          ? THIS_ID_DOES_NOT_EXIST
-          : THIS_ID_HAS_BEEN_ALREADY_USED
+        message: merge ? THIS_ID_DOES_NOT_EXIST : THIS_ID_HAS_BEEN_ALREADY_USED
       }
       throw appError
     })
     .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
 
-  if (appErrorOrIsNotExist === true) {
+  if (appErrorOrIsAbleToSet === true) {
     transaction.set(ref, data, { merge })
     return
   }
-  const appError = appErrorOrIsNotExist
+  const appError = appErrorOrIsAbleToSet
   return appError
 }
