@@ -1,5 +1,5 @@
-import { FirestoreRef } from '../types'
-import { FirestoreSubscriber, FirestoreFinder } from '../services'
+import { FirestoreRef } from '../../types'
+import { FirestoreSubscriber, FirestoreFinder } from '../../services'
 
 /**
  * @description factory of FirestoreSubscriber and FirestoreFinder

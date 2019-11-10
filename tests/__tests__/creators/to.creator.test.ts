@@ -1,31 +1,20 @@
 import { to } from '../../../src/creators'
 import {
-  FirestoreSetter,
-  FirestoreAdder,
-  FirestoreMergeSetter
+  FirestoreAdder
 } from '../../../src/services'
+import {
+  FirestoreDocumentWriterFacade
+} from '../../../src/creators/helpers'
 import { firestore } from '../../mocks/firebase'
 
-describe('FirestoreWriterServiceFactory', () => {
+describe('to', () => {
   it('is FirestoreAdder instance', () => {
-    const adder = to(firestore.collection('comments')).newData()
+    const adder = to(firestore.collection('comments'))
     expect(adder).toBeInstanceOf(FirestoreAdder)
   })
 
-  it('is FirestoreSetter instance', () => {
-    const setter = to(firestore.collection('comments').doc('commentId')).newData()
-    expect(setter).toBeInstanceOf(FirestoreSetter)
-  })
-
-  it('is FirestoreMergeSetter instance', () => {
-    const mergeSetter = to(firestore.collection('comments').doc('commentId')).existingData()
-    expect(mergeSetter).toBeInstanceOf(FirestoreMergeSetter)
-  })
-
-  it('is AppError called', () => {
-    jest.spyOn(console, 'error')
-    const _ = to(firestore.collection('comments')).existingData()
-    expect(console.error).toHaveBeenCalled()
-    jest.clearAllMocks()
+  it('is FirestoreDocumentWriterFacade instance', () => {
+    const writerFacade = to(firestore.collection('comments').doc('commentId'))
+    expect(writerFacade).toBeInstanceOf(FirestoreDocumentWriterFacade)
   })
 })
