@@ -624,26 +624,25 @@ export default {
   state: {},
   mutations: {},
   actions: {
+    set: async ({ dispatch }, { data }) => {
+      await to(firestore.colleciton('comments').doc('commentId'))
+        .set(data)
+    },
+    mergeSet: async ({ dispatch }, { data }) => {
+      const errorHandler = (error) => {
+        dispatch(`error/OCCURED`, error, { root: true })
+        console.error(error)
+        return error
+      }
+      await to(firestore.colleciton('comments').doc('commentId'))
+        .transaction()
+        .mergeSet(data)
+    },
     add: async ({ dispatch }, { data }) => {
       const result = await to(firestore.colleciton('comments')).add(data)
       if (typeof result === 'string') {
         console.log(`documentId is ${result}`)
       } else {
-        dispatch(`error/OCCURED`, result, { root: true })
-      }
-    },
-    set: async ({ dispatch }, { data }) => {
-      const result = await to(firestore.colleciton('comments').doc('commentId'))
-        .set(data)
-      if (typeof result !== 'undefined') {
-        dispatch(`error/OCCURED`, result, { root: true })
-      }
-    },
-    mergeSet: async ({ dispatch }, { data }) => {
-      const result = await to(firestore.colleciton('comments').doc('commentId'))
-        .transaction()
-        .mergeSet(data)
-      if (typeof result !== 'undefined') {
         dispatch(`error/OCCURED`, result, { root: true })
       }
     },
