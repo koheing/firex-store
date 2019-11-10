@@ -6,7 +6,6 @@ import * as flushPromises from 'flush-promises'
 import { MockCollectionReference } from '../../mocks/mock-collection-reference'
 
 describe('FirestoreAdder', () => {
-
   it('return FirestoreAdder instance', () => {
     const adder = FirestoreAdder.to(firestore.collection('comments'))
     expect(adder).toBeInstanceOf(FirestoreAdder)

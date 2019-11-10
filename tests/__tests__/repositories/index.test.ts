@@ -111,7 +111,11 @@ describe('FirestoreService', () => {
     const ref = new MockCollectionReference(data)
     const mapper = (data: any) => ({ name: data.name })
 
-    const result = await FirestoreRepository.add({ data: { name: 'test' }, ref, mapper })
+    const result = await FirestoreRepository.add({
+      data: { name: 'test' },
+      ref,
+      mapper
+    })
     expect(result).toEqual('testDoc1')
     done()
   })
@@ -120,9 +124,14 @@ describe('FirestoreService', () => {
     const data = {} as any
     const ref = new MockCollectionReference(data, { message: 'error occured' })
     const mapper = (data: any) => ({ name: data.name })
-    const errorHandler = jest.fn(() => ({ message: 'error occured' }) as Error)
+    const errorHandler = jest.fn(() => ({ message: 'error occured' } as Error))
 
-    const result = await FirestoreRepository.add({ data: { name: 'test' }, ref, mapper, errorHandler })
+    const result = await FirestoreRepository.add({
+      data: { name: 'test' },
+      ref,
+      mapper,
+      errorHandler
+    })
     expect(errorHandler).toHaveBeenCalled()
     expect(result).toHaveProperty('message')
     done()
@@ -147,10 +156,10 @@ describe('FirestoreService', () => {
   it('set: no transaction, return error', async (done) => {
     const ref = new MockDocumentReference(
       Promise.resolve(new MockDocumentSnapshot()),
-      { setReturnData: Promise.reject(({ message: 'error occured' }) as Error) } 
+      { setReturnData: Promise.reject({ message: 'error occured' } as Error) }
     )
     const mapper = (data: any) => ({ name: data.name })
-    const errorHandler = jest.fn(() => ({ message: 'error occured' }) as Error)
+    const errorHandler = jest.fn(() => ({ message: 'error occured' } as Error))
     const result = await FirestoreRepository.set({
       data: { name: 'test' },
       ref,

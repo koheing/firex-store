@@ -1,10 +1,6 @@
 import { to } from '../../../src/creators'
-import {
-  FirestoreAdder
-} from '../../../src/services'
-import {
-  FirestoreDocumentWriterFacade
-} from '../../../src/creators/helpers'
+import { FirestoreAdder } from '../../../src/services'
+import { FirestoreDocumentWriterFacade } from '../../../src/creators/helpers'
 import { firestore } from '../../mocks/firebase'
 
 describe('to', () => {

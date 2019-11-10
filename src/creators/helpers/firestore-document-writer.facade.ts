@@ -1,13 +1,23 @@
 import { AppErrorOr } from '../../types'
 import { SetCriteriaOptions } from '../../options'
 import { FirestoreSetter, FirestoreMergeSetter } from '../../services'
+import { Transaction, MergeSetter, Setter } from '../../models'
 
-export class FirestoreDocumentWriterFacade {
+export class FirestoreDocumentWriterFacade
+  implements Transaction, MergeSetter, Setter {
   private _ref: firebase.firestore.DocumentReference
   private _isTransaction = false
 
   constructor(ref: firebase.firestore.DocumentReference) {
     this._ref = ref
+  }
+
+  get ref(): firebase.firestore.DocumentReference {
+    return this._ref
+  }
+
+  get isTransaction(): boolean {
+    return this._isTransaction
   }
 
   transaction(): FirestoreDocumentWriterFacade {

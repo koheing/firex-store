@@ -16,12 +16,14 @@ export class MockCollectionReference extends MockQueryReference {
   }
   doc(path: string) {
     return new MockDocumentReference(
-        Promise.resolve(new MockDocumentSnapshot())
-      ) as firebase.firestore.DocumentReference
+      Promise.resolve(new MockDocumentSnapshot())
+    ) as firebase.firestore.DocumentReference
   }
   add(data: any) {
-    return this._error === null ? Promise.resolve(new MockDocumentReference(
-        Promise.resolve(new MockDocumentSnapshot())
-      )) : Promise.reject(this._error)
+    return this._error === null
+      ? Promise.resolve(
+          new MockDocumentReference(Promise.resolve(new MockDocumentSnapshot()))
+        )
+      : Promise.reject(this._error)
   }
 }

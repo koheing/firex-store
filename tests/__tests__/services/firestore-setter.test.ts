@@ -6,19 +6,24 @@ import * as flushPromises from 'flush-promises'
 import { MockCollectionReference } from '../../mocks/mock-collection-reference'
 
 describe('FirestoreSetter', () => {
-
   it('return FirestoreSetter instance', () => {
-    const adder = FirestoreSetter.to(firestore.collection('comments').doc('commentId'))
+    const adder = FirestoreSetter.to(
+      firestore.collection('comments').doc('commentId')
+    )
     expect(adder).toBeInstanceOf(FirestoreSetter)
   })
 
   it('ref is DocumentReference instance', () => {
-    const adder = FirestoreSetter.to(firestore.collection('comments').doc('commentId'))
+    const adder = FirestoreSetter.to(
+      firestore.collection('comments').doc('commentId')
+    )
     expect(adder.ref).toBeInstanceOf(firebase.firestore.DocumentReference)
   })
 
   it('transaction is true', () => {
-    const setter = FirestoreSetter.to(firestore.collection('comments').doc('commentId'))
+    const setter = FirestoreSetter.to(
+      firestore.collection('comments').doc('commentId')
+    )
     expect(setter.isTransaction).toBeFalsy()
     expect(setter.transaction().isTransaction).toBeTruthy()
   })
@@ -26,7 +31,9 @@ describe('FirestoreSetter', () => {
   it('FirestoreRepository.set called with no transaction', async (done) => {
     const mockSetter = jest.spyOn(FirestoreRepository, 'set')
     const data = {} as any
-    const setter = FirestoreSetter.to(new MockCollectionReference(data).doc('documentId'))
+    const setter = FirestoreSetter.to(
+      new MockCollectionReference(data).doc('documentId')
+    )
     const result = setter.set({ name: 'test' })
     await flushPromises()
     expect(FirestoreRepository.set).toHaveBeenCalled()

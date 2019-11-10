@@ -38,7 +38,9 @@ describe('unsubscribe-action', () => {
         ...firestoreMutations('collection')
       },
       actions: {
-        ...firestoreUnsubscribeAction(FirestoreUnsubscriber.on('comments'), { type: 'collection' })
+        ...firestoreUnsubscribeAction(FirestoreUnsubscriber.on('comments'), {
+          type: 'collection'
+        })
       }
     }
 
@@ -66,10 +68,10 @@ describe('unsubscribe-action', () => {
         ...firestoreMutations('collection')
       },
       actions: {
-        ...firestoreUnsubscribeAction(
-          FirestoreUnsubscriber.on('comments'),
-          { type: 'collection', actionName: 'test' }
-        )
+        ...firestoreUnsubscribeAction(FirestoreUnsubscriber.on('comments'), {
+          type: 'collection',
+          actionName: 'test'
+        })
       }
     }
 
@@ -97,7 +99,9 @@ describe('unsubscribe-action', () => {
         ...firestoreMutations('document')
       },
       actions: {
-        ...firestoreUnsubscribeAction(FirestoreUnsubscriber.on('user'), { type: 'document' })
+        ...firestoreUnsubscribeAction(FirestoreUnsubscriber.on('user'), {
+          type: 'document'
+        })
       }
     }
 
