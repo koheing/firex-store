@@ -3,10 +3,28 @@ import { Setter, Transaction } from '../models'
 import { FirestoreRepository } from '../repositories'
 import { SetCriteriaOptions } from '../options'
 
+/**
+ * @description class set data to firestore
+ *
+ * @example
+ *   FirestoreSetter
+ *     .to(firebase.firestore().collection('collection').doc('docId'))
+ *     .transaction()  // <- call it if you wanna transaction
+ *     .set(data, {
+ *         mapper,
+ *         errorHandler,
+ *         completionHandler
+ *     })
+ */
 export class FirestoreSetter implements Setter, Transaction {
   private _ref: firebase.firestore.DocumentReference
   private _isTransaction = false
 
+  /**
+   * @description Make FirestoreSetter instance
+   * @param ref: firebase.firestore.DocumentReference
+   * @returns FirestoreSetter
+   */
   static to(ref: firebase.firestore.DocumentReference): FirestoreSetter {
     return new FirestoreSetter(ref)
   }
@@ -23,11 +41,25 @@ export class FirestoreSetter implements Setter, Transaction {
     return this._isTransaction
   }
 
+  /**
+   * @description Call it if you wanna transaction
+   * @return `this` FirestoreSetter class instance
+   */
   transaction(): FirestoreSetter {
     this._isTransaction = true
     return this
   }
 
+  /**
+   * @description Firestore.collection('hoge').doc('fuga').set, merge is false. call `transaction` before call it, if you wanna transaction
+   * @param data : Set data to firestore
+   * @param options : {
+   *         mapper,
+   *         errorHandler,
+   *         completionHandler
+   *        } | undefined
+   * @returns `AppError` or `undefined`
+   */
   async set<T = any>(
     data: any,
     options?: SetCriteriaOptions<T>

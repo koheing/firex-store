@@ -3,6 +3,13 @@ import { SetCriteriaOptions } from '../../options'
 import { FirestoreSetter, FirestoreMergeSetter } from '../../services'
 import { Transaction, MergeSetter, Setter } from '../../models'
 
+/**
+ * @description facade of FirestoreSetter and FirestoreMergeSetter
+ * @param ref: firebase.firestore.DocumentReference
+ * @method transaction: Call it if you wanna transaction
+ * @method set: Firestore.set, merge is false
+ * @method mergeSet: Firestore.set, merge is true
+ */
 export class FirestoreDocumentWriterFacade
   implements Transaction, MergeSetter, Setter {
   private _ref: firebase.firestore.DocumentReference
@@ -20,11 +27,25 @@ export class FirestoreDocumentWriterFacade
     return this._isTransaction
   }
 
+  /**
+   * @description Call it if you wanna transaction
+   * @return `this` FirestoreDocumentWriterFacade class instance
+   */
   transaction(): FirestoreDocumentWriterFacade {
     this._isTransaction = true
     return this
   }
 
+  /**
+   * @description Firestore.collection('hoge').doc('fuga').set, merge is false. call `transaction` before call it, if you wanna transaction
+   * @param data : Set data to firestore
+   * @param options : {
+   *         mapper,
+   *         errorHandler,
+   *         completionHandler
+   *        } | undefined
+   * @returns `AppError` or `undefined`
+   */
   async set<T = any>(
     data: any,
     options?: SetCriteriaOptions<T>
@@ -36,6 +57,15 @@ export class FirestoreDocumentWriterFacade
       : FirestoreSetter.to(this._ref).set(data, options)
   }
 
+  /**
+   * @description Firestore.collection('hoge').doc('fuga').set, merge is true. call `transaction` before call it, if you wanna transaction
+   * @param data : Set data to firestore
+   * @param options : { mapper,
+   *         errorHandler,
+   *         completionHandler
+   *        } | undefined
+   * @returns `AppError` or `undefined`
+   */
   async mergeSet<T = any>(
     data: any,
     options?: SetCriteriaOptions<T>

@@ -3,6 +3,18 @@ import { Adder } from '../models'
 import { FirestoreRepository } from '../repositories'
 import { AddCriteriaOptions } from '../options'
 
+/**
+ * @description class add data to firestore
+ *
+ * @example
+ *   FirestoreAdder
+ *     .to(firebase.firestore().collection('collection'))
+ *     .add(data, {
+ *         mapper,
+ *         errorHandler,
+ *         completionHandler
+ *     })
+ */
 export class FirestoreAdder implements Adder {
   private _ref: firebase.firestore.CollectionReference
 
@@ -18,6 +30,16 @@ export class FirestoreAdder implements Adder {
     return this._ref
   }
 
+  /**
+   * @description Firestore.collection('hoge')add
+   * @param data : add data to firestore
+   * @param options : {
+   *         mapper,
+   *         errorHandler,
+   *         completionHandler
+   *        } | undefined
+   * @returns `DocumentId(string)` or `AppError` 
+   */
   async add<T = any>(
     data: any,
     options?: AddCriteriaOptions<T>
