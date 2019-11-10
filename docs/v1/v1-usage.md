@@ -586,11 +586,6 @@ export default {
 ## to and FirestoreDocumentWriterFacade
 
 - `to`: Method, return FirestoreAdder or FirestoreDocumentWriterFacade instance.
-
-Return FirestoreDocumentWriterFacade instance if parameter is firebase.firestore.DocumentReference,
-
-Return FirestoreAdder instance if parameter is firebase.firestore.CollectionReference.
-
   - parameter:
     - ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference
   - return: FirestoreAdder or FirestoreDocumentWriterFacade
