@@ -1,5 +1,5 @@
 import { CallMutation, NullOr, AppErrorOr, DocumentId } from '../types';
-import { SubscribeCriteriaOptions, FindCriteriaOptions, CriteriaOptions } from '../options';
+import { SubscribeCriteriaOptions, FindCriteriaOptions, AddCriteriaOptions, SetCriteriaOptions } from '../options';
 interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
     statePropName: string;
     ref: U;
@@ -8,11 +8,11 @@ interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
 interface FindCriteria<T, U> extends FindCriteriaOptions<T> {
     ref: U;
 }
-interface AddCriteria<T, U> extends CriteriaOptions<T> {
+interface AddCriteria<T, U> extends AddCriteriaOptions<T> {
     data: any;
     ref: U;
 }
-interface SetCriteria<T, U> extends CriteriaOptions<T> {
+interface SetCriteria<T, U> extends SetCriteriaOptions<T> {
     data: any;
     ref: U;
     merge: boolean;
