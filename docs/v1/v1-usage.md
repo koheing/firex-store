@@ -354,6 +354,43 @@ export default {
 }
 ```
 
+## 5. Add to firestore
+
+- class: `FirestoreAdder`
+- class methods:
+  - to: Make instance
+    - parameter:
+      - ref: firebase.firestore.CollectionReference
+    - return:
+      - FirestoreAdder
+  - add: add data to firestore
+    - parameter:
+      - options?:
+        - see [Options](#options)
+
+Ex.
+
+```javascript
+import { FirestoreAdder } from 'firex-store'
+export default {
+  namespaced: true,
+  state: {},
+  getters: {},
+  mutations: {},
+  actions: {
+    add: async (_, { data, options }) => {
+      const result = await FirestoreAdder
+        .to(firestore.collection('comments'))
+        .add(data, options)
+      if (typeof result !== 'string') {
+        // error process
+        // ...
+      }
+    }
+  }
+}
+```
+
 ## 6. Helpers
 
 ### from and FirestoreReaderServiceFactory
@@ -460,7 +497,9 @@ export default {
 
   - mapper:
 
-    - Map to something. State prop bound to Firestore or return values map to something if mapper defined
+    - Map to something.
+      - `Subscribe case`: State prop bound to Firestore or return values map to something if mapper defined
+      - `Set or add case`: Data which set or added to firestore map to something if mapper defined
 
   - errorHandler
 

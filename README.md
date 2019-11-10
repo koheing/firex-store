@@ -3,7 +3,7 @@
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 [![CircleCI](https://circleci.com/gh/nor-ko-hi-jp/firex-store.svg?style=svg)](https://circleci.com/gh/nor-ko-hi-jp/firex-store)
 
-- If you use this npm, you can reference firestore data, easily
+- `If you use this npm, you can read or write firestore data, easily`
 - It is inspired by [vuexfire](https://github.com/vuejs/vuefire)
 
 ## Installation
@@ -14,7 +14,7 @@ npm install --save firex-store
 
 ## Example
 
-- [Nuxt SSR sample](https://github.com/nor-ko-hi-jp/firex-store-sample)
+- [firex-store-sample](https://github.com/nor-ko-hi-jp/firex-store-sample)
 
 others comming soon
 

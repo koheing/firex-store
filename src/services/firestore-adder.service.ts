@@ -31,7 +31,7 @@ export class FirestoreAdder implements Adder {
   }
 
   /**
-   * @description Firestore.collection('hoge')add
+   * @description Firestore.collection('hoge').add
    * @param data : add data to firestore
    * @param options : {
    *         mapper,

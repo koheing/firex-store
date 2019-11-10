@@ -1,6 +1,6 @@
-import { Either } from '../../types'
+import { Either, AppErrorOr } from '../../types'
 import { AppError } from '../../models'
-import { THIS_ID_HAS_BEEN_ALREADY_USED } from '../../errors'
+import { THIS_ID_HAS_BEEN_ALREADY_USED, THIS_ID_DOES_NOT_EXIST } from '../../errors'
 import { notifyErrorOccurred } from './notifications'
 import { CriteriaOptions } from '../../options'
 
@@ -17,16 +17,20 @@ export const transactionOfSet = async <T = any>({
   merge,
   transaction,
   errorHandler
-}: TransactionCriteria<T>) => {
+}: TransactionCriteria<T>): Promise<AppErrorOr<void>> => {
+  const isMergeSetAction = merge
   const appErrorOrIsNotExist: Either<AppError, true> = await transaction
     .get(ref)
-    .then((snapshot) => {
-      if (!snapshot.exists) {
+    .then((snapshot) => (isMergeSetAction && snapshot.exists === true || !isMergeSetAction && !snapshot.data()) ? true : false)
+    .then(isAbleToSet => {
+      if (isAbleToSet) {
         return true
       }
-      const appError = {
-        message: THIS_ID_HAS_BEEN_ALREADY_USED
-      } as AppError
+
+      const appError: AppError = {
+        name: 'document id error',
+        message: isMergeSetAction ? THIS_ID_DOES_NOT_EXIST : THIS_ID_HAS_BEEN_ALREADY_USED
+      }
       throw appError
     })
     .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))

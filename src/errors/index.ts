@@ -5,3 +5,4 @@ export const UNSUBSCRIBE_METHOD_NOT_CALLED =
 export const CANNOT_CALL_IT_IF_REF_IS_COLLECTION_REFERENCE =
   'Cannot call it if ref is collectionReference.'
 export const THIS_ID_HAS_BEEN_ALREADY_USED = 'This id has already been used.'
+export const THIS_ID_DOES_NOT_EXIST = 'This is does not exist.'
