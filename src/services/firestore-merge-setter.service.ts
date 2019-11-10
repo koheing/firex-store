@@ -32,9 +32,9 @@ export class FirestoreMergeSetter implements MergeSetter, Transaction {
     data: any,
     options?: SetCriteriaOptions<T>
   ): Promise<AppErrorOr<void>> {
-    const d = { ...data }
+    const _data = { ...data }
     const result = await FirestoreRepository.set({
-      data: d,
+      data: _data,
       ref: this._ref,
       isTransaction: this.isTransaction,
       ...options,
