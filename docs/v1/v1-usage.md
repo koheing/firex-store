@@ -741,13 +741,7 @@ const notFoundHandler = (type, isAll) => {
 ```
 
 ```javascript
-const notFoundHandler = (type, isAll) => {
-  console.log('not found')
-}
-```
-
-```javascript
-import { firestoreMutations, FirestoreSubscriber } from 'firex-store'
+import { firestoreMutations, from, to } from 'firex-store'
 export default {
   namespaced: true,
   state: {
@@ -763,8 +757,7 @@ export default {
   },
   actions: {
     subscribe: ({ state, commit }) => {
-      FirestoreSubscriber
-        .from(firestore.collection('/comments'))
+      from(firestore.collection('/comments'))
         .bindTo('comments')
         .subscribe(state, commit, {
           mapper: mapUser,
@@ -773,6 +766,10 @@ export default {
           afterMutationCalled,
           notFoundHandler
         })
+    },
+    add: async (_, { data }) => {
+      await to(firestore.collection('/comments'))
+        .add(data, { mapper, errorHandler, completionHandler })
     }
   }
   .....
