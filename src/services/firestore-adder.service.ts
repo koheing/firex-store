@@ -38,7 +38,7 @@ export class FirestoreAdder implements Adder {
    *         errorHandler,
    *         completionHandler
    *        } | undefined
-   * @returns `DocumentId(string)` or `AppError` 
+   * @returns `DocumentId(string)` or `AppError`
    */
   async add<T = any>(
     data: any,

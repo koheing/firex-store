@@ -42,8 +42,8 @@ export class FirestoreMergeSetter implements MergeSetter, Transaction {
   }
 
   /**
-   * @description Call it if you wanna transaction
-   * @return `this` FirestoreMergeSetter class instance
+   * @description Call this if you would like to overwrite data or add property to data
+   * @return `FirestoreMergeSetter class instance`
    */
   transaction(): FirestoreMergeSetter {
     this._isTransaction = true

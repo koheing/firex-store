@@ -29,7 +29,7 @@ export class FirestoreDocumentWriterFacade
 
   /**
    * @description Call it if you wanna transaction
-   * @return `this` FirestoreDocumentWriterFacade class instance
+   * @return `FirestoreDocumentWriterFacade class instance`
    */
   transaction(): FirestoreDocumentWriterFacade {
     this._isTransaction = true

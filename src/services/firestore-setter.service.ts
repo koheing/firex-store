@@ -42,8 +42,8 @@ export class FirestoreSetter implements Setter, Transaction {
   }
 
   /**
-   * @description Call it if you wanna transaction
-   * @return `this` FirestoreSetter class instance
+   * @description Call this if you wouldn't like to overwrite data
+   * @return  `FirestoreSetter class instance`
    */
   transaction(): FirestoreSetter {
     this._isTransaction = true
