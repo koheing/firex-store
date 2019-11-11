@@ -1,14 +1,20 @@
-import { CallMutation, NullOr } from '../types'
-import { Unsubscribe } from 'firebase'
-import { SubscribeCriteriaOptions, FindCriteriaOptions } from '../options'
+import { CallMutation, NullOr, AppErrorOr, DocumentId } from '../types'
+import {
+  SubscribeCriteriaOptions,
+  FindCriteriaOptions,
+  AddCriteriaOptions,
+  SetCriteriaOptions
+} from '../options'
 import {
   toDocumentResult,
   callDocumentMutation,
   callCollectionMutation,
   notifyNotFound,
   notifyErrorOccurred,
-  notifyCompletionIfDefined
+  notifyCompletionIfDefined,
+  transactionOfSet
 } from './helpers'
+import { AppError } from '../models'
 
 interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
   statePropName: string
@@ -18,6 +24,18 @@ interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
 
 interface FindCriteria<T, U> extends FindCriteriaOptions<T> {
   ref: U
+}
+
+interface AddCriteria<T, U> extends AddCriteriaOptions<T> {
+  data: any
+  ref: U
+}
+
+interface SetCriteria<T, U> extends SetCriteriaOptions<T> {
+  data: any
+  ref: U
+  merge: boolean
+  isTransaction: boolean
 }
 
 export class FirestoreRepository {
@@ -30,7 +48,10 @@ export class FirestoreRepository {
     completionHandler,
     afterMutationCalled,
     notFoundHandler
-  }: SubscribeCriteria<T, firebase.firestore.DocumentReference>): Unsubscribe {
+  }: SubscribeCriteria<
+    T,
+    firebase.firestore.DocumentReference
+  >): firebase.Unsubscribe {
     return ref.onSnapshot(
       (snapshot) =>
         !snapshot.exists
@@ -59,7 +80,7 @@ export class FirestoreRepository {
   }: SubscribeCriteria<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
-  >): Unsubscribe {
+  >): firebase.Unsubscribe {
     return ref.onSnapshot(
       (snapshot) =>
         snapshot.empty
@@ -118,6 +139,59 @@ export class FirestoreRepository {
         return resultsWithoutNull.length > 0 ? resultsWithoutNull : null
       })
       .catch((error: any) => notifyErrorOccurred(error, errorHandler))
+
+    notifyCompletionIfDefined(completionHandler)
+
+    return result
+  }
+
+  static async add<T = any>({
+    data,
+    ref,
+    mapper,
+    errorHandler,
+    completionHandler
+  }: AddCriteria<T, firebase.firestore.CollectionReference>): Promise<
+    AppErrorOr<DocumentId>
+  > {
+    const document = mapper ? mapper(data) : data
+    const result: AppErrorOr<DocumentId> = await ref
+      .add(document)
+      .then((it) => it.id)
+      .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
+
+    notifyCompletionIfDefined(completionHandler)
+
+    return result
+  }
+
+  static async set<T>({
+    data,
+    ref,
+    merge,
+    isTransaction,
+    mapper,
+    errorHandler,
+    completionHandler
+  }: SetCriteria<T, firebase.firestore.DocumentReference>): Promise<
+    AppErrorOr<void>
+  > {
+    const document = mapper ? mapper(data) : data
+    const result: AppErrorOr<void> = !isTransaction
+      ? await ref
+          .set(document, { merge })
+          .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
+      : await ref.firestore.runTransaction(
+          async (transaction) =>
+            await transactionOfSet({
+              transaction,
+              data: document,
+              ref,
+              merge,
+              mapper,
+              errorHandler
+            })
+        )
 
     notifyCompletionIfDefined(completionHandler)
 
