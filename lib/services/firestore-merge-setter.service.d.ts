@@ -27,7 +27,7 @@ export declare class FirestoreMergeSetter implements MergeSetter, Transaction {
     readonly ref: firebase.firestore.DocumentReference;
     readonly isTransaction: boolean;
     /**
-     * @description Call this if you would like to overwrite data or add property to data
+     * @description Call this if you wanna use transaction
      * @return `FirestoreMergeSetter class instance`
      */
     transaction(): FirestoreMergeSetter;

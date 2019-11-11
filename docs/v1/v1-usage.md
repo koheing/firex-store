@@ -407,7 +407,8 @@ export default {
       - ref: firebase.firestore.DocumentReference
     - return:
       - FirestoreSetter
-  - transaction: call this if you wouldn't like to overwrite data
+  - transaction: Call this if you wanna use transaction
+    - `UseCase`: Call this if you wouldn't like to overwrite data
     - return:
       - FirestoreSetter
   - set: set data to firestore
@@ -450,7 +451,8 @@ export default {
       - ref: firebase.firestore.DocumentReference
     - return:
       - FirestoreMergeSetter
-  - transaction: Call this if you would like to overwrite data or add property to data
+  - transaction: Call this if you wanna use transaction
+    - `UseCase`: Call this if you would like to overwrite data or add property to data
     - return:
       - FirestoreMergeSetter
   - mergeSet: set data to firestore

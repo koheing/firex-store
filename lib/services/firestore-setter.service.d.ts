@@ -27,7 +27,7 @@ export declare class FirestoreSetter implements Setter, Transaction {
     readonly ref: firebase.firestore.DocumentReference;
     readonly isTransaction: boolean;
     /**
-     * @description Call this if you wouldn't like to overwrite data
+     * @description Call this if you wanna use transaction
      * @return  `FirestoreSetter class instance`
      */
     transaction(): FirestoreSetter;
