@@ -1,4 +1,4 @@
-import { Unsubscribe } from "./unsubscribe.type"
+import { Unsubscribe } from './unsubscribe.type'
 
 type StatePropName = string
 
