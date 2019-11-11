@@ -1,7 +1,7 @@
 import { AppErrorOr } from '../types'
 import { Setter, Transaction } from '../models'
 import { FirestoreRepository } from '../repositories'
-import { SetCriteriaOptions } from '../options'
+import { SetOptionsParameter } from '../parameters'
 
 /**
  * @description class set data to firestore
@@ -62,7 +62,7 @@ export class FirestoreSetter implements Setter, Transaction {
    */
   async set<T = any>(
     data: any,
-    options?: SetCriteriaOptions<T>
+    options?: SetOptionsParameter<T>
   ): Promise<AppErrorOr<void>> {
     const _data = { ...data }
     const result = await FirestoreRepository.set({

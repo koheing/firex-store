@@ -1,10 +1,10 @@
 import { AppErrorOr } from '../../types';
-import { CriteriaOptions } from '../../options';
-interface TransactionCriteria<T> extends CriteriaOptions<T> {
+import { OptionsParameter } from '../../parameters';
+interface TransactionParameter<T> extends OptionsParameter<T> {
     transaction: firebase.firestore.Transaction;
     data: any;
     ref: firebase.firestore.DocumentReference;
     merge: boolean;
 }
-export declare const transactionOfSet: <T = any>({ ref, data, merge, transaction, errorHandler }: TransactionCriteria<T>) => Promise<AppErrorOr<void>>;
+export declare const transactionOfSet: <T = any>({ ref, data, merge, transaction, errorHandler }: TransactionParameter<T>) => Promise<AppErrorOr<void>>;
 export {};

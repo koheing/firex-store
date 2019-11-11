@@ -1,7 +1,7 @@
 import { ActionTree } from 'vuex';
-import { SubscribeCriteriaOptions } from '../../options';
+import { SubscribeOptionsParameter } from '../../parameters';
 import { FirestoreSubscriber } from '../../services/firestore-subscriber.service';
-interface CriteriaOptions<T> extends SubscribeCriteriaOptions<T> {
+interface OptionsParameter<T> extends SubscribeOptionsParameter<T> {
     /**
      * @param actionName action name registered to ActionTree
      */
@@ -36,5 +36,5 @@ interface CriteriaOptions<T> extends SubscribeCriteriaOptions<T> {
  *   }
  *
  */
-export declare const firestoreSubscribeAction: (firestoreSubscriber: FirestoreSubscriber, options?: CriteriaOptions<any> | undefined) => ActionTree<any, any>;
+export declare const firestoreSubscribeAction: (firestoreSubscriber: FirestoreSubscriber, options?: OptionsParameter<any> | undefined) => ActionTree<any, any>;
 export {};

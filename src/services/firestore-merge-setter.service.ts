@@ -1,7 +1,7 @@
 import { AppErrorOr } from '../types'
 import { MergeSetter, Transaction } from '../models'
 import { FirestoreRepository } from '../repositories'
-import { SetCriteriaOptions } from '../options'
+import { SetOptionsParameter } from '../parameters'
 
 /**
  * @description class merge set data to firestore
@@ -62,7 +62,7 @@ export class FirestoreMergeSetter implements MergeSetter, Transaction {
    */
   async mergeSet<T = any>(
     data: any,
-    options?: SetCriteriaOptions<T>
+    options?: SetOptionsParameter<T>
   ): Promise<AppErrorOr<void>> {
     const _data = { ...data }
     const result = await FirestoreRepository.set({

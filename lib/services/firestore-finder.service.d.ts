@@ -1,6 +1,6 @@
 import { Finder } from '../models';
 import { FirestoreRef, NullOr } from '../types';
-import { FindCriteriaOptions } from '../options';
+import { FindOptionsParameter } from '../parameters';
 /**
  * @description class find firestore data at once
  * @returns null | error | any
@@ -35,5 +35,5 @@ export declare class FirestoreFinder implements Finder {
      * @returns null | error | any
      *   - error: if you defined errorHandler, it changed any
      */
-    find<T = any>(options?: FindCriteriaOptions<T>): Promise<NullOr<T | any>>;
+    find<T = any>(options?: FindOptionsParameter<T>): Promise<NullOr<T | any>>;
 }

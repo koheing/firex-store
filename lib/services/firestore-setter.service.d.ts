@@ -1,6 +1,6 @@
 import { AppErrorOr } from '../types';
 import { Setter, Transaction } from '../models';
-import { SetCriteriaOptions } from '../options';
+import { SetOptionsParameter } from '../parameters';
 /**
  * @description class set data to firestore
  *
@@ -41,5 +41,5 @@ export declare class FirestoreSetter implements Setter, Transaction {
      *        } | undefined
      * @returns `AppError` or `undefined`
      */
-    set<T = any>(data: any, options?: SetCriteriaOptions<T>): Promise<AppErrorOr<void>>;
+    set<T = any>(data: any, options?: SetOptionsParameter<T>): Promise<AppErrorOr<void>>;
 }

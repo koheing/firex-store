@@ -1,10 +1,10 @@
 import { CallMutation, NullOr, AppErrorOr, DocumentId } from '../types'
 import {
-  SubscribeCriteriaOptions,
-  FindCriteriaOptions,
-  AddCriteriaOptions,
-  SetCriteriaOptions
-} from '../options'
+  SubscribeOptionsParameter,
+  FindOptionsParameter,
+  AddOptionsParameter,
+  SetOptionsParameter
+} from '../parameters'
 import {
   toDocumentResult,
   callDocumentMutation,
@@ -16,22 +16,22 @@ import {
 } from './helpers'
 import { AppError } from '../models'
 
-interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
+interface SubscribeParameter<T, U> extends SubscribeOptionsParameter<T> {
   statePropName: string
   ref: U
   callMutation: CallMutation
 }
 
-interface FindCriteria<T, U> extends FindCriteriaOptions<T> {
+interface FindParameter<T, U> extends FindOptionsParameter<T> {
   ref: U
 }
 
-interface AddCriteria<T, U> extends AddCriteriaOptions<T> {
+interface AddParameter<T, U> extends AddOptionsParameter<T> {
   data: any
   ref: U
 }
 
-interface SetCriteria<T, U> extends SetCriteriaOptions<T> {
+interface SetParameter<T, U> extends SetOptionsParameter<T> {
   data: any
   ref: U
   merge: boolean
@@ -48,7 +48,7 @@ export class FirestoreRepository {
     completionHandler,
     afterMutationCalled,
     notFoundHandler
-  }: SubscribeCriteria<
+  }: SubscribeParameter<
     T,
     firebase.firestore.DocumentReference
   >): firebase.Unsubscribe {
@@ -77,7 +77,7 @@ export class FirestoreRepository {
     completionHandler,
     afterMutationCalled,
     notFoundHandler
-  }: SubscribeCriteria<
+  }: SubscribeParameter<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
   >): firebase.Unsubscribe {
@@ -104,7 +104,7 @@ export class FirestoreRepository {
     mapper,
     errorHandler,
     completionHandler
-  }: FindCriteria<T, firebase.firestore.DocumentReference>): Promise<
+  }: FindParameter<T, firebase.firestore.DocumentReference>): Promise<
     NullOr<T | any>
   > {
     const result = await ref
@@ -121,7 +121,7 @@ export class FirestoreRepository {
     mapper,
     errorHandler,
     completionHandler
-  }: FindCriteria<
+  }: FindParameter<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
   >): Promise<NullOr<T[] | any | any[]>> {
@@ -151,7 +151,7 @@ export class FirestoreRepository {
     mapper,
     errorHandler,
     completionHandler
-  }: AddCriteria<T, firebase.firestore.CollectionReference>): Promise<
+  }: AddParameter<T, firebase.firestore.CollectionReference>): Promise<
     AppErrorOr<DocumentId>
   > {
     const document = mapper ? mapper(data) : data
@@ -173,7 +173,7 @@ export class FirestoreRepository {
     mapper,
     errorHandler,
     completionHandler
-  }: SetCriteria<T, firebase.firestore.DocumentReference>): Promise<
+  }: SetParameter<T, firebase.firestore.DocumentReference>): Promise<
     AppErrorOr<void>
   > {
     const document = mapper ? mapper(data) : data

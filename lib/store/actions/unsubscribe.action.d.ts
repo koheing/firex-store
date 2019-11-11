@@ -3,7 +3,7 @@ import { FirestoreUnsubscriber } from '../../services/firestore-unsubscriber.ser
 /**
  * @description unsubscribe firestore data to state property
  * @param firestoreUnsubscriber: FirestoreUnsubscriber instance
- * @param criteria: { type: 'document' | 'collection', actionName?: string }
+ * @param parameter: { type: 'document' | 'collection', actionName?: string }
  * @returns ActionTree<any, any>
  *
  * @example
@@ -22,7 +22,7 @@ import { FirestoreUnsubscriber } from '../../services/firestore-unsubscriber.ser
  *   }
  *
  */
-export declare const firestoreUnsubscribeAction: (firestoreUnsubscriber: FirestoreUnsubscriber, criteria: {
+export declare const firestoreUnsubscribeAction: (firestoreUnsubscriber: FirestoreUnsubscriber, parameter: {
     type: "document" | "collection";
     actionName?: string | undefined;
 }) => ActionTree<any, any>;

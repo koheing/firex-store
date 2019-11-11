@@ -1,5 +1,5 @@
 import { AppErrorOr } from '../../types'
-import { SetCriteriaOptions } from '../../options'
+import { SetOptionsParameter } from '../../parameters'
 import { FirestoreSetter, FirestoreMergeSetter } from '../../services'
 import { Transaction, MergeSetter, Setter } from '../../models'
 
@@ -48,7 +48,7 @@ export class FirestoreDocumentWriterFacade
    */
   async set<T = any>(
     data: any,
-    options?: SetCriteriaOptions<T>
+    options?: SetOptionsParameter<T>
   ): Promise<AppErrorOr<void>> {
     return this._isTransaction
       ? FirestoreSetter.to(this._ref)
@@ -68,7 +68,7 @@ export class FirestoreDocumentWriterFacade
    */
   async mergeSet<T = any>(
     data: any,
-    options?: SetCriteriaOptions<T>
+    options?: SetOptionsParameter<T>
   ): Promise<AppErrorOr<void>> {
     return this._isTransaction
       ? FirestoreMergeSetter.to(this._ref)

@@ -1,6 +1,6 @@
 import { Finder } from '../models'
 import { FirestoreRef, NullOr } from '../types'
-import { FindCriteriaOptions } from '../options'
+import { FindOptionsParameter } from '../parameters'
 import { isDocumentRef } from './helpers'
 import { FirestoreRepository } from '../repositories'
 
@@ -48,7 +48,7 @@ export class FirestoreFinder implements Finder {
    * @returns null | error | any
    *   - error: if you defined errorHandler, it changed any
    */
-  find<T = any>(options?: FindCriteriaOptions<T>): Promise<NullOr<T | any>> {
+  find<T = any>(options?: FindOptionsParameter<T>): Promise<NullOr<T | any>> {
     return isDocumentRef(this.ref)
       ? FirestoreRepository.find({ ref: this.ref, ...options })
       : FirestoreRepository.findAll({ ref: this.ref, ...options })

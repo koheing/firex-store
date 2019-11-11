@@ -1,6 +1,6 @@
 import { AppErrorOr, DocumentId } from '../types';
 import { Adder } from '../models';
-import { AddCriteriaOptions } from '../options';
+import { AddOptionsParameter } from '../parameters';
 /**
  * @description class add data to firestore
  *
@@ -28,5 +28,5 @@ export declare class FirestoreAdder implements Adder {
      *        } | undefined
      * @returns `DocumentId(string)` or `AppError`
      */
-    add<T = any>(data: any, options?: AddCriteriaOptions<T>): Promise<AppErrorOr<DocumentId>>;
+    add<T = any>(data: any, options?: AddOptionsParameter<T>): Promise<AppErrorOr<DocumentId>>;
 }

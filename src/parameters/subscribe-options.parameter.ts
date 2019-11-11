@@ -1,7 +1,7 @@
-import { CriteriaOptions } from './criteria-options.interface'
+import { OptionsParameter } from './options.parameter'
 import { AfterMutationCalled, NotFoundHandler } from '../types'
 
-export interface SubscribeCriteriaOptions<T> extends CriteriaOptions<T> {
+export interface SubscribeOptionsParameter<T> extends OptionsParameter<T> {
   /**
    * @description afterMutationCalled This method called after mutation called
    *   - `subscribeFirestore` and `subscribeFirestoreActions` only.

@@ -1,6 +1,6 @@
 import { AppErrorOr } from '../types';
 import { MergeSetter, Transaction } from '../models';
-import { SetCriteriaOptions } from '../options';
+import { SetOptionsParameter } from '../parameters';
 /**
  * @description class merge set data to firestore
  *
@@ -41,5 +41,5 @@ export declare class FirestoreMergeSetter implements MergeSetter, Transaction {
      *        } | undefined
      * @returns `AppError` or `undefined`
      */
-    mergeSet<T = any>(data: any, options?: SetCriteriaOptions<T>): Promise<AppErrorOr<void>>;
+    mergeSet<T = any>(data: any, options?: SetOptionsParameter<T>): Promise<AppErrorOr<void>>;
 }

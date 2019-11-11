@@ -1,6 +1,6 @@
 import { AppErrorOr, DocumentId } from '../types';
-import { AddCriteriaOptions } from '../options';
+import { AddOptionsParameter } from '../parameters';
 export interface Adder {
     readonly ref: firebase.firestore.CollectionReference;
-    add: <T>(data: any, options?: AddCriteriaOptions<T>) => Promise<AppErrorOr<DocumentId>>;
+    add: <T>(data: any, options?: AddOptionsParameter<T>) => Promise<AppErrorOr<DocumentId>>;
 }

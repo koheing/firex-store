@@ -3,7 +3,7 @@ import { mutationTypes } from '../../store/types/mutation'
 import { MutationType } from '../../types'
 import { Payload } from '../../models'
 
-interface Criteria {
+interface Parameter {
   mutationType: MutationType
   changeType: firebase.firestore.DocumentChangeType
   commit: Commit
@@ -15,7 +15,7 @@ export const callMutation = ({
   changeType,
   commit,
   payload
-}: Criteria) => {
+}: Parameter) => {
   const types =
     mutationType === 'document'
       ? mutationTypes.document

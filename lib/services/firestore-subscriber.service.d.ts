@@ -1,7 +1,7 @@
 import { Subscriber } from '../models';
 import { FirestoreRef } from '../types';
 import { Commit } from 'vuex';
-import { SubscribeCriteriaOptions } from '../options';
+import { SubscribeOptionsParameter } from '../parameters';
 /**
  * @description class subscribe firestore data to state property
  *
@@ -44,6 +44,6 @@ export declare class FirestoreSubscriber implements Subscriber {
      *         completionHandler
      *         afterMutationCalled } | undefined
      */
-    subscribe<T = any>(state: any, commit: Commit, options?: SubscribeCriteriaOptions<T>): void;
+    subscribe<T = any>(state: any, commit: Commit, options?: SubscribeOptionsParameter<T>): void;
     isDocumentRef(): boolean;
 }
