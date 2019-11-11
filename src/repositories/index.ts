@@ -1,4 +1,4 @@
-import { CallMutation, NullOr, AppErrorOr, DocumentId } from '../types'
+import { CallMutation, NullOr, AppErrorOr, DocumentId, Unsubscribe } from '../types'
 import {
   SubscribeOptionsParameter,
   FindOptionsParameter,
@@ -51,7 +51,7 @@ export class FirestoreRepository {
   }: SubscribeParameter<
     T,
     firebase.firestore.DocumentReference
-  >): firebase.Unsubscribe {
+  >): Unsubscribe {
     return ref.onSnapshot(
       (snapshot) =>
         !snapshot.exists
@@ -80,7 +80,7 @@ export class FirestoreRepository {
   }: SubscribeParameter<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
-  >): firebase.Unsubscribe {
+  >): Unsubscribe {
     return ref.onSnapshot(
       (snapshot) =>
         snapshot.empty

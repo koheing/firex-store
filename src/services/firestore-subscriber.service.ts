@@ -1,5 +1,5 @@
 import { Subscriber } from '../models'
-import { FirestoreRef, Unsubscribes } from '../types'
+import { FirestoreRef, Unsubscribes, Unsubscribe } from '../types'
 import { Commit } from 'vuex'
 import { SubscribeOptionsParameter } from '../parameters'
 import { BIND_TO_METHOD_NOT_CALLED } from '../errors'
@@ -80,7 +80,7 @@ export class FirestoreSubscriber implements Subscriber {
     }
 
     if (!state[FIREX_UNSUBSCRIBES]) {
-      state[FIREX_UNSUBSCRIBES] = new Map<string, any>()
+      state[FIREX_UNSUBSCRIBES] = new Map<string, Unsubscribe>()
     }
 
     if ((state[FIREX_UNSUBSCRIBES] as Unsubscribes).has(this.statePropName)) {
