@@ -2,7 +2,7 @@ import { Mapper, CallMutation, AfterMutationCalled } from '../../types'
 import { toDocumentResult } from './to-document-result'
 import { Payload } from '../../models'
 
-interface DocumentCriteria<T> {
+interface DocumentParameter<T> {
   statePropName: string
   snapshot: firebase.firestore.DocumentSnapshot
   callMutation: CallMutation
@@ -12,7 +12,7 @@ interface DocumentCriteria<T> {
   afterMutationCalled?: AfterMutationCalled
 }
 
-interface CollectionCriteria<T> {
+interface CollectionParameter<T> {
   statePropName: string
   snapshot: firebase.firestore.QuerySnapshot
   callMutation: CallMutation
@@ -29,7 +29,7 @@ export const callDocumentMutation = <T = any>({
   type,
   mapper,
   afterMutationCalled
-}: DocumentCriteria<T>) => {
+}: DocumentParameter<T>) => {
   const _type = type ? type : 'added'
 
   const data = toDocumentResult(snapshot, mapper)
@@ -49,7 +49,7 @@ export const callCollectionMutation = <T = any>({
   mapper,
   afterMutationCalled,
   notifyNotFound
-}: CollectionCriteria<T>) => {
+}: CollectionParameter<T>) => {
   const length = snapshot.docChanges().length
   snapshot.docChanges().forEach((change, index) => {
     !change.doc.exists

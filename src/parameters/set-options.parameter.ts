@@ -1,7 +1,7 @@
-import { CriteriaOptions } from './criteria-options.interface'
+import { OptionsParameter } from './options.parameter'
 import { Mapper } from '../types'
 
-export interface SetCriteriaOptions<T> extends CriteriaOptions<T> {
+export interface SetOptionsParameter<T> extends OptionsParameter<T> {
   /**
    * @param mapper convert data which set to firestore to something, if defined
    *   - type: <T>(data: { [key: string]: any }) => T

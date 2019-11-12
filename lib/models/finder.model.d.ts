@@ -1,6 +1,6 @@
 import { FirestoreRef } from '../types';
-import { FindCriteriaOptions } from '../options';
+import { FindOptionsParameter } from '../parameters';
 export interface Finder {
     readonly ref: FirestoreRef;
-    find: <T = any>(options?: FindCriteriaOptions<T>) => Promise<any>;
+    find: <T = any>(options?: FindOptionsParameter<T>) => Promise<any>;
 }

@@ -4,7 +4,7 @@ import { Unsubscribes } from '../types'
 import { UNSUBSCRIBE_METHOD_NOT_CALLED } from '../errors'
 
 /**
- * @description class unsubscribe firestore data to state property
+ * Class unsubscribe firestore data to state property
  *
  * @example
  *   FirestoreUnsubscriber
@@ -15,7 +15,7 @@ export class FirestoreUnsubscriber implements Unsubscriber {
   private _statePropName: string
 
   /**
-   * @description Make FirestoreUnsubscriber instance
+   * Make FirestoreUnsubscriber instance
    * @param statePropName: string
    * @returns FirestoreUnsubscriber
    */
@@ -32,7 +32,7 @@ export class FirestoreUnsubscriber implements Unsubscriber {
   }
 
   /**
-   * @description unsubscribe firestore data
+   * Unsubscribe firestore data
    * @param state: any
    */
   unsubscribe(state: any) {

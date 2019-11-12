@@ -1,10 +1,10 @@
 import { AppErrorOr } from '../types'
-import { SetCriteriaOptions } from '../options'
+import { SetOptionsParameter } from '../parameters'
 
 export interface Setter {
   readonly ref: firebase.firestore.DocumentReference
   set: <T>(
     data: any,
-    options?: SetCriteriaOptions<T>
+    options?: SetOptionsParameter<T>
   ) => Promise<AppErrorOr<void>>
 }

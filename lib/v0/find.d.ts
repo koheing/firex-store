@@ -5,7 +5,7 @@ interface Criteria<T, U> {
     options?: FindCriteriaOptions<U>;
 }
 /**
- * @description fetch firestore data at once
+ *  fetch firestore data at once
  * @param ref firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
  * @param options optional methods. can undefined
  *   - mapper

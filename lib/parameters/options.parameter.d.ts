@@ -1,5 +1,5 @@
 import { Mapper, ErrorHandler, CompletionHandler } from '../types';
-export interface CriteriaOptions<T> {
+export interface OptionsParameter<T> {
     /**
      * @param mapper convert subscribed data to something, if defined
      *   - type: <T>(data: { [key: string]: any }) => T

@@ -1,5 +1,5 @@
 import { Commit } from 'vuex'
-import { SubscribeCriteriaOptions } from '../options'
+import { SubscribeOptionsParameter } from '../parameters'
 import { FirestoreRef } from '../types'
 
 export interface Subscriber {
@@ -9,7 +9,7 @@ export interface Subscriber {
   subscribe: <T = any>(
     state: any,
     commit: Commit,
-    options?: SubscribeCriteriaOptions<T>
+    options?: SubscribeOptionsParameter<T>
   ) => void
   isDocumentRef(): boolean
 }
