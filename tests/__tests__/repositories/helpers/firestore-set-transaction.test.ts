@@ -1,4 +1,4 @@
-import { transactionOfSet } from '../../../../src/repositories/helpers'
+import { transactionOfSetOrMergeSet } from '../../../../src/repositories/helpers'
 import { MockDocumentReference } from '../../../mocks/mock-document-reference'
 import { MockDocumentSnapshot } from '../../../mocks/mock-document-snapshot'
 import { MockTransaction } from '../../../mocks/mock-transaction'
@@ -6,12 +6,12 @@ import { AppError } from '../../../../src/models'
 import * as flushPromises from 'flush-promises'
 import { THIS_ID_DOES_NOT_EXIST, THIS_ID_HAS_BEEN_ALREADY_USED } from '../../../../src/errors'
 
-describe('transactionOfSet', () => {
+describe('transactionOfSetOrMergeSet', () => {
   it('mergeSet error occured', async (done) => {
     const transaction = new MockTransaction()
     const mockSet = jest.fn()
     transaction.set = mockSet
-    const result = await transactionOfSet({
+    const result = await transactionOfSetOrMergeSet({
       ref: new MockDocumentReference(
         Promise.resolve(
           new MockDocumentSnapshot(false, { name: 'test', count: 1 })
@@ -33,7 +33,7 @@ describe('transactionOfSet', () => {
   it('mergeSet succeeded', async (done) => {
     const transaction = new MockTransaction() as firebase.firestore.Transaction
     const errorHandler = jest.fn(() => ({ name: 'document id error', message: THIS_ID_DOES_NOT_EXIST } as AppError))
-    const result = await transactionOfSet({
+    const result = await transactionOfSetOrMergeSet({
       ref: new MockDocumentReference(
         Promise.resolve(
           new MockDocumentSnapshot(true, { name: 'test', count: 1 })
@@ -55,7 +55,7 @@ describe('transactionOfSet', () => {
     const transaction = new MockTransaction()
     const mockSet = jest.fn()
     transaction.set = mockSet
-    const result = await transactionOfSet({
+    const result = await transactionOfSetOrMergeSet({
       ref: new MockDocumentReference(
         Promise.resolve(
           new MockDocumentSnapshot(true, { name: 'test', count: 1 })
@@ -81,7 +81,7 @@ describe('transactionOfSet', () => {
     const errorHandler = jest.fn(() => ({ name: 'document id error', message: THIS_ID_HAS_BEEN_ALREADY_USED } as AppError))
     const documentSnap = new MockDocumentSnapshot(true, undefined)
     documentSnap._data = undefined
-    const result = await transactionOfSet({
+    const result = await transactionOfSetOrMergeSet({
       ref: new MockDocumentReference(
         Promise.resolve(
           documentSnap
