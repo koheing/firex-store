@@ -2,7 +2,10 @@ export * from './store'
 export {
   FirestoreFinder,
   FirestoreSubscriber,
-  FirestoreUnsubscriber
+  FirestoreUnsubscriber,
+  FirestoreAdder,
+  FirestoreMergeSetter,
+  FirestoreSetter
 } from './services'
 export {
   Mapper,
@@ -11,8 +14,8 @@ export {
   CompletionHandler,
   NotFoundHandler
 } from './types'
-export { Payload, DocumentResult } from './models'
-export { from, on } from './creators'
+export { Payload, DocumentResult, AppError } from './models'
+export { from, on, to } from './creators'
 
 import * as v0 from './v0'
 export { v0 }

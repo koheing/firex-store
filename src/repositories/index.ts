@@ -1,23 +1,47 @@
-import { CallMutation, NullOr } from '../types'
-import { Unsubscribe } from 'firebase'
-import { SubscribeCriteriaOptions, FindCriteriaOptions } from '../options'
+import {
+  CallMutation,
+  NullOr,
+  AppErrorOr,
+  DocumentId,
+  Unsubscribe
+} from '../types'
+import {
+  SubscribeOptionsParameter,
+  FindOptionsParameter,
+  AddOptionsParameter,
+  SetOptionsParameter
+} from '../parameters'
 import {
   toDocumentResult,
   callDocumentMutation,
   callCollectionMutation,
   notifyNotFound,
   notifyErrorOccurred,
-  notifyCompletionIfDefined
+  notifyCompletionIfDefined,
+  transactionOfSetOrMergeSet
 } from './helpers'
+import { AppError } from '../models'
 
-interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
+interface SubscribeParameter<T, U> extends SubscribeOptionsParameter<T> {
   statePropName: string
   ref: U
   callMutation: CallMutation
 }
 
-interface FindCriteria<T, U> extends FindCriteriaOptions<T> {
+interface FindParameter<T, U> extends FindOptionsParameter<T> {
   ref: U
+}
+
+interface AddParameter<T, U> extends AddOptionsParameter<T> {
+  data: any
+  ref: U
+}
+
+interface SetParameter<T, U> extends SetOptionsParameter<T> {
+  data: any
+  ref: U
+  merge: boolean
+  isTransaction: boolean
 }
 
 export class FirestoreRepository {
@@ -30,7 +54,7 @@ export class FirestoreRepository {
     completionHandler,
     afterMutationCalled,
     notFoundHandler
-  }: SubscribeCriteria<T, firebase.firestore.DocumentReference>): Unsubscribe {
+  }: SubscribeParameter<T, firebase.firestore.DocumentReference>): Unsubscribe {
     return ref.onSnapshot(
       (snapshot) =>
         !snapshot.exists
@@ -56,7 +80,7 @@ export class FirestoreRepository {
     completionHandler,
     afterMutationCalled,
     notFoundHandler
-  }: SubscribeCriteria<
+  }: SubscribeParameter<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
   >): Unsubscribe {
@@ -83,7 +107,7 @@ export class FirestoreRepository {
     mapper,
     errorHandler,
     completionHandler
-  }: FindCriteria<T, firebase.firestore.DocumentReference>): Promise<
+  }: FindParameter<T, firebase.firestore.DocumentReference>): Promise<
     NullOr<T | any>
   > {
     const result = await ref
@@ -100,7 +124,7 @@ export class FirestoreRepository {
     mapper,
     errorHandler,
     completionHandler
-  }: FindCriteria<
+  }: FindParameter<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
   >): Promise<NullOr<T[] | any | any[]>> {
@@ -118,6 +142,59 @@ export class FirestoreRepository {
         return resultsWithoutNull.length > 0 ? resultsWithoutNull : null
       })
       .catch((error: any) => notifyErrorOccurred(error, errorHandler))
+
+    notifyCompletionIfDefined(completionHandler)
+
+    return result
+  }
+
+  static async add<T = any>({
+    data,
+    ref,
+    mapper,
+    errorHandler,
+    completionHandler
+  }: AddParameter<T, firebase.firestore.CollectionReference>): Promise<
+    AppErrorOr<DocumentId>
+  > {
+    const _data = mapper ? mapper(data) : data
+    const result: AppErrorOr<DocumentId> = await ref
+      .add(_data)
+      .then((it) => it.id)
+      .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
+
+    notifyCompletionIfDefined(completionHandler)
+
+    return result
+  }
+
+  static async set<T>({
+    data,
+    ref,
+    merge,
+    isTransaction,
+    mapper,
+    errorHandler,
+    completionHandler
+  }: SetParameter<T, firebase.firestore.DocumentReference>): Promise<
+    AppErrorOr<void>
+  > {
+    const _data = mapper ? mapper(data) : data
+    const result: AppErrorOr<void> = !isTransaction
+      ? await ref
+          .set(_data, { merge })
+          .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
+      : await ref.firestore.runTransaction(
+          async (transaction) =>
+            await transactionOfSetOrMergeSet({
+              transaction,
+              data: _data,
+              ref,
+              merge,
+              mapper,
+              errorHandler
+            })
+        )
 
     notifyCompletionIfDefined(completionHandler)
 

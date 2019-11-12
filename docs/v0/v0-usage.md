@@ -1,4 +1,3 @@
-
 ## Usage
 
 - [Subscribe Firestore, using firex-store actions](#1-subscribe-firestore-using-firex-store-actions)
@@ -28,7 +27,6 @@ export const firestore = firebase.firestore()
 
 - `import { } from 'firex-store/v0'`
 
-
 ### 1. Subscribe Firestore, using firex-store actions
 
 #### part1. Add below mutations to namespaced Store
@@ -57,6 +55,7 @@ export default {
 ```
 
 #### part2. Add below actions to namespaced Store
+
 - method: `firestoreSubscribeAction` or `firestoreSubscribeActions`
   - `firestoreSubscribeActions` is deprecated. It will be removed at `^1.0.0~`
 - argments:
@@ -298,7 +297,7 @@ export default {
 
     - If it defined, call it when completed
 
-  - OnCompleted   ※ It is deprecated and removed on v1.0.0~
+  - OnCompleted ※ It is deprecated and removed on v1.0.0~
 
     - If it defined, call it when completed
 
@@ -309,20 +308,20 @@ export default {
     - This method called after mutation called
     - @param payload
       - type payload = {
-         - data: { docId: string | null, [key: string]: any }, <-- subscribed data
-        - isLast: boolean,  <-- In 'document' subscribed , it undefined. In 'collection' subscribed, true or false.
-          - UseCase: disappear and appear loading bar when subscribed 'collection' data at first 
+        - data: { docId: string | null, [key: string]: any }, <-- subscribed data
+        - isLast: boolean, <-- In 'document' subscribed , it undefined. In 'collection' subscribed, true or false.
+          - UseCase: disappear and appear loading bar when subscribed 'collection' data at first
         - [key: string]: any }
 
+* notFoundHandler
 
-  - notFoundHandler
-    - If it defined, call it when snapshot doesn't exist
-    - @param type: 'document' | 'collection'
-    - @param isAll:
-      - undefined  when subscribe Document data
-      - true       when subscribe Collection data
-      - false      when subscribe Collection data and document in Collection is not existed
-    
+  - If it defined, call it when snapshot doesn't exist
+  - @param type: 'document' | 'collection'
+  - @param isAll:
+    - undefined when subscribe Document data
+    - true when subscribe Collection data
+    - false when subscribe Collection data and document in Collection is not existed
+
 Ex.
 
 ```javascript

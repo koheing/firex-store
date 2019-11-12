@@ -10,7 +10,7 @@ interface Criteria {
 }
 
 /**
- * @description unsubscribe firestore data
+ *  unsubscribe firestore data
  * @param type 'document' | 'collection'
  * @param state any. vuex's state
  */

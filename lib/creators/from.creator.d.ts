@@ -1,7 +1,7 @@
 import { FirestoreRef } from '../types';
-import { FirestoreReaderServiceFactory } from '../factories';
+import { FirestoreReaderServiceFactory } from './helpers';
 /**
- * @description return factory of FirestoreSubscriber and FirestoreFinder
+ * Return factory of FirestoreSubscriber and FirestoreFinder
  * @param ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
  * @returns FirestoreReaderServiceFactory
  */

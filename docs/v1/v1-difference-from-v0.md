@@ -61,6 +61,7 @@
       - actionName: string
 
 - firestoreMutations param changed
+
   - [v1] param
     - type: 'document' | 'collection' | 'all'
   - [v0] param
@@ -68,6 +69,7 @@
     - json
       - statePropName: string
       - type: 'document' | 'collection'
+
 - default return value of find and findAll, FirestoreFinder method in case of error occured
   - [v1]
     - return value: void

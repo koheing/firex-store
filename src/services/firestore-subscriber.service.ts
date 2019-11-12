@@ -1,7 +1,7 @@
 import { Subscriber } from '../models'
-import { FirestoreRef, Unsubscribes } from '../types'
+import { FirestoreRef, Unsubscribes, Unsubscribe } from '../types'
 import { Commit } from 'vuex'
-import { SubscribeCriteriaOptions } from '../options'
+import { SubscribeOptionsParameter } from '../parameters'
 import { BIND_TO_METHOD_NOT_CALLED } from '../errors'
 import {
   isDocumentRef,
@@ -11,7 +11,7 @@ import {
 import { FIREX_UNSUBSCRIBES } from '../configurations'
 
 /**
- * @description class subscribe firestore data to state property
+ * Class subscribe firestore data to state property
  *
  * @example
  *   FirestoreSubscriber
@@ -29,7 +29,7 @@ export class FirestoreSubscriber implements Subscriber {
   private _statePropName?: string
 
   /**
-   * @description Make FirestoreSubscriber instance
+   * Make FirestoreSubscriber instance
    * @param ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
    * @returns FirestoreSubscriber
    */
@@ -50,7 +50,7 @@ export class FirestoreSubscriber implements Subscriber {
   }
 
   /**
-   * @description Set state property bound to firestore data
+   * Set state property bound to firestore data
    * @param statePropName: string
    * @returns FirestoreSubscriber
    */
@@ -60,7 +60,7 @@ export class FirestoreSubscriber implements Subscriber {
   }
 
   /**
-   * @description subscribe firestore data and bind to state property
+   * Subscribe firestore data and bind to state property
    * @param state: any
    * @param commit: Commit
    * @param options: { mapper,
@@ -72,7 +72,7 @@ export class FirestoreSubscriber implements Subscriber {
   subscribe<T = any>(
     state: any,
     commit: Commit,
-    options?: SubscribeCriteriaOptions<T>
+    options?: SubscribeOptionsParameter<T>
   ) {
     if (!this.statePropName) {
       console.error(BIND_TO_METHOD_NOT_CALLED)
@@ -80,7 +80,7 @@ export class FirestoreSubscriber implements Subscriber {
     }
 
     if (!state[FIREX_UNSUBSCRIBES]) {
-      state[FIREX_UNSUBSCRIBES] = new Map<string, any>()
+      state[FIREX_UNSUBSCRIBES] = new Map<string, Unsubscribe>()
     }
 
     if ((state[FIREX_UNSUBSCRIBES] as Unsubscribes).has(this.statePropName)) {

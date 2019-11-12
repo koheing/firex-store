@@ -5,7 +5,13 @@
 - [Unsubscribe Firestore, using firex-store actions](#3-unsubscribe-firestore-using-firex-store-actions)
 - [Unsubscribe Firestore, using custom actions](#4-unsubscribe-firestore-using-custom-actions)
 - [Fetch at Once](#5-fetch-at-once)
-- [Helpers](#6-helpers)
+- [Add to firestore](#6-add-to-firestore)
+- [Set to firestore](#7-set-to-firestore)
+- [MergeSet to firestore (like Update)](#8-mergeSet-to-firestore-like-update)
+- [Helpers](#9-helpers)
+  - [from and FirestoreReaderServiceFactory](#from-and-FirestoreReaderServiceFactory)
+  - [on](#on)
+  - [to and FirestoreDocumentWriterFacade](#to-and-FirestoreDocumentWriterFacade)
 - [Options](#options)
 
 ### Before Start...
@@ -190,7 +196,7 @@ Ex. Unsubscribe collection
 - argments:
 
   - firestoreUnsubscriber: FirestoreUnsubscriber instance
-  - criteria: {
+  - parameter: {
     type: 'document' | 'collection',
     actionName: string | undefined
     }
@@ -354,7 +360,133 @@ export default {
 }
 ```
 
-## 6. Helpers
+## 6. Add to firestore
+
+- class: `FirestoreAdder`
+- class methods:
+  - to: Make instance
+    - parameter:
+      - ref: firebase.firestore.CollectionReference
+    - return:
+      - FirestoreAdder
+  - add: add data to firestore
+    - data: data you wanna add to firestore
+    - parameter:
+      - options?:
+        - see [Options](#options)
+
+Ex.
+
+```javascript
+import { FirestoreAdder } from 'firex-store'
+export default {
+  namespaced: true,
+  state: {},
+  getters: {},
+  mutations: {},
+  actions: {
+    add: async (_, { data }) => {
+      const result = await FirestoreAdder.to(
+        firestore.collection('comments')
+      ).add(data, { mapper, errorHandler, completionHandler })
+      if (typeof result !== 'string') {
+        // error process
+        // ...
+      }
+    }
+  }
+}
+```
+
+## 7. Set to firestore
+
+- class: `FirestoreSetter`
+- class methods:
+  - to: Make instance
+    - parameter:
+      - ref: firebase.firestore.DocumentReference
+    - return:
+      - FirestoreSetter
+  - transaction: Call this if you wanna use transaction
+    - `UseCase`: Call this if you wouldn't like to overwrite data
+    - return:
+      - FirestoreSetter
+  - set: set data to firestore
+    - data: data you wanna set to firestore
+    - parameter:
+      - options?:
+        - see [Options](#options)
+
+Ex.
+
+```javascript
+import { FirestoreSetter } from 'firex-store'
+export default {
+  namespaced: true,
+  state: {},
+  getters: {},
+  mutations: {},
+  actions: {
+    set: async (_, { data }) => {
+      const result = await FirestoreSetter.to(
+        firestore.collection('comments').doc('commentId')
+      )
+        // .transaction() // <- comment out if you wanna use transaction
+        .set(data, { mapper, errorHandler, completionHandler })
+      if (typeof result !== 'undefined') {
+        // error process
+        // ...
+      }
+    }
+  }
+}
+```
+
+## 8. MergeSet to firestore (like Update)
+
+- class: `FirestoreMergeSetter`
+- class methods:
+  - to: Make instance
+    - parameter:
+      - ref: firebase.firestore.DocumentReference
+    - return:
+      - FirestoreMergeSetter
+  - transaction: Call this if you wanna use transaction
+    - `UseCase`: Call this if you would like to overwrite data or add property to data
+    - return:
+      - FirestoreMergeSetter
+  - mergeSet: set data to firestore
+    - data: data you wanna mergeSet to firestore
+    - parameter:
+      - options?:
+        - see [Options](#options)
+
+Ex.
+
+```javascript
+import { FirestoreMergeSetter } from 'firex-store'
+export default {
+  namespaced: true,
+  state: {},
+  getters: {},
+  mutations: {},
+  actions: {
+    mergeSet: async (_, { data }) => {
+      const result = await FirestoreSetter.to(
+        firestore.collection('comments').doc('commentId')
+      )
+        // .transaction() // <- comment out if you wanna use transaction
+        .mergeSet(data, { mapper, errorHandler, completionHandler })
+      if (typeof result !== 'undefined') {
+        // error process
+        // ...
+      }
+    }
+  }
+}
+```
+
+## 9. Helpers
 
 ### from and FirestoreReaderServiceFactory
 
@@ -453,6 +585,73 @@ export default {
 }
 ```
 
+## to and FirestoreDocumentWriterFacade
+
+- `to`: Method, return FirestoreAdder or FirestoreDocumentWriterFacade instance.
+  - parameter:
+    - ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference
+  - return: FirestoreAdder or FirestoreDocumentWriterFacade
+
+- `FirestoreDocumentWriterFacade`: Class, facade of FirestoreSetter and FirestoreMergeSetter
+
+  - parameter:
+    - ref: firebase.firestore.DocumentReference
+  - methods:
+
+  - `transaction`: call this if you wanna transaction
+    - return:
+      - FirestoreDocumentWriterFacade
+  - `set`: set data to firestore
+
+    - data: data you wanna set to firestore
+    - parameter:
+      - options?:
+        - see [Options](#options)
+
+  - `mergeSet`: set data to firestore
+    - data: data you wanna mergeSet to firestore
+    - parameter:
+      - options?:
+        - see [Options](#options)
+
+
+#### Ex.
+
+```javascript
+import { to } from 'firex-store'
+
+// modules: comment
+export default {
+  namespaced: true,
+  state: {},
+  mutations: {},
+  actions: {
+    set: async ({ dispatch }, { data }) => {
+      await to(firestore.colleciton('comments').doc('commentId'))
+        .set(data)
+    },
+    mergeSet: async ({ dispatch }, { data }) => {
+      const errorHandler = (error) => {
+        dispatch(`error/OCCURED`, error, { root: true })
+        console.error(error)
+        return error
+      }
+      await to(firestore.colleciton('comments').doc('commentId'))
+        .transaction()
+        .mergeSet(data)
+    },
+    add: async ({ dispatch }, { data }) => {
+      const result = await to(firestore.colleciton('comments')).add(data)
+      if (typeof result === 'string') {
+        console.log(`documentId is ${result}`)
+      } else {
+        dispatch(`error/OCCURED`, result, { root: true })
+      }
+    },
+  }
+.....
+}
+```
 
 ## Options
 
@@ -460,7 +659,9 @@ export default {
 
   - mapper:
 
-    - Map to something. State prop bound to Firestore or return values map to something if mapper defined
+    - Map to something.
+      - `Subscribe case`: State prop bound to Firestore or return values map to something if mapper defined
+      - `Set or add case`: Data which set or added to firestore map to something if mapper defined
 
   - errorHandler
 
@@ -542,13 +743,7 @@ const notFoundHandler = (type, isAll) => {
 ```
 
 ```javascript
-const notFoundHandler = (type, isAll) => {
-  console.log('not found')
-}
-```
-
-```javascript
-import { firestoreMutations, FirestoreSubscriber } from 'firex-store'
+import { firestoreMutations, from, to } from 'firex-store'
 export default {
   namespaced: true,
   state: {
@@ -564,8 +759,7 @@ export default {
   },
   actions: {
     subscribe: ({ state, commit }) => {
-      FirestoreSubscriber
-        .from(firestore.collection('/comments'))
+      from(firestore.collection('/comments'))
         .bindTo('comments')
         .subscribe(state, commit, {
           mapper: mapUser,
@@ -574,6 +768,10 @@ export default {
           afterMutationCalled,
           notFoundHandler
         })
+    },
+    add: async (_, { data }) => {
+      await to(firestore.collection('/comments'))
+        .add(data, { mapper, errorHandler, completionHandler })
     }
   }
   .....

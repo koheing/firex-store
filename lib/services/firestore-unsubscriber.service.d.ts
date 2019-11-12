@@ -1,6 +1,6 @@
 import { Unsubscriber } from '../models';
 /**
- * @description class unsubscribe firestore data to state property
+ * Class unsubscribe firestore data to state property
  *
  * @example
  *   FirestoreUnsubscriber
@@ -10,7 +10,7 @@ import { Unsubscriber } from '../models';
 export declare class FirestoreUnsubscriber implements Unsubscriber {
     private _statePropName;
     /**
-     * @description Make FirestoreUnsubscriber instance
+     * Make FirestoreUnsubscriber instance
      * @param statePropName: string
      * @returns FirestoreUnsubscriber
      */
@@ -18,7 +18,7 @@ export declare class FirestoreUnsubscriber implements Unsubscriber {
     constructor(statePropName: string);
     readonly statePropName: string;
     /**
-     * @description unsubscribe firestore data
+     * Unsubscribe firestore data
      * @param state: any
      */
     unsubscribe(state: any): void;

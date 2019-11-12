@@ -1,7 +1,7 @@
 import { FirestoreUnsubscriber } from '../services'
 
 /**
- * @description return FirestoreUnsubscriber instance
+ * Return FirestoreUnsubscriber instance
  * @param statePropName state property bound to firestore data
  * @returns FirestoreUnsubscriber
  */

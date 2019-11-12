@@ -12,7 +12,7 @@ interface Criteria<T = any> {
 
 /**
  * @warn It is deprecated. It will be removed at `^1.0.0~`
- * @description subscribe firestore data to state property
+ *  subscribe firestore data to state property
  * @param actionName custom action name. can undefined
  * @param ref firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
  * @param options optional methods. can undefined
@@ -43,7 +43,7 @@ export const firestoreSubscribeActions = <T = any>({
 }
 
 /**
- * @description subscribe firestore data to state property
+ *  subscribe firestore data to state property
  * @param actionName custom action name. can undefined
  * @param ref firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
  * @param options optional methods. can undefined

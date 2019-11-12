@@ -1,5 +1,6 @@
+import { DocumentId } from '../types';
 interface Document {
-    docId?: string | null;
+    docId?: DocumentId | null;
 }
 export interface DocumentResult extends Document {
     [key: string]: any;

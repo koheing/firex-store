@@ -67,7 +67,7 @@ const subscribeFirestoreDocument = <T = any>({
 }
 
 /**
- * @description subscribe firestore data to state property
+ *  subscribe firestore data to state property
  * @param state vuex's state
  * @param commit vuex's commit
  * @param ref firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query

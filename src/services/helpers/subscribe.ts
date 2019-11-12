@@ -4,14 +4,14 @@ import { callMutation } from './call-mutation'
 import { FirestoreRepository } from '../../repositories'
 import { Payload } from '../../models/payload.model'
 import { Commit } from 'vuex'
-import { SubscribeCriteriaOptions } from '../../options'
+import { SubscribeOptionsParameter } from '../../parameters'
 
-interface SubscribeCriteria<T, U> {
+interface SubscribeParameter<T, U> {
   statePropName: string
   state: any
   commit: Commit
   ref: T
-  options?: SubscribeCriteriaOptions<U>
+  options?: SubscribeOptionsParameter<U>
 }
 
 export const subscribeFirestoreCollection = <T = any>({
@@ -20,7 +20,7 @@ export const subscribeFirestoreCollection = <T = any>({
   commit,
   ref,
   options
-}: SubscribeCriteria<
+}: SubscribeParameter<
   firebase.firestore.Query | firebase.firestore.CollectionReference,
   T
 >) => {
@@ -45,7 +45,7 @@ export const subscribeFirestoreDocument = <T = any>({
   commit,
   ref,
   options
-}: SubscribeCriteria<firebase.firestore.DocumentReference, T>) => {
+}: SubscribeParameter<firebase.firestore.DocumentReference, T>) => {
   const mutation: CallMutation = (
     changeType: firebase.firestore.DocumentChangeType,
     payload: Payload
