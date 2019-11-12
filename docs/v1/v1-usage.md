@@ -7,7 +7,7 @@
 - [Fetch at Once](#5-fetch-at-once)
 - [Add to firestore](#6-add-to-firestore)
 - [Set to firestore](#7-set-to-firestore)
-- [MergeSet to firestore (like Update)](<#8-mergeSet-to-firestore-(like-update)>)
+- [MergeSet to firestore (like Update)](#8-mergeSet-to-firestore-like-update)
 - [Helpers](#9-helpers)
   - [from and FirestoreReaderServiceFactory](#from-and-FirestoreReaderServiceFactory)
   - [on](#on)
