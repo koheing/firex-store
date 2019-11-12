@@ -6,5 +6,5 @@ interface TransactionParameter<T> extends OptionsParameter<T> {
     ref: firebase.firestore.DocumentReference;
     merge: boolean;
 }
-export declare const transactionOfSet: <T = any>({ ref, data, merge, transaction, errorHandler }: TransactionParameter<T>) => Promise<AppErrorOr<void>>;
+export declare const transactionOfSetOrMergeSet: <T = any>({ ref, data, merge, transaction, errorHandler }: TransactionParameter<T>) => Promise<AppErrorOr<void>>;
 export {};

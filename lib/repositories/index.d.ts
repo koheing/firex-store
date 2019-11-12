@@ -1,4 +1,4 @@
-import { CallMutation, NullOr, AppErrorOr, DocumentId } from '../types';
+import { CallMutation, NullOr, AppErrorOr, DocumentId, Unsubscribe } from '../types';
 import { SubscribeOptionsParameter, FindOptionsParameter, AddOptionsParameter, SetOptionsParameter } from '../parameters';
 interface SubscribeParameter<T, U> extends SubscribeOptionsParameter<T> {
     statePropName: string;
@@ -19,8 +19,8 @@ interface SetParameter<T, U> extends SetOptionsParameter<T> {
     isTransaction: boolean;
 }
 export declare class FirestoreRepository {
-    static subscribe<T = any>({ statePropName, ref, callMutation, mapper, errorHandler, completionHandler, afterMutationCalled, notFoundHandler }: SubscribeParameter<T, firebase.firestore.DocumentReference>): firebase.Unsubscribe;
-    static subscribeAll<T = any>({ statePropName, ref, callMutation, mapper, errorHandler, completionHandler, afterMutationCalled, notFoundHandler }: SubscribeParameter<T, firebase.firestore.CollectionReference | firebase.firestore.Query>): firebase.Unsubscribe;
+    static subscribe<T = any>({ statePropName, ref, callMutation, mapper, errorHandler, completionHandler, afterMutationCalled, notFoundHandler }: SubscribeParameter<T, firebase.firestore.DocumentReference>): Unsubscribe;
+    static subscribeAll<T = any>({ statePropName, ref, callMutation, mapper, errorHandler, completionHandler, afterMutationCalled, notFoundHandler }: SubscribeParameter<T, firebase.firestore.CollectionReference | firebase.firestore.Query>): Unsubscribe;
     static find<T = any>({ ref, mapper, errorHandler, completionHandler }: FindParameter<T, firebase.firestore.DocumentReference>): Promise<NullOr<T | any>>;
     static findAll<T = any>({ ref, mapper, errorHandler, completionHandler }: FindParameter<T, firebase.firestore.CollectionReference | firebase.firestore.Query>): Promise<NullOr<T[] | any | any[]>>;
     static add<T = any>({ data, ref, mapper, errorHandler, completionHandler }: AddParameter<T, firebase.firestore.CollectionReference>): Promise<AppErrorOr<DocumentId>>;

@@ -2,7 +2,7 @@ import { AppErrorOr } from '../../types';
 import { SetOptionsParameter } from '../../parameters';
 import { Transaction, MergeSetter, Setter } from '../../models';
 /**
- * @description facade of FirestoreSetter and FirestoreMergeSetter
+ * facade of FirestoreSetter and FirestoreMergeSetter
  * @param ref: firebase.firestore.DocumentReference
  * @method transaction: Call it if you wanna transaction
  * @method set: Firestore.set, merge is false
@@ -15,12 +15,12 @@ export declare class FirestoreDocumentWriterFacade implements Transaction, Merge
     readonly ref: firebase.firestore.DocumentReference;
     readonly isTransaction: boolean;
     /**
-     * @description Call it if you wanna transaction
+     * Call it if you wanna transaction
      * @return `FirestoreDocumentWriterFacade class instance`
      */
     transaction(): FirestoreDocumentWriterFacade;
     /**
-     * @description Firestore.collection('hoge').doc('fuga').set, merge is false. call `transaction` before call it, if you wanna transaction
+     * Firestore.collection('hoge').doc('fuga').set, merge is false. call `transaction` before call it, if you wanna transaction
      * @param data : Set data to firestore
      * @param options : {
      *         mapper,
@@ -31,7 +31,7 @@ export declare class FirestoreDocumentWriterFacade implements Transaction, Merge
      */
     set<T = any>(data: any, options?: SetOptionsParameter<T>): Promise<AppErrorOr<void>>;
     /**
-     * @description Firestore.collection('hoge').doc('fuga').set, merge is true. call `transaction` before call it, if you wanna transaction
+     * Firestore.collection('hoge').doc('fuga').set, merge is true. call `transaction` before call it, if you wanna transaction
      * @param data : Set data to firestore
      * @param options : { mapper,
      *         errorHandler,

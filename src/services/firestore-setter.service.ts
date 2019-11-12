@@ -4,7 +4,7 @@ import { FirestoreRepository } from '../repositories'
 import { SetOptionsParameter } from '../parameters'
 
 /**
- * @description class set data to firestore
+ * Class set data to firestore
  *
  * @example
  *   FirestoreSetter
@@ -21,7 +21,7 @@ export class FirestoreSetter implements Setter, Transaction {
   private _isTransaction = false
 
   /**
-   * @description Make FirestoreSetter instance
+   * Make FirestoreSetter instance
    * @param ref: firebase.firestore.DocumentReference
    * @returns FirestoreSetter
    */
@@ -42,7 +42,7 @@ export class FirestoreSetter implements Setter, Transaction {
   }
 
   /**
-   * @description Call this if you wanna use transaction
+   * Call this if you wanna use transaction
    * @return  `FirestoreSetter class instance`
    */
   transaction(): FirestoreSetter {
@@ -51,7 +51,7 @@ export class FirestoreSetter implements Setter, Transaction {
   }
 
   /**
-   * @description Firestore.collection('hoge').doc('fuga').set, merge is false. call `transaction` before call it, if you wanna transaction
+   * Firestore.collection('hoge').doc('fuga').set, merge is false. call `transaction` before call it, if you wanna transaction
    * @param data : Set data to firestore
    * @param options : {
    *         mapper,

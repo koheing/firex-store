@@ -3,7 +3,7 @@ import { actionTypes } from '../types/action'
 import { FirestoreUnsubscriber } from '../../services/firestore-unsubscriber.service'
 
 /**
- * @description unsubscribe firestore data to state property
+ * Unsubscribe firestore data to state property
  * @param firestoreUnsubscriber: FirestoreUnsubscriber instance
  * @param parameter: { type: 'document' | 'collection', actionName?: string }
  * @returns ActionTree<any, any>

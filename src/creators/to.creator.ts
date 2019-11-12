@@ -8,7 +8,7 @@ type AdderOrSetter<T> = T extends firebase.firestore.CollectionReference
   : FirestoreDocumentWriterFacade
 
 /**
- * @description return FirestoreAdder or FirestoreDocumentWriterFacade instance
+ * Return FirestoreAdder or FirestoreDocumentWriterFacade instance
  * Return FirestoreAdder instance if ref is firebase.firestore.CollectionReference,
  * while return FirestoreDocumentWriterFacade if if ref is firebase.firestore.DocumentReference
  * @param ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference

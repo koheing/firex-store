@@ -3,7 +3,7 @@ import { AfterMutationCalled, NotFoundHandler } from '../types'
 
 export interface SubscribeOptionsParameter<T> extends OptionsParameter<T> {
   /**
-   * @description afterMutationCalled This method called after mutation called
+   *  AfterMutationCalled This method called after mutation called
    *   - `subscribeFirestore` and `subscribeFirestoreActions` only.
    *   @param: (payload: Payload) => void
    *     + payload = { data: { docId: string, [key: string]: any }, isLast: boolean }
@@ -18,7 +18,7 @@ export interface SubscribeOptionsParameter<T> extends OptionsParameter<T> {
    */
   afterMutationCalled?: AfterMutationCalled
   /**
-   * @description (type?: string, isAll?: boolean) => void
+   * (type?: string, isAll?: boolean) => void
    * @param type: 'document' | 'collection'
    * @param isAll:
    *     + undefined  when subscribe Document data

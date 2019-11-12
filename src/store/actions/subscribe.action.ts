@@ -11,7 +11,7 @@ interface OptionsParameter<T> extends SubscribeOptionsParameter<T> {
 }
 
 /**
- * @description subscribe firestore data to state property
+ * Subscribe firestore data to state property
  * @param firestoreSubscriber: FirestoreSubscriber instance
  * @param options: {
  *         actionName,

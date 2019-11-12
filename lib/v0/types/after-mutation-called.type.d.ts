@@ -1,6 +1,6 @@
 import { Payload } from '../models';
 /**
- * @description Payload = {
+ *  Payload = {
  *   data?: {
  *     docId: string | null,
  *     [key: string]: any

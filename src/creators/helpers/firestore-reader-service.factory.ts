@@ -2,7 +2,7 @@ import { FirestoreRef } from '../../types'
 import { FirestoreSubscriber, FirestoreFinder } from '../../services'
 
 /**
- * @description factory of FirestoreSubscriber and FirestoreFinder
+ * Factory of FirestoreSubscriber and FirestoreFinder
  * @param ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
  * @method bindTo(statePropName): return FirestoreSubscriber
  * @method once: return FirestoreFinder
@@ -15,7 +15,7 @@ export class FirestoreReaderServiceFactory {
   }
 
   /**
-   * @description return FirestoreSubscriber instance
+   * Return FirestoreSubscriber instance
    * @param statePropName: state property bound to firestore data
    * @return FirestoreSubscriber
    */
@@ -24,7 +24,7 @@ export class FirestoreReaderServiceFactory {
   }
 
   /**
-   * @description return FirestoreFinder instance
+   * Return FirestoreFinder instance
    * @return FirestoreFinder
    */
   once(): FirestoreFinder {

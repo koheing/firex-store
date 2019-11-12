@@ -18,7 +18,7 @@ import {
   notifyNotFound,
   notifyErrorOccurred,
   notifyCompletionIfDefined,
-  transactionOfSet
+  transactionOfSetOrMergeSet
 } from './helpers'
 import { AppError } from '../models'
 
@@ -157,9 +157,9 @@ export class FirestoreRepository {
   }: AddParameter<T, firebase.firestore.CollectionReference>): Promise<
     AppErrorOr<DocumentId>
   > {
-    const document = mapper ? mapper(data) : data
+    const _data = mapper ? mapper(data) : data
     const result: AppErrorOr<DocumentId> = await ref
-      .add(document)
+      .add(_data)
       .then((it) => it.id)
       .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
 
@@ -179,16 +179,16 @@ export class FirestoreRepository {
   }: SetParameter<T, firebase.firestore.DocumentReference>): Promise<
     AppErrorOr<void>
   > {
-    const document = mapper ? mapper(data) : data
+    const _data = mapper ? mapper(data) : data
     const result: AppErrorOr<void> = !isTransaction
       ? await ref
-          .set(document, { merge })
+          .set(_data, { merge })
           .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
       : await ref.firestore.runTransaction(
           async (transaction) =>
-            await transactionOfSet({
+            await transactionOfSetOrMergeSet({
               transaction,
-              data: document,
+              data: _data,
               ref,
               merge,
               mapper,

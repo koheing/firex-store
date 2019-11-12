@@ -5,7 +5,7 @@ import { isDocumentRef } from './helpers'
 import { FirestoreRepository } from '../repositories'
 
 /**
- * @description class find firestore data at once
+ * Class find firestore data at once
  * @returns null | error | any
  *   - error: if you defined errorHandler, it changed any
  *
@@ -23,7 +23,7 @@ export class FirestoreFinder implements Finder {
   private _ref: FirestoreRef
 
   /**
-   * @description Make FirestoreFinder instance
+   * Make FirestoreFinder instance
    * @param ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
    * @returns FirestoreFinder
    */
@@ -40,7 +40,7 @@ export class FirestoreFinder implements Finder {
   }
 
   /**
-   * @description find firestore data at once
+   * Find firestore data at once
    * @param options: {
    *         mapper,
    *         errorHandler,

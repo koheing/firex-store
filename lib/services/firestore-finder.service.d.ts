@@ -2,7 +2,7 @@ import { Finder } from '../models';
 import { FirestoreRef, NullOr } from '../types';
 import { FindOptionsParameter } from '../parameters';
 /**
- * @description class find firestore data at once
+ * Class find firestore data at once
  * @returns null | error | any
  *   - error: if you defined errorHandler, it changed any
  *
@@ -19,7 +19,7 @@ import { FindOptionsParameter } from '../parameters';
 export declare class FirestoreFinder implements Finder {
     private _ref;
     /**
-     * @description Make FirestoreFinder instance
+     * Make FirestoreFinder instance
      * @param ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
      * @returns FirestoreFinder
      */
@@ -27,7 +27,7 @@ export declare class FirestoreFinder implements Finder {
     constructor(ref: FirestoreRef);
     readonly ref: FirestoreRef;
     /**
-     * @description find firestore data at once
+     * Find firestore data at once
      * @param options: {
      *         mapper,
      *         errorHandler,

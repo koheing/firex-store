@@ -14,13 +14,13 @@ interface TransactionParameter<T> extends OptionsParameter<T> {
   merge: boolean
 }
 
-const isAbleToSet = (
+const isAbleToSetOrMergeSet = (
   isMergeSet: boolean,
   snapshot: firebase.firestore.DocumentSnapshot
 ): boolean =>
   (isMergeSet && snapshot.exists === true) || (!isMergeSet && !snapshot.data())
 
-export const transactionOfSet = async <T = any>({
+export const transactionOfSetOrMergeSet = async <T = any>({
   ref,
   data,
   merge,
@@ -28,9 +28,12 @@ export const transactionOfSet = async <T = any>({
   errorHandler
 }: TransactionParameter<T>): Promise<AppErrorOr<void>> => {
   const isMergeSet = merge
-  const appErrorOrIsAbleToSet: Either<AppError, true> = await transaction
+  const appErrorOrIsAbleToSetOrMergeSet: Either<
+    AppError,
+    true
+  > = await transaction
     .get(ref)
-    .then((snapshot) => isAbleToSet(isMergeSet, snapshot))
+    .then((snapshot) => isAbleToSetOrMergeSet(isMergeSet, snapshot))
     .then((isAbleToSet) => {
       if (isAbleToSet) {
         return true
@@ -44,10 +47,10 @@ export const transactionOfSet = async <T = any>({
     })
     .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
 
-  if (appErrorOrIsAbleToSet === true) {
+  if (appErrorOrIsAbleToSetOrMergeSet === true) {
     transaction.set(ref, data, { merge })
     return
   }
-  const appError = appErrorOrIsAbleToSet
+  const appError = appErrorOrIsAbleToSetOrMergeSet
   return appError
 }

@@ -4,7 +4,7 @@ import { FirestoreSetter, FirestoreMergeSetter } from '../../services'
 import { Transaction, MergeSetter, Setter } from '../../models'
 
 /**
- * @description facade of FirestoreSetter and FirestoreMergeSetter
+ * facade of FirestoreSetter and FirestoreMergeSetter
  * @param ref: firebase.firestore.DocumentReference
  * @method transaction: Call it if you wanna transaction
  * @method set: Firestore.set, merge is false
@@ -28,7 +28,7 @@ export class FirestoreDocumentWriterFacade
   }
 
   /**
-   * @description Call it if you wanna transaction
+   * Call it if you wanna transaction
    * @return `FirestoreDocumentWriterFacade class instance`
    */
   transaction(): FirestoreDocumentWriterFacade {
@@ -37,7 +37,7 @@ export class FirestoreDocumentWriterFacade
   }
 
   /**
-   * @description Firestore.collection('hoge').doc('fuga').set, merge is false. call `transaction` before call it, if you wanna transaction
+   * Firestore.collection('hoge').doc('fuga').set, merge is false. call `transaction` before call it, if you wanna transaction
    * @param data : Set data to firestore
    * @param options : {
    *         mapper,
@@ -58,7 +58,7 @@ export class FirestoreDocumentWriterFacade
   }
 
   /**
-   * @description Firestore.collection('hoge').doc('fuga').set, merge is true. call `transaction` before call it, if you wanna transaction
+   * Firestore.collection('hoge').doc('fuga').set, merge is true. call `transaction` before call it, if you wanna transaction
    * @param data : Set data to firestore
    * @param options : { mapper,
    *         errorHandler,

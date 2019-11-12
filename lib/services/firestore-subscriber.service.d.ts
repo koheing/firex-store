@@ -3,7 +3,7 @@ import { FirestoreRef } from '../types';
 import { Commit } from 'vuex';
 import { SubscribeOptionsParameter } from '../parameters';
 /**
- * @description class subscribe firestore data to state property
+ * Class subscribe firestore data to state property
  *
  * @example
  *   FirestoreSubscriber
@@ -20,7 +20,7 @@ export declare class FirestoreSubscriber implements Subscriber {
     private _ref;
     private _statePropName?;
     /**
-     * @description Make FirestoreSubscriber instance
+     * Make FirestoreSubscriber instance
      * @param ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
      * @returns FirestoreSubscriber
      */
@@ -29,13 +29,13 @@ export declare class FirestoreSubscriber implements Subscriber {
     readonly ref: FirestoreRef;
     readonly statePropName: string | undefined;
     /**
-     * @description Set state property bound to firestore data
+     * Set state property bound to firestore data
      * @param statePropName: string
      * @returns FirestoreSubscriber
      */
     bindTo(statePropName: string): FirestoreSubscriber;
     /**
-     * @description subscribe firestore data and bind to state property
+     * Subscribe firestore data and bind to state property
      * @param state: any
      * @param commit: Commit
      * @param options: { mapper,

@@ -4,7 +4,7 @@ import { FirestoreRepository } from '../repositories'
 import { AddOptionsParameter } from '../parameters'
 
 /**
- * @description class add data to firestore
+ *  Class add data to firestore
  *
  * @example
  *   FirestoreAdder
@@ -31,7 +31,7 @@ export class FirestoreAdder implements Adder {
   }
 
   /**
-   * @description Firestore.collection('hoge').add
+   * Firestore.collection('hoge').add
    * @param data : add data to firestore
    * @param options : {
    *         mapper,
