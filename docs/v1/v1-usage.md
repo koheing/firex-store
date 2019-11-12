@@ -196,7 +196,7 @@ Ex. Unsubscribe collection
 - argments:
 
   - firestoreUnsubscriber: FirestoreUnsubscriber instance
-  - criteria: {
+  - parameter: {
     type: 'document' | 'collection',
     actionName: string | undefined
     }

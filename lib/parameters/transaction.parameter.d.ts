@@ -1,5 +1,5 @@
 import { Mapper, ErrorHandler } from '../types';
-export interface TransactionCriteria<T> {
+export interface TransactionParameter<T> {
     transaction: firebase.firestore.Transaction;
     data: any;
     ref: firebase.firestore.DocumentReference;

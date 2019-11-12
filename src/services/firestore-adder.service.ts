@@ -1,10 +1,10 @@
 import { AppErrorOr, DocumentId } from '../types'
 import { Adder } from '../models'
 import { FirestoreRepository } from '../repositories'
-import { AddCriteriaOptions } from '../options'
+import { AddOptionsParameter } from '../parameters'
 
 /**
- * @description class add data to firestore
+ *  Class add data to firestore
  *
  * @example
  *   FirestoreAdder
@@ -31,7 +31,7 @@ export class FirestoreAdder implements Adder {
   }
 
   /**
-   * @description Firestore.collection('hoge').add
+   * Firestore.collection('hoge').add
    * @param data : add data to firestore
    * @param options : {
    *         mapper,
@@ -42,7 +42,7 @@ export class FirestoreAdder implements Adder {
    */
   async add<T = any>(
     data: any,
-    options?: AddCriteriaOptions<T>
+    options?: AddOptionsParameter<T>
   ): Promise<AppErrorOr<DocumentId>> {
     const _data = { ...data }
     const result = await FirestoreRepository.add({

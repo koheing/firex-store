@@ -1,10 +1,16 @@
-import { CallMutation, NullOr, AppErrorOr, DocumentId } from '../types'
 import {
-  SubscribeCriteriaOptions,
-  FindCriteriaOptions,
-  AddCriteriaOptions,
-  SetCriteriaOptions
-} from '../options'
+  CallMutation,
+  NullOr,
+  AppErrorOr,
+  DocumentId,
+  Unsubscribe
+} from '../types'
+import {
+  SubscribeOptionsParameter,
+  FindOptionsParameter,
+  AddOptionsParameter,
+  SetOptionsParameter
+} from '../parameters'
 import {
   toDocumentResult,
   callDocumentMutation,
@@ -12,26 +18,26 @@ import {
   notifyNotFound,
   notifyErrorOccurred,
   notifyCompletionIfDefined,
-  transactionOfSet
+  transactionOfSetOrMergeSet
 } from './helpers'
 import { AppError } from '../models'
 
-interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
+interface SubscribeParameter<T, U> extends SubscribeOptionsParameter<T> {
   statePropName: string
   ref: U
   callMutation: CallMutation
 }
 
-interface FindCriteria<T, U> extends FindCriteriaOptions<T> {
+interface FindParameter<T, U> extends FindOptionsParameter<T> {
   ref: U
 }
 
-interface AddCriteria<T, U> extends AddCriteriaOptions<T> {
+interface AddParameter<T, U> extends AddOptionsParameter<T> {
   data: any
   ref: U
 }
 
-interface SetCriteria<T, U> extends SetCriteriaOptions<T> {
+interface SetParameter<T, U> extends SetOptionsParameter<T> {
   data: any
   ref: U
   merge: boolean
@@ -48,10 +54,7 @@ export class FirestoreRepository {
     completionHandler,
     afterMutationCalled,
     notFoundHandler
-  }: SubscribeCriteria<
-    T,
-    firebase.firestore.DocumentReference
-  >): firebase.Unsubscribe {
+  }: SubscribeParameter<T, firebase.firestore.DocumentReference>): Unsubscribe {
     return ref.onSnapshot(
       (snapshot) =>
         !snapshot.exists
@@ -77,10 +80,10 @@ export class FirestoreRepository {
     completionHandler,
     afterMutationCalled,
     notFoundHandler
-  }: SubscribeCriteria<
+  }: SubscribeParameter<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
-  >): firebase.Unsubscribe {
+  >): Unsubscribe {
     return ref.onSnapshot(
       (snapshot) =>
         snapshot.empty
@@ -104,7 +107,7 @@ export class FirestoreRepository {
     mapper,
     errorHandler,
     completionHandler
-  }: FindCriteria<T, firebase.firestore.DocumentReference>): Promise<
+  }: FindParameter<T, firebase.firestore.DocumentReference>): Promise<
     NullOr<T | any>
   > {
     const result = await ref
@@ -121,7 +124,7 @@ export class FirestoreRepository {
     mapper,
     errorHandler,
     completionHandler
-  }: FindCriteria<
+  }: FindParameter<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
   >): Promise<NullOr<T[] | any | any[]>> {
@@ -151,12 +154,12 @@ export class FirestoreRepository {
     mapper,
     errorHandler,
     completionHandler
-  }: AddCriteria<T, firebase.firestore.CollectionReference>): Promise<
+  }: AddParameter<T, firebase.firestore.CollectionReference>): Promise<
     AppErrorOr<DocumentId>
   > {
-    const document = mapper ? mapper(data) : data
+    const _data = mapper ? mapper(data) : data
     const result: AppErrorOr<DocumentId> = await ref
-      .add(document)
+      .add(_data)
       .then((it) => it.id)
       .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
 
@@ -173,19 +176,19 @@ export class FirestoreRepository {
     mapper,
     errorHandler,
     completionHandler
-  }: SetCriteria<T, firebase.firestore.DocumentReference>): Promise<
+  }: SetParameter<T, firebase.firestore.DocumentReference>): Promise<
     AppErrorOr<void>
   > {
-    const document = mapper ? mapper(data) : data
+    const _data = mapper ? mapper(data) : data
     const result: AppErrorOr<void> = !isTransaction
       ? await ref
-          .set(document, { merge })
+          .set(_data, { merge })
           .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
       : await ref.firestore.runTransaction(
           async (transaction) =>
-            await transactionOfSet({
+            await transactionOfSetOrMergeSet({
               transaction,
-              data: document,
+              data: _data,
               ref,
               merge,
               mapper,

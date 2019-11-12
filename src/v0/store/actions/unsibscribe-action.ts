@@ -10,7 +10,7 @@ interface Criteria {
 
 /**
  * @warn It is deprecated. It will be removed at `^1.0.0~`
- * @description unsubscribe firestore data
+ *  unsubscribe firestore data
  * @param type 'document' | 'collection'
  * @param actionName can undefined. But if you define actionName in `firestoreSubscribeActions`, set same name.
  */
@@ -35,7 +35,7 @@ export const firestoreUnsubscribeActions = ({
 }
 
 /**
- * @description unsubscribe firestore data
+ *  unsubscribe firestore data
  * @param type 'document' | 'collection'
  * @param actionName can undefined. But if you define actionName in `firestoreSubscribeAction`, set same name.
  */
