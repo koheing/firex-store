@@ -3,7 +3,7 @@
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 [![CircleCI](https://circleci.com/gh/nor-ko-hi-jp/firex-store.svg?style=svg)](https://circleci.com/gh/nor-ko-hi-jp/firex-store)
 
-- `If you use this npm, you can read or write firestore data, easily.`
+- `If you use this npm, you can read and write firestore data, easily.`
 - It is inspired by [vuexfire](https://github.com/vuejs/vuefire)
 - You can read or write firestore data, the following code, if you use this package.
 ```Javascript
