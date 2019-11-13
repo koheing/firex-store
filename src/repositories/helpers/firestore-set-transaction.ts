@@ -1,9 +1,6 @@
 import { Either, AppErrorOr } from '../../types'
 import { AppError } from '../../models'
-import {
-  THIS_ID_HAS_BEEN_ALREADY_USED,
-  THIS_ID_DOES_NOT_EXIST
-} from '../../errors'
+import { appErrorTree } from '../../errors'
 import { notifyErrorOccurred } from './notifications'
 import { OptionsParameter } from '../../parameters'
 
@@ -39,10 +36,9 @@ export const transactionOfSetOrMergeSet = async <T = any>({
         return true
       }
 
-      const appError: AppError = {
-        name: 'document id error',
-        message: merge ? THIS_ID_DOES_NOT_EXIST : THIS_ID_HAS_BEEN_ALREADY_USED
-      }
+      const appError = merge
+        ? appErrorTree.DATA_EXISTED
+        : appErrorTree.ID_HAS_ALREADY_BEEN_USED
       throw appError
     })
     .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))

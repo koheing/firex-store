@@ -1,7 +1,7 @@
 import { Unsubscriber } from '../models'
 import { FIREX_UNSUBSCRIBES } from '../configurations'
 import { Unsubscribes } from '../types'
-import { UNSUBSCRIBE_METHOD_NOT_CALLED } from '../errors'
+import { errorMessageTree } from '../errors'
 
 /**
  * Class unsubscribe firestore data to state property
@@ -38,7 +38,7 @@ export class FirestoreUnsubscriber implements Unsubscriber {
   unsubscribe(state: any) {
     const unsubscribes: Unsubscribes | undefined = state[FIREX_UNSUBSCRIBES]
     if (!unsubscribes || !unsubscribes.has(this.statePropName)) {
-      console.error(UNSUBSCRIBE_METHOD_NOT_CALLED)
+      console.error(errorMessageTree.UNSUBSCRIBE_METHOD_NOT_CALLED)
       return
     }
 

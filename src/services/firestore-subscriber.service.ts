@@ -2,7 +2,7 @@ import { Subscriber } from '../models'
 import { FirestoreRef, Unsubscribes, Unsubscribe } from '../types'
 import { Commit } from 'vuex'
 import { SubscribeOptionsParameter } from '../parameters'
-import { BIND_TO_METHOD_NOT_CALLED } from '../errors'
+import { errorMessageTree } from '../errors'
 import {
   isDocumentRef,
   subscribeFirestoreDocument,
@@ -75,7 +75,7 @@ export class FirestoreSubscriber implements Subscriber {
     options?: SubscribeOptionsParameter<T>
   ) {
     if (!this.statePropName) {
-      console.error(BIND_TO_METHOD_NOT_CALLED)
+      console.error(errorMessageTree.BIND_TO_METHOD_NOT_CALLED)
       return
     }
 
