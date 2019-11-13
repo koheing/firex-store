@@ -1,7 +1,7 @@
 {
   "name": "firex-store",
   "version": "1.2.0",
-  "description": "subscribe firebase data to vuex",
+  "description": "Subscribe and write firestore data, easily",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "directories": {
