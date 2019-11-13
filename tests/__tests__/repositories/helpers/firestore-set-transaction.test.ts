@@ -2,9 +2,8 @@ import { transactionOfSetOrMergeSet } from '../../../../src/repositories/helpers
 import { MockDocumentReference } from '../../../mocks/mock-document-reference'
 import { MockDocumentSnapshot } from '../../../mocks/mock-document-snapshot'
 import { MockTransaction } from '../../../mocks/mock-transaction'
-import { AppError } from '../../../../src/models'
 import * as flushPromises from 'flush-promises'
-import { THIS_ID_DOES_NOT_EXIST, THIS_ID_HAS_BEEN_ALREADY_USED } from '../../../../src/errors'
+import { appErrorTree } from '../../../../src/errors'
 
 describe('transactionOfSetOrMergeSet', () => {
   it('mergeSet error occured', async (done) => {
@@ -24,7 +23,7 @@ describe('transactionOfSetOrMergeSet', () => {
     await flushPromises()
     expect(result).not.toBeUndefined()
     if (result) {
-      expect(result.message).toEqual(THIS_ID_DOES_NOT_EXIST)
+      expect(result.message).toEqual(appErrorTree.DATA_EXISTED.message)
     }
     jest.clearAllMocks()
     done()
@@ -32,7 +31,7 @@ describe('transactionOfSetOrMergeSet', () => {
 
   it('mergeSet succeeded', async (done) => {
     const transaction = new MockTransaction() as firebase.firestore.Transaction
-    const errorHandler = jest.fn(() => ({ name: 'document id error', message: THIS_ID_DOES_NOT_EXIST } as AppError))
+    const errorHandler = jest.fn(() => appErrorTree.ID_HAS_ALREADY_BEEN_USED)
     const result = await transactionOfSetOrMergeSet({
       ref: new MockDocumentReference(
         Promise.resolve(
@@ -68,7 +67,7 @@ describe('transactionOfSetOrMergeSet', () => {
     await flushPromises()
     expect(result).not.toBeUndefined()
     if (result) {
-      expect(result.message).toEqual(THIS_ID_HAS_BEEN_ALREADY_USED)
+      expect(result.message).toEqual(appErrorTree.ID_HAS_ALREADY_BEEN_USED.message)
     }
     jest.clearAllMocks()
     done()
@@ -78,7 +77,7 @@ describe('transactionOfSetOrMergeSet', () => {
     const transaction = new MockTransaction()
     const mockSet = jest.fn()
     transaction.set = mockSet
-    const errorHandler = jest.fn(() => ({ name: 'document id error', message: THIS_ID_HAS_BEEN_ALREADY_USED } as AppError))
+    const errorHandler = jest.fn(() => appErrorTree.ID_HAS_ALREADY_BEEN_USED)
     const documentSnap = new MockDocumentSnapshot(true, undefined)
     documentSnap._data = undefined
     const result = await transactionOfSetOrMergeSet({
