@@ -9,7 +9,8 @@ import {
   SubscribeOptionsParameter,
   FindOptionsParameter,
   AddOptionsParameter,
-  SetOptionsParameter
+  SetOptionsParameter,
+  DeleteOptionsParameter
 } from '../parameters'
 import {
   toDocumentResult,
@@ -18,7 +19,8 @@ import {
   notifyNotFound,
   notifyErrorOccurred,
   notifyCompletionIfDefined,
-  transactionOfSetOrMergeSet
+  transactionOfSetOrMergeSet,
+  transacitonOfDelete
 } from './helpers'
 import { AppError } from '../models'
 
@@ -41,6 +43,11 @@ interface SetParameter<T, U> extends SetOptionsParameter<T> {
   data: any
   ref: U
   merge: boolean
+  isTransaction: boolean
+}
+
+interface DeleteParamater<T> extends DeleteOptionsParameter {
+  ref: T
   isTransaction: boolean
 }
 
@@ -192,6 +199,30 @@ export class FirestoreRepository {
               ref,
               merge,
               mapper,
+              errorHandler
+            })
+        )
+
+    notifyCompletionIfDefined(completionHandler)
+
+    return result
+  }
+
+  static async delete({
+    ref,
+    isTransaction,
+    errorHandler,
+    completionHandler
+  }: DeleteParamater<firebase.firestore.DocumentReference>) {
+    const result: AppErrorOr<void> = !isTransaction
+      ? await ref
+          .delete()
+          .catch((error: AppError) => notifyErrorOccurred(error, errorHandler))
+      : await ref.firestore.runTransaction(
+          async (transaction) =>
+            await transacitonOfDelete({
+              ref,
+              transaction,
               errorHandler
             })
         )

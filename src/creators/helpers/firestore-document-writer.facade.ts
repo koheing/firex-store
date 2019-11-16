@@ -1,6 +1,10 @@
 import { AppErrorOr } from '../../types'
-import { SetOptionsParameter } from '../../parameters'
-import { FirestoreSetter, FirestoreMergeSetter } from '../../services'
+import { SetOptionsParameter, DeleteOptionsParameter } from '../../parameters'
+import {
+  FirestoreSetter,
+  FirestoreMergeSetter,
+  FirestoreDeleter
+} from '../../services'
 import { Transaction, MergeSetter, Setter } from '../../models'
 
 /**
@@ -75,5 +79,13 @@ export class FirestoreDocumentWriterFacade
           .transaction()
           .mergeSet(data, options)
       : FirestoreMergeSetter.to(this._ref).mergeSet(data, options)
+  }
+
+  async delete(options?: DeleteOptionsParameter): Promise<AppErrorOr<void>> {
+    return this._isTransaction
+      ? FirestoreDeleter.to(this._ref)
+          .transaction()
+          .delete(options)
+      : FirestoreDeleter.to(this._ref).delete()
   }
 }
