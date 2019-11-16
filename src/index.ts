@@ -5,7 +5,8 @@ export {
   FirestoreUnsubscriber,
   FirestoreAdder,
   FirestoreMergeSetter,
-  FirestoreSetter
+  FirestoreSetter,
+  FirestoreDeleter
 } from './services'
 export {
   Mapper,
