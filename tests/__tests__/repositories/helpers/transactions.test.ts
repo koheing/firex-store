@@ -1,4 +1,4 @@
-import { transactionOfSetOrMergeSet } from '../../../../src/repositories/helpers'
+import { transactionOfSetOrMergeSet, transacitonOfDelete } from '../../../../src/repositories/helpers'
 import { MockDocumentReference } from '../../../mocks/mock-document-reference'
 import { MockDocumentSnapshot } from '../../../mocks/mock-document-snapshot'
 import { MockTransaction } from '../../../mocks/mock-transaction'
@@ -15,7 +15,7 @@ describe('transactionOfSetOrMergeSet', () => {
         Promise.resolve(
           new MockDocumentSnapshot(false, { name: 'test', count: 1 })
         )
-      ),
+      ) as firebase.firestore.DocumentReference,
       data: { name: 'test' },
       merge: true,
       transaction
@@ -37,7 +37,7 @@ describe('transactionOfSetOrMergeSet', () => {
         Promise.resolve(
           new MockDocumentSnapshot(true, { name: 'test', count: 1 })
         )
-      ),
+      ) as firebase.firestore.DocumentReference,
       data: { name: 'test' },
       merge: true,
       transaction,
@@ -59,7 +59,7 @@ describe('transactionOfSetOrMergeSet', () => {
         Promise.resolve(
           new MockDocumentSnapshot(true, { name: 'test', count: 1 })
         )
-      ),
+      ) as firebase.firestore.DocumentReference,
       data: { name: 'test' },
       merge: false,
       transaction
@@ -85,7 +85,7 @@ describe('transactionOfSetOrMergeSet', () => {
         Promise.resolve(
           documentSnap
         )
-      ),
+      ) as firebase.firestore.DocumentReference,
       data: { name: 'test' },
       merge: false,
       transaction
@@ -97,4 +97,51 @@ describe('transactionOfSetOrMergeSet', () => {
     done()
   })
 
+})
+
+describe('transacitonOfDelete', () => {
+  it('delete error occured', async (done) => {
+    const transaction = new MockTransaction()
+    const mockDelete = jest.fn()
+    transaction.delete = mockDelete
+    const result = await transacitonOfDelete({
+      ref: new MockDocumentReference(
+        Promise.resolve(
+          new MockDocumentSnapshot(false)
+        )
+      ) as firebase.firestore.DocumentReference,
+      transaction
+    })
+    await flushPromises()
+    expect(result).not.toBeUndefined()
+    if (result) {
+      expect(result.message).toEqual(appErrorTree.DATA_NOT_EXISTED.message)
+    }
+    jest.clearAllMocks()
+    done()
+  })
+
+  it('delete succeeded', async (done) => {
+    const transaction = new MockTransaction()
+    const mockDelete = jest.fn()
+    transaction.delete = mockDelete
+    const errorHandler = jest.fn(() => appErrorTree.DATA_NOT_EXISTED)
+    const documentSnap = new MockDocumentSnapshot(true, undefined)
+    documentSnap._data = undefined
+    const result = await transacitonOfDelete({
+      ref: new MockDocumentReference(
+        Promise.resolve(
+          documentSnap
+        )
+      ) as firebase.firestore.DocumentReference,
+      transaction,
+      errorHandler
+    })
+    await flushPromises()
+    expect(result).toBeUndefined()
+    expect(mockDelete).toHaveBeenCalled()
+    expect(errorHandler).not.toHaveBeenCalled()
+    jest.clearAllMocks()
+    done()
+  })
 })

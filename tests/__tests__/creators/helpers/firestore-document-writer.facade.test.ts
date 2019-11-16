@@ -66,6 +66,34 @@ describe('FirestoreDocumentWriterFacade', () => {
     done()
   })
 
+  it('call FirestoreDeleter with not transaction', async (done) => {
+    const mockSetter = jest.spyOn(FirestoreRepository, 'delete')
+    const writerFacade = new FirestoreDocumentWriterFacade(
+      new MockCollectionReference({}).doc('documentId')
+    )
+    const result = writerFacade.delete({})
+    await flushPromises()
+    expect(FirestoreRepository.delete).toHaveBeenCalled()
+    expect(mockSetter.mock.calls[0][0].isTransaction).toBeFalsy()
+    expect(result).toBeInstanceOf(Promise)
+    jest.clearAllMocks()
+    done()
+  })
+
+  it('call FirestoreDeleter with transaction', async (done) => {
+    const mockSetter = jest.spyOn(FirestoreRepository, 'delete')
+    const writerFacade = new FirestoreDocumentWriterFacade(
+      new MockCollectionReference({}).doc('documentId')
+    ).transaction()
+    const result = writerFacade.delete({})
+    await flushPromises()
+    expect(FirestoreRepository.delete).toHaveBeenCalled()
+    expect(mockSetter.mock.calls[0][0].isTransaction).toBeTruthy()
+    expect(result).toBeInstanceOf(Promise)
+    jest.clearAllMocks()
+    done()
+  })
+
   it('get ref', () => {
     const writerFacade = new FirestoreDocumentWriterFacade(
       firestore.collection('comments').doc('comment')
