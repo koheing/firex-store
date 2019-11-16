@@ -29,15 +29,15 @@ describe('FirestoreDeleter', () => {
   })
 
   it('FirestoreRepository.delete called with no transaction', async (done) => {
-    const mockSetter = jest.spyOn(FirestoreRepository, 'delete')
+    const mockDeleter = jest.spyOn(FirestoreRepository, 'delete')
     const data = {} as any
-    const setter = FirestoreDeleter.to(
-      new MockCollectionReference(data).doc('documentId')
+    const deleter = FirestoreDeleter.to(
+      new MockCollectionReference(data).doc('documentId') as firebase.firestore.DocumentReference
     )
-    const result = setter.delete()
+    const result = deleter.delete()
     await flushPromises()
     expect(FirestoreRepository.delete).toHaveBeenCalled()
-    expect(mockSetter.mock.calls[0][0].isTransaction).toBeFalsy()
+    expect(mockDeleter.mock.calls[0][0].isTransaction).toBeFalsy()
     expect(result).toBeInstanceOf(Promise)
     jest.clearAllMocks()
 
