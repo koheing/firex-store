@@ -81,6 +81,14 @@ export class FirestoreDocumentWriterFacade
       : FirestoreMergeSetter.to(this._ref).mergeSet(data, options)
   }
 
+  /**
+   * Firestore.collection('hoge').doc('fuga').delete. call `transaction` before call it, if you wanna transaction
+   * @param options : {
+   *         errorHandler,
+   *         completionHandler
+   *        } | undefined
+   * @returns `AppError` or `undefined`
+   */
   async delete(options?: DeleteOptionsParameter): Promise<AppErrorOr<void>> {
     return this._isTransaction
       ? FirestoreDeleter.to(this._ref)
