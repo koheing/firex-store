@@ -1,6 +1,10 @@
 import { AppErrorOr } from '../../types'
-import { SetOptionsParameter } from '../../parameters'
-import { FirestoreSetter, FirestoreMergeSetter } from '../../services'
+import { SetOptionsParameter, DeleteOptionsParameter } from '../../parameters'
+import {
+  FirestoreSetter,
+  FirestoreMergeSetter,
+  FirestoreDeleter
+} from '../../services'
 import { Transaction, MergeSetter, Setter } from '../../models'
 
 /**
@@ -75,5 +79,21 @@ export class FirestoreDocumentWriterFacade
           .transaction()
           .mergeSet(data, options)
       : FirestoreMergeSetter.to(this._ref).mergeSet(data, options)
+  }
+
+  /**
+   * Firestore.collection('hoge').doc('fuga').delete. call `transaction` before call it, if you wanna transaction
+   * @param options : {
+   *         errorHandler,
+   *         completionHandler
+   *        } | undefined
+   * @returns `AppError` or `undefined`
+   */
+  async delete(options?: DeleteOptionsParameter): Promise<AppErrorOr<void>> {
+    return this._isTransaction
+      ? FirestoreDeleter.to(this._ref)
+          .transaction()
+          .delete(options)
+      : FirestoreDeleter.to(this._ref).delete()
   }
 }
