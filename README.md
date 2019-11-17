@@ -6,11 +6,11 @@
 - `If you use this npm, you can read and write firestore data, easily.`
 - It is inspired by [vuexfire](https://github.com/vuejs/vuefire)
 - You can read or write firestore data, the following code, if you use this package.
-```Javascript
+```JavaScript:store.js
 import { to, from, on, firestoreMutations } from 'firex-store'
 import { firestore } from '~/plugins/firebase'
 
-
+// Vuex module
 export default {
   state: {
     comments: []
@@ -21,7 +21,8 @@ export default {
   },
   actions: {
     subscribe: ({ state, commit }) => {
-      from(firestore.collection('comments'))
+      const ref = firestore.collection('comments')
+      from(ref)
         .bindTo('comments')
         .subscribe(state, commit, /* { mapper, errorHandler, complectionHandler, afterMutationCalled } */)
     },
@@ -29,23 +30,31 @@ export default {
       on('comments').unsubscribe(state)
     },
     find: async (_, { commentId }) => {
-      result = await from(firestore.collection('comments').doc(commentId))
-        .once()
-        .find(/* { mapper, errorHandler, completionHandler } */)
+      const ref = firestore.collection('comments').doc('commentId')
+      result = await from(ref).once().find(/* { mapper, errorHandler, completionHandler } */)
+      return result
     },
     add: (_, { data }) => {
-      return to(firestore.collection('comments'))
-        .add(data, /* { mapper, errorHandler, completionHandler } */)
+      const ref = firestore.collection('comments')
+      return to(ref).add(data, /* { mapper, errorHandler, completionHandler } */)
     },
     set: (_, { data, commentId }) => {
-      to(firestore.collection('comments').doc(commentId))
-        // .transaction()
+      const ref = firestore.collection('comments').doc('commentId')
+      return to(ref)
+        // .transaction()  <- comment out if you use transaction
         .set(data, /* { mapper, errorHandler, completionHandler } */)
     },
     mergeSet: (_, { data, commentId }) => {
-      to(firestore.collection('comments').doc(commentId))
-        // .transaction()
+      const ref = firestore.collection('comments').doc('commentId')
+      return to(ref)
+        // .transaction()  <- comment out if you use transaction
         .mergeSet(data, /* { mapper, errorHandler, completionHandler } */)
+    },
+    delete: (_) => {
+      const ref = firestore.collection('comments').doc('commentId')
+      return to(ref)
+      // .transaction()  <- comment out if you use transaction
+        .delete(/* { errorHandler, completionHandler } */)
     }
   }
 }

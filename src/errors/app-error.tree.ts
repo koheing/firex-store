@@ -8,5 +8,9 @@ export const appErrorTree = {
   DATA_EXISTED: {
     name: 'Transaction Error',
     message: 'data existed.'
+  } as AppError,
+  DATA_NOT_EXISTED: {
+    name: 'Transaction Error',
+    message: 'data not existed.'
   } as AppError
 }
