@@ -1,5 +1,5 @@
-import { Subscriber } from '../models'
-import { FirestoreRef, Unsubscribes, Unsubscribe } from '../types'
+import { Subscriber, FirestoreMapper } from '../models'
+import { FirestoreRef, Unsubscribes, Unsubscribe, Mapper } from '../types'
 import { Commit } from 'vuex'
 import { SubscribeOptionsParameter } from '../parameters'
 import { errorMessageTree } from '../errors'
@@ -27,6 +27,7 @@ import { FIREX_UNSUBSCRIBES } from '../configurations'
 export class FirestoreSubscriber implements Subscriber {
   private _ref: FirestoreRef
   private _statePropName?: string
+  private _mapper?: Mapper<any>
 
   /**
    * Make FirestoreSubscriber instance
@@ -54,8 +55,14 @@ export class FirestoreSubscriber implements Subscriber {
    * @param statePropName: string
    * @returns FirestoreSubscriber
    */
-  bindTo(statePropName: string): FirestoreSubscriber {
+  bindTo(statePropName: string): this {
     this._statePropName = statePropName
+    return this
+  }
+
+  mapOf<T extends FirestoreMapper>(className: T): this {
+    // @ts-ignore
+    this._mapper = className.fromJson
     return this
   }
 
@@ -87,20 +94,25 @@ export class FirestoreSubscriber implements Subscriber {
       return
     }
 
+    const _options: SubscribeOptionsParameter<any> = {
+      ...{ mapper: this._mapper },
+      ...options
+    }
+
     isDocumentRef(this.ref)
       ? subscribeFirestoreDocument({
           statePropName: this.statePropName,
           state,
           commit,
           ref: this.ref,
-          options
+          options: _options
         })
       : subscribeFirestoreCollection({
           statePropName: this.statePropName,
           state,
           commit,
           ref: this.ref,
-          options
+          options: _options
         })
   }
 

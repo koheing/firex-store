@@ -1,4 +1,4 @@
-import { Finder } from '../models'
+import { Finder, FirestoreMapper } from '../models'
 import { FirestoreRef, NullOr } from '../types'
 import { FindOptionsParameter } from '../parameters'
 import { isDocumentRef } from './helpers'
@@ -37,6 +37,12 @@ export class FirestoreFinder implements Finder {
 
   get ref(): FirestoreRef {
     return this._ref
+  }
+
+  mapOf<T extends FirestoreMapper>(className: T): this {
+    // @ts-ignore
+    this._mapper = className.fromJson
+    return this
   }
 
   /**
