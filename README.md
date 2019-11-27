@@ -10,8 +10,13 @@
 import { FirestoreMapper } from 'firex-store'
 
 class Model extends FirestoreMapper {
-  static fromJson(data: { [key: string]: any }) {
-    return new Model()
+  static fromJson(data) {
+    return new Model(data.id, `${data.family_name}${data.first_name}` )
+  }
+
+  construnctor(id, fullName) {
+    this.id = id
+    this.fullName = fullName
   }
 }
 ```
