@@ -62,21 +62,21 @@ export default {
       const ref = firestore.collection('comments')
       return to(ref)
         // .mapOf(Model)  <- comment out if you use mapper
-        .add(data, /* { mapper, errorHandler, completionHandler } */)
+        .add(data, /* { errorHandler, completionHandler } */)
     },
     set: (_, { data, commentId }) => {
       const ref = firestore.collection('comments').doc('commentId')
       return to(ref)
         // .mapOf(Model)  <- comment out if you use mapper
         // .transaction()  <- comment out if you use transaction
-        .set(data, /* { mapper, errorHandler, completionHandler } */)
+        .set(data, /* { errorHandler, completionHandler } */)
     },
     mergeSet: (_, { data, commentId }) => {
       const ref = firestore.collection('comments').doc('commentId')
       return to(ref)
         // .mapOf(Model)  <- comment out if you use mapper
         // .transaction()  <- comment out if you use transaction
-        .mergeSet(data, /* { mapper, errorHandler, completionHandler } */)
+        .mergeSet(data, /* { errorHandler, completionHandler } */)
     },
     delete: (_) => {
       const ref = firestore.collection('comments').doc('commentId')
