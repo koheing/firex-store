@@ -408,7 +408,9 @@ export default {
     add: async (_, { data }) => {
       const result = await FirestoreAdder.to(
         firestore.collection('comments')
-      ).add(data, { mapper, errorHandler, completionHandler })
+      )
+      // .mapOf(Model)
+      .add(data, { errorHandler, completionHandler })
       if (typeof result !== 'string') {
         // error process
         // ...
@@ -451,6 +453,7 @@ export default {
       const result = await FirestoreSetter.to(
         firestore.collection('comments').doc('commentId')
       )
+        // .mapOf(Model)
         // .transaction() // <- comment out if you wanna use transaction
         .set(data, { mapper, errorHandler, completionHandler })
       if (typeof result !== 'undefined') {
@@ -495,6 +498,7 @@ export default {
       const result = await FirestoreSetter.to(
         firestore.collection('comments').doc('commentId')
       )
+        // .mapOf(Model)
         // .transaction() // <- comment out if you wanna use transaction
         .mergeSet(data, { mapper, errorHandler, completionHandler })
       if (typeof result !== 'undefined') {
@@ -699,10 +703,10 @@ from(firestore.collection('comments'))
 
 - Options
 
-  - mapper:
+  - mapper: `decrecated. It will be removed at 1.5.0~`
 
     - Map to something.
-      - `Subscribe and Fetch case`: `decrecated. It will be removed at 1.5.0~`. State prop bound to Firestore or return values map to something if mapper defined
+      - `Subscribe and Fetch case`: State prop bound to Firestore or return values map to something if mapper defined
       - `Set or Add case`: Data which set or added to firestore map to something if mapper defined
 
   - errorHandler

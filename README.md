@@ -11,7 +11,11 @@ import { FirestoreMapper } from 'firex-store'
 
 class Model extends FirestoreMapper {
   static fromJson(data) {
-    return new Model(data.id, `${data.family_name}${data.first_name}` )
+    return new Model(data.id, `${data.family_name} ${data.first_name}` )
+  }
+
+  static toJson(data) {
+    return { id: data.id, family_name: data.fullName.split(' ')[0], first_name: data.fullName.split(' ')[1] }
   }
 
   construnctor(id, fullName) {
@@ -56,17 +60,21 @@ export default {
     },
     add: (_, { data }) => {
       const ref = firestore.collection('comments')
-      return to(ref).add(data, /* { mapper, errorHandler, completionHandler } */)
+      return to(ref)
+        // .mapOf(Model)  <- comment out if you use mapper
+        .add(data, /* { mapper, errorHandler, completionHandler } */)
     },
     set: (_, { data, commentId }) => {
       const ref = firestore.collection('comments').doc('commentId')
       return to(ref)
+        // .mapOf(Model)  <- comment out if you use mapper
         // .transaction()  <- comment out if you use transaction
         .set(data, /* { mapper, errorHandler, completionHandler } */)
     },
     mergeSet: (_, { data, commentId }) => {
       const ref = firestore.collection('comments').doc('commentId')
       return to(ref)
+        // .mapOf(Model)  <- comment out if you use mapper
         // .transaction()  <- comment out if you use transaction
         .mergeSet(data, /* { mapper, errorHandler, completionHandler } */)
     },
