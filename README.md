@@ -6,8 +6,19 @@
 - `If you use this npm, you can read and write firestore data, easily.`
 - It is inspired by [vuexfire](https://github.com/vuejs/vuefire)
 - You can read or write firestore data, the following code, if you use this package.
+```Javascript:model.js
+import { FirestoreMapper } from 'firex-store'
+
+class Model extends FirestoreMapper {
+  static fromJson(data: { [key: string]: any }) {
+    return new Model()
+  }
+}
+```
+
 ```JavaScript:store.js
 import { to, from, on, firestoreMutations } from 'firex-store'
+import { Model } from '~/model'
 import { firestore } from '~/plugins/firebase'
 
 // Vuex module
@@ -23,15 +34,16 @@ export default {
     subscribe: ({ state, commit }) => {
       const ref = firestore.collection('comments')
       from(ref)
+        .mapOf(Model)
         .bindTo('comments')
-        .subscribe(state, commit, /* { mapper, errorHandler, complectionHandler, afterMutationCalled } */)
+        .subscribe(state, commit, /* { errorHandler, complectionHandler, afterMutationCalled } */)
     },
     unsubscribe: ({ state }) => {
       on('comments').unsubscribe(state)
     },
     find: async (_, { commentId }) => {
       const ref = firestore.collection('comments').doc('commentId')
-      result = await from(ref).once().find(/* { mapper, errorHandler, completionHandler } */)
+      result = await from(ref).once().mapOf(Model).find(/* { errorHandler, completionHandler } */)
       return result
     },
     add: (_, { data }) => {

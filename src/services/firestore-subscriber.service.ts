@@ -14,11 +14,19 @@ import { FIREX_UNSUBSCRIBES } from '../configurations'
  * Class subscribe firestore data to state property
  *
  * @example
+ *    class FirestoreMapperModel extends FirestoreMapper {
+ *     id: number
+ *     name: string
+ *     static fromJson(data: { [key: string]: any }) {
+ *        return { id: data.id, name: data.name } as FirestoreMapperModel
+ *     }
+ *   }
+ *
  *   FirestoreSubscriber
  *     .from(firebase.firestore().collection('collection'))
  *     .bindTo('statePropName')
+ *     .mapOf(FirestoreMapperModel)
  *     .subscribe(state, commit, {
- *         mapper,
  *         errorHandler,
  *         notFoundHandler,
  *         afterMutationCalled
@@ -60,6 +68,10 @@ export class FirestoreSubscriber implements Subscriber {
     return this
   }
 
+  /**
+   * new data with the results of calling a provided function(fromJson)
+   * @param className extends FirestoreMapper
+   */
   mapOf<T extends FirestoreMapper>(className: T): this {
     // @ts-ignore
     this._mapper = className.fromJson

@@ -62,6 +62,11 @@ export const firestore = firebase.firestore()
       - statePropName: string. state property
     - return:
       - FirestoreSubscriber
+  - mapOf: Mapping data subscribed from Firestore
+    - parameter:
+      - className: Class inheriting FirestoreMapper
+    - return:
+      - FirestoreSubscriber
 
 Ex. Subscribe collection and document
 
@@ -85,12 +90,14 @@ export default {
   actions: {
     ...firestoreSubscribeAction(
       FirestoreSubscriber
+        // .mapOf(Model)
         .from(firebase.firestore().collection('/comments'))
         .bindTo('comments')  // property name in state
     ),
     ...firestoreSubscribeAction(
       FirestoreSubscriber
         .from(firebase.firestore().collection('/comments').doc('commentId'))
+        // .mapOf(Model)
         .bindTo('comment'),  // property name in state,
         { actionName: 'subscribeComment' }
     ),
@@ -136,6 +143,11 @@ export default {
       - statePropName: string. state property
     - return:
       - FirestoreSubscriber
+  - mapOf: Mapping data subscribed from Firestore
+    - parameter:
+      - className: Class inheriting FirestoreMapper
+    - return:
+      - FirestoreSubscriber
   - subscribe: Subscribe firestore data
     - parameters:
       - state: any
@@ -163,6 +175,7 @@ export default {
     subscribeAll: ({ state, commit }) => {
       FirestoreSubscriber
         .from(firebase.firestore().collection('/comments'))
+        // .mapOf(Model)
         .bindTo('comments')
         .subscribe(state, commit)
     }
@@ -295,6 +308,7 @@ export default {
     subscribeAll: ({ state, commit }) => {
       FirestoreSubscriber
         .from(firebase.firestore().collection('/comments'))
+        // .mapOf(Model)
         .bindTo('comments')
         .subscribe(state, commit)
     },
@@ -333,6 +347,11 @@ export default {
       - ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
     - return:
       - FirestoreFinder
+  - mapOf: Mapping data fetched from Firestore
+    - parameter:
+      - className: Class inheriting FirestoreMapper
+    - return:
+      - FirestoreSubscriber
   - find: fetch firestore data at once
     - parameter:
       - options?:
@@ -349,11 +368,11 @@ export default {
   mutations: {},
   actions: {
     fetchComments: async ({ commit }) => {
-      const mapComment = (data) => ({ message: data.message, user: { firstName: data.user.first_name, familyName: data.user.family_name } })
       const ref = firestore.collection('/comments')
       const result = await FirestoreFinder
         .from(ref)
-        .find({ mapper: mapComment })
+        // .mapOf(Model)
+        .find()
       commit(***, result)
     }
   }
@@ -660,8 +679,8 @@ export default {
   - mapper:
 
     - Map to something.
-      - `Subscribe case`: State prop bound to Firestore or return values map to something if mapper defined
-      - `Set or add case`: Data which set or added to firestore map to something if mapper defined
+      - `Subscribe and Fetch case`: `decrecated. It will be removed at 1.5.0~`. State prop bound to Firestore or return values map to something if mapper defined
+      - `Set or Add case`: Data which set or added to firestore map to something if mapper defined
 
   - errorHandler
 

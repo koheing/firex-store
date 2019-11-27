@@ -11,10 +11,18 @@ import { FirestoreRepository } from '../repositories'
  *
  *
  * @example
+ *   class FirestoreMapperModel extends FirestoreMapper {
+ *     id: number
+ *     name: string
+ *     static fromJson(data: { [key: string]: any }) {
+ *        return { id: data.id, name: data.name } as FirestoreMapperModel
+ *     }
+ *   }
+ *
  *   FirestoreFinder
  *     .from(firebase.firestore().collection('collection'))
+ *     .mapOf(FirestoreMapperModel)
  *     .find({
- *         mapper,
  *         errorHandler,
  *         completionHandler
  *     })
@@ -40,6 +48,10 @@ export class FirestoreFinder implements Finder {
     return this._ref
   }
 
+  /**
+   * new data with the results of calling a provided function(fromJson)
+   * @param className extends FirestoreMapper
+   */
   mapOf<T extends FirestoreMapper>(className: T): this {
     // @ts-ignore
     this._mapper = className.fromJson

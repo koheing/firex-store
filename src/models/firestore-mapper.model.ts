@@ -39,4 +39,3 @@ export abstract class FirestoreMapper {
     throw appErrorTree.NOT_IMPLEMENTED
   }
 }
-
