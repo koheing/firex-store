@@ -34,7 +34,7 @@ export default {
     subscribe: ({ state, commit }) => {
       const ref = firestore.collection('comments')
       from(ref)
-        .mapOf(Model)
+        // .mapOf(Model)  <- comment out if you use mapper
         .bindTo('comments')
         .subscribe(state, commit, /* { errorHandler, complectionHandler, afterMutationCalled } */)
     },
@@ -43,7 +43,10 @@ export default {
     },
     find: async (_, { commentId }) => {
       const ref = firestore.collection('comments').doc('commentId')
-      result = await from(ref).once().mapOf(Model).find(/* { errorHandler, completionHandler } */)
+      result = await from(ref)
+        .once()
+        // .mapOf(Model)  <- comment out if you use mapper
+        .find(/* { errorHandler, completionHandler } */)
       return result
     },
     add: (_, { data }) => {
