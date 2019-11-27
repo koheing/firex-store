@@ -62,7 +62,7 @@ export class FirestoreMergeSetter implements MergeSetter, Transaction {
   }
 
   /**
-   * Convert data before registering data in Firestoren with the results of calling a provided function(toJson)
+   * Convert data before registering data in Firestore with the results of calling a provided function(toJson)
    * @param className extends FirestoreMapper
    * @returns FirestoreMergeSetter
    */

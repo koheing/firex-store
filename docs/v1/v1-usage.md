@@ -389,6 +389,11 @@ export default {
       - ref: firebase.firestore.CollectionReference
     - return:
       - FirestoreAdder
+  - mapOf: Convert data before registering data in Firestore
+    - parameter:
+      - className: Class inheriting FirestoreMapper
+    - return:
+      - FirestoreAdder
   - add: add data to firestore
     - data: data you wanna add to firestore
     - parameter:
@@ -431,6 +436,11 @@ export default {
       - FirestoreSetter
   - transaction: Call this if you wanna use transaction
     - `UseCase`: Call this if you wouldn't like to overwrite data
+    - return:
+      - FirestoreSetter
+  - mapOf: Convert data before registering data in Firestore
+    - parameter:
+      - className: Class inheriting FirestoreMapper
     - return:
       - FirestoreSetter
   - set: set data to firestore
@@ -476,6 +486,11 @@ export default {
       - FirestoreMergeSetter
   - transaction: Call this if you wanna use transaction
     - `UseCase`: Call this if you would like to overwrite data or add property to data
+    - return:
+      - FirestoreMergeSetter
+  - mapOf: Convert data before registering data in Firestore
+    - parameter:
+      - className: Class inheriting FirestoreMapper
     - return:
       - FirestoreMergeSetter
   - mergeSet: set data to firestore
