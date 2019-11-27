@@ -17,7 +17,7 @@ import { SubscribeOptionsParameter } from '../parameters';
  *   FirestoreSubscriber
  *     .from(firebase.firestore().collection('collection'))
  *     .bindTo('statePropName')
- *     .mapOf(FirestoreMapperModel)
+ *     .mapOf(FirestoreMapperModel)  // <- options
  *     .subscribe(state, commit, {
  *         errorHandler,
  *         notFoundHandler,
@@ -44,8 +44,9 @@ export declare class FirestoreSubscriber implements Subscriber {
      */
     bindTo(statePropName: string): this;
     /**
-     * new data with the results of calling a provided function(fromJson)
+     * Convert new data with the results of calling a provided function(fromJson)
      * @param className extends FirestoreMapper
+     * @returns FirestoreSubscriber
      */
     mapOf<T extends FirestoreMapper>(className: T): this;
     /**

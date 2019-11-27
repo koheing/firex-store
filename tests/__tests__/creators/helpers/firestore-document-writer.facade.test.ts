@@ -4,14 +4,20 @@ import { FirestoreRepository } from '../../../../src/repositories'
 import { firestore } from '../../../mocks/firebase'
 import * as flushPromises from 'flush-promises'
 import * as firebase from 'firebase'
+import { FirestoreMapper } from '../../../../src/models'
 
 describe('FirestoreDocumentWriterFacade', () => {
+  class MockModel extends FirestoreMapper {
+    static toJson(data: any) {
+      return {}
+    }
+  }
   it('call FirestoreMergeSetter with not transaction', async (done) => {
     const mockSetter = jest.spyOn(FirestoreRepository, 'set')
     const writerFacade = new FirestoreDocumentWriterFacade(
       new MockCollectionReference({}).doc('documentId')
     )
-    const result = writerFacade.mergeSet({})
+    const result = writerFacade.mapOf(MockModel).mergeSet({ id: 0 })
     await flushPromises()
     expect(FirestoreRepository.set).toHaveBeenCalled()
     expect(mockSetter.mock.calls[0][0].isTransaction).toBeFalsy()

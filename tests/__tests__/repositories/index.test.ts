@@ -5,7 +5,7 @@ import { MockQueryReference } from '../../mocks/mock-query-reference'
 import { MockQuerySnapshot } from '../../mocks/mock-query-snapshot'
 import { MockCollectionReference } from '../../mocks/mock-collection-reference'
 import * as flushPromises from 'flush-promises'
-import { FirestoreFinder, FirestoreSubscriber } from '../../../src/services'
+import { FirestoreFinder, FirestoreSubscriber, FirestoreAdder, FirestoreSetter, FirestoreMergeSetter } from '../../../src/services'
 import { FirestoreMapper } from '../../../src/models'
 
 describe('FirestoreRepository', () => {
@@ -277,6 +277,40 @@ describe('FirestoreRepository', () => {
     FirestoreSubscriber.from(ref).mapOf(MockModel).bindTo('test').subscribe({}, jest.fn(), { mapper: (data: any) => ({ count: data.count }) })
     if (spyMock.mock.calls[0][0].mapper) {
       expect(spyMock.mock.calls[0][0].mapper.name).toEqual('fromJson')
+    }
+    jest.clearAllMocks()
+  })
+
+  it('add: toJson called', () => {
+    const spyMock = jest.spyOn(FirestoreRepository, 'add')
+    const ref = new MockCollectionReference(
+      Promise.resolve(
+        new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
+      )
+    ) as firebase.firestore.CollectionReference
+    FirestoreAdder.to(ref).mapOf(MockModel).add({}, { errorHandler: (error: any) => error })
+    if (spyMock.mock.calls[0][0].mapper) {
+      expect(spyMock.mock.calls[0][0].mapper.name).toEqual('toJson')
+    }
+    jest.clearAllMocks()
+  })
+
+  it('set: toJson called', () => {
+    const spyMock = jest.spyOn(FirestoreRepository, 'set')
+    const ref = new MockDocumentReference(Promise.resolve(new MockDocumentSnapshot())) as firebase.firestore.DocumentReference
+    FirestoreSetter.to(ref).mapOf(MockModel).set({}, { errorHandler: (error: any) => error })
+    if (spyMock.mock.calls[0][0].mapper) {
+      expect(spyMock.mock.calls[0][0].mapper.name).toEqual('toJson')
+    }
+    jest.clearAllMocks()
+  })
+
+  it('mergeSet: toJson called', () => {
+    const spyMock = jest.spyOn(FirestoreRepository, 'set')
+    const ref = new MockDocumentReference(Promise.resolve(new MockDocumentSnapshot())) as firebase.firestore.DocumentReference
+    FirestoreMergeSetter.to(ref).mapOf(MockModel).mergeSet({}, { errorHandler: (error: any) => error })
+    if (spyMock.mock.calls[0][0].mapper) {
+      expect(spyMock.mock.calls[0][0].mapper.name).toEqual('toJson')
     }
     jest.clearAllMocks()
   })

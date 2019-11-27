@@ -1,7 +1,7 @@
 /**
- * Delegator class that convert data subscribed from Firestore.
+ * Delegator class that convert data subscribed from Firestore or set to Firestore.
  * @example
- * class Model implements SubscribeData {
+ * class Model extends FirestoreMapper {
  *   static fromJson(data: { [key: string]: any }) {
  *     return new Model()
  *   }
@@ -13,7 +13,7 @@ export declare abstract class FirestoreMapper {
      * @param data  { [key: string]: any }
      * @returns any
      * @example
-     * class Model implements SubscribeData {
+     * class Model extends FirestoreMapper {
      *   id: string
      *   firstName: string
      *   familyName: string
@@ -34,6 +34,34 @@ export declare abstract class FirestoreMapper {
      * }
      */
     static fromJson(data: {
+        [key: string]: any;
+    }): any;
+    /**
+     * Mapper used before registering data in Firestore
+     * @param data  { [key: string]: any }
+     * @returns any
+     * @example
+     * class Model extends FirestoreMapper {
+     *   id: string
+     *   firstName: string
+     *   familyName: string
+     *
+     *   static toJson(data: Model): Model {
+     *     return {
+     *       id: data.id,
+     *       first_name: data.firstName,
+     *       family_name: data.familyName
+     *     } as Model
+     *   }
+     *
+     *   constructor(data: Partial<Model> = {}) {
+     *     this.id = data.id || ''
+     *     this.firstName = data.firstName || ''
+     *     this.familyName = data.familyName || ''
+     *   }
+     * }
+     */
+    static toJson(data: {
         [key: string]: any;
     }): any;
 }

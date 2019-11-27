@@ -39,6 +39,31 @@ export abstract class FirestoreMapper {
     throw appErrorTree.NOT_IMPLEMENTED
   }
 
+  /**
+   * Mapper used before registering data in Firestore
+   * @param data  { [key: string]: any }
+   * @returns any
+   * @example
+   * class Model extends FirestoreMapper {
+   *   id: string
+   *   firstName: string
+   *   familyName: string
+   *
+   *   static toJson(data: Model): Model {
+   *     return {
+   *       id: data.id,
+   *       first_name: data.firstName,
+   *       family_name: data.familyName
+   *     } as Model
+   *   }
+   *
+   *   constructor(data: Partial<Model> = {}) {
+   *     this.id = data.id || ''
+   *     this.firstName = data.firstName || ''
+   *     this.familyName = data.familyName || ''
+   *   }
+   * }
+   */
   static toJson(data: { [key: string]: any }): any {
     throw appErrorTree.NOT_IMPLEMENTED
   }

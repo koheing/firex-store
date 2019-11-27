@@ -18,7 +18,7 @@ import { FindOptionsParameter } from '../parameters';
  *
  *   FirestoreFinder
  *     .from(firebase.firestore().collection('collection'))
- *     .mapOf(FirestoreMapperModel)
+ *     .mapOf(FirestoreMapperModel)  // <- options
  *     .find({
  *         errorHandler,
  *         completionHandler
@@ -36,8 +36,9 @@ export declare class FirestoreFinder implements Finder {
     constructor(ref: FirestoreRef);
     readonly ref: FirestoreRef;
     /**
-     * new data with the results of calling a provided function(fromJson)
+     * Convert new data with the results of calling a provided function(fromJson)
      * @param className extends FirestoreMapper
+     * @returns FirestoreFinder
      */
     mapOf<T extends FirestoreMapper>(className: T): this;
     /**
