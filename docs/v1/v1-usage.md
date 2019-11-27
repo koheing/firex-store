@@ -455,7 +455,7 @@ export default {
       )
         // .mapOf(Model)
         // .transaction() // <- comment out if you wanna use transaction
-        .set(data, { mapper, errorHandler, completionHandler })
+        .set(data, { errorHandler, completionHandler })
       if (typeof result !== 'undefined') {
         // error process
         // ...
@@ -500,7 +500,7 @@ export default {
       )
         // .mapOf(Model)
         // .transaction() // <- comment out if you wanna use transaction
-        .mergeSet(data, { mapper, errorHandler, completionHandler })
+        .mergeSet(data, { errorHandler, completionHandler })
       if (typeof result !== 'undefined') {
         // error process
         // ...
