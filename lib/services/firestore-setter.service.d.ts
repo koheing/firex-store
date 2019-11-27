@@ -44,7 +44,7 @@ export declare class FirestoreSetter implements Setter, Transaction {
      */
     transaction(): this;
     /**
-     * Convert data before registering data in Firestoren with the results of calling a provided function(toJson)
+     * Convert data before registering data in Firestore with the results of calling a provided function(toJson)
      * @param className extends FirestoreMapper
      * @returns FirestoreAdder
      */
