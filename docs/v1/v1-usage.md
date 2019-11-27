@@ -12,6 +12,7 @@
   - [from and FirestoreReaderServiceFactory](#from-and-FirestoreReaderServiceFactory)
   - [on](#on)
   - [to and FirestoreDocumentWriterFacade](#to-and-FirestoreDocumentWriterFacade)
+- [MappingModel](#mappingmodel)
 - [Options](#options)
 
 ### Before Start...
@@ -670,6 +671,28 @@ export default {
   }
 .....
 }
+```
+
+## MappingModel
+- If you want to convert Subscribe or Fetched data, please use Class that inherits FirestoreMapper
+```Javascript
+import { FirestoreMapper, from } from 'firex-store'
+
+class Model extends FirestoreMapper {
+  static fromJson(data: { [key:string]: any }) {
+    return new Model()
+  }
+}
+
+...
+from(firestore.collection('comments'))
+  .once()
+  .mapOf(Model)
+  .find()
+from(firestore.collection('comments'))
+  .bindTo('comments')
+  .mapOf(Model)
+  .subscribe(state, commit)
 ```
 
 ## Options
