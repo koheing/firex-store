@@ -5,8 +5,15 @@ import { MockQueryReference } from '../../mocks/mock-query-reference'
 import { MockQuerySnapshot } from '../../mocks/mock-query-snapshot'
 import { MockCollectionReference } from '../../mocks/mock-collection-reference'
 import * as flushPromises from 'flush-promises'
+import { FirestoreFinder, FirestoreSubscriber } from '../../../src/services'
+import { FirestoreMapper } from '../../../src/models'
 
-describe('FirestoreService', () => {
+describe('FirestoreRepository', () => {
+  class MockModel extends FirestoreMapper {
+    static fromJson(data: any) {
+      console.log('mapper')
+    }
+  }
   it('find: return vaule', async (done) => {
     const ref = new MockDocumentReference(
       Promise.resolve(new MockDocumentSnapshot())
@@ -214,5 +221,63 @@ describe('FirestoreService', () => {
     })
     expect(result).toBeUndefined()
     done()
+  })
+
+  it('findAll and find: fromJson called', async (done) => {
+    const spyMock = jest.spyOn(FirestoreRepository, 'findAll')
+    const ref = new MockQueryReference(
+      Promise.resolve(
+        new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
+      )
+    ) as firebase.firestore.Query
+    await FirestoreFinder.from(ref).mapOf(MockModel).find()
+    if (spyMock.mock.calls[0][0].mapper) {
+      expect(spyMock.mock.calls[0][0].mapper.name).toEqual('fromJson')
+    }
+    jest.clearAllMocks()
+    done()
+  })
+
+  it('findAll and find: fromJson not called', async (done) => {
+    const spyMock = jest.spyOn(FirestoreRepository, 'findAll')
+    const ref = new MockQueryReference(
+      Promise.resolve(
+        new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
+      )
+    ) as firebase.firestore.Query
+    await FirestoreFinder.from(ref).mapOf(MockModel).find({ mapper: (data: any) => ({ count: data.count }) })
+    if (spyMock.mock.calls[0][0].mapper) {
+      expect(spyMock.mock.calls[0][0].mapper.name).toEqual('mapper')
+    }
+    jest.clearAllMocks()
+    done()
+  })
+
+  it('subscribeAll and subscribe: fromJson called', () => {
+    const spyMock = jest.spyOn(FirestoreRepository, 'subscribeAll')
+    const ref = new MockQueryReference(
+      Promise.resolve(
+        new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
+      )
+    ) as firebase.firestore.Query
+    FirestoreSubscriber.from(ref).mapOf(MockModel).bindTo('test').subscribe({}, jest.fn())
+    if (spyMock.mock.calls[0][0].mapper) {
+      expect(spyMock.mock.calls[0][0].mapper.name).toEqual('fromJson')
+    }
+    jest.clearAllMocks()
+  })
+
+  it('subscribeAll and subscribe: fromJson not called', () => {
+    const spyMock = jest.spyOn(FirestoreRepository, 'subscribeAll')
+    const ref = new MockQueryReference(
+      Promise.resolve(
+        new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
+      )
+    ) as firebase.firestore.Query
+    FirestoreSubscriber.from(ref).mapOf(MockModel).bindTo('test').subscribe({}, jest.fn(), { mapper: (data: any) => ({ count: data.count }) })
+    if (spyMock.mock.calls[0][0].mapper) {
+      expect(spyMock.mock.calls[0][0].mapper.name).toEqual('mapper')
+    }
+    jest.clearAllMocks()
   })
 })
