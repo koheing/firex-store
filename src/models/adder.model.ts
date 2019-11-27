@@ -1,5 +1,6 @@
 import { AppErrorOr, DocumentId } from '../types'
 import { AddOptionsParameter } from '../parameters'
+import { FirestoreMapper } from './firestore-mapper.model'
 
 export interface Adder {
   readonly ref: firebase.firestore.CollectionReference
@@ -7,4 +8,5 @@ export interface Adder {
     data: any,
     options?: AddOptionsParameter<T>
   ) => Promise<AppErrorOr<DocumentId>>
+  mapOf: <T extends FirestoreMapper>(className: T) => this
 }

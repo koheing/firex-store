@@ -247,7 +247,7 @@ describe('FirestoreRepository', () => {
     ) as firebase.firestore.Query
     await FirestoreFinder.from(ref).mapOf(MockModel).find({ mapper: (data: any) => ({ count: data.count }) })
     if (spyMock.mock.calls[0][0].mapper) {
-      expect(spyMock.mock.calls[0][0].mapper.name).toEqual('mapper')
+      expect(spyMock.mock.calls[0][0].mapper.name).toEqual('fromJson')
     }
     jest.clearAllMocks()
     done()
@@ -276,7 +276,7 @@ describe('FirestoreRepository', () => {
     ) as firebase.firestore.Query
     FirestoreSubscriber.from(ref).mapOf(MockModel).bindTo('test').subscribe({}, jest.fn(), { mapper: (data: any) => ({ count: data.count }) })
     if (spyMock.mock.calls[0][0].mapper) {
-      expect(spyMock.mock.calls[0][0].mapper.name).toEqual('mapper')
+      expect(spyMock.mock.calls[0][0].mapper.name).toEqual('fromJson')
     }
     jest.clearAllMocks()
   })

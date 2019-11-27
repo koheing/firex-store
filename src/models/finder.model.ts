@@ -5,5 +5,5 @@ import { FirestoreMapper } from './firestore-mapper.model'
 export interface Finder {
   readonly ref: FirestoreRef
   find: <T = any>(options?: FindOptionsParameter<T>) => Promise<any>
-  mapOf: <T extends FirestoreMapper>(mapper: T) => this
+  mapOf: <T extends FirestoreMapper>(className: T) => this
 }

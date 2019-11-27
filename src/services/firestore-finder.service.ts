@@ -21,7 +21,7 @@ import { FirestoreRepository } from '../repositories'
  *
  *   FirestoreFinder
  *     .from(firebase.firestore().collection('collection'))
- *     .mapOf(FirestoreMapperModel)
+ *     .mapOf(FirestoreMapperModel)  // <- options
  *     .find({
  *         errorHandler,
  *         completionHandler
@@ -49,8 +49,9 @@ export class FirestoreFinder implements Finder {
   }
 
   /**
-   * new data with the results of calling a provided function(fromJson)
+   * Convert new data with the results of calling a provided function(fromJson)
    * @param className extends FirestoreMapper
+   * @returns FirestoreFinder
    */
   mapOf<T extends FirestoreMapper>(className: T): this {
     // @ts-ignore
@@ -69,8 +70,8 @@ export class FirestoreFinder implements Finder {
    */
   find<T = any>(options?: FindOptionsParameter<T>): Promise<NullOr<T | any>> {
     const _options: FindOptionsParameter<any> = {
-      ...{ mapper: this._mapper },
-      ...options
+      ...options,
+      ...{ mapper: this._mapper }
     }
     return isDocumentRef(this.ref)
       ? FirestoreRepository.find({ ref: this.ref, ..._options })

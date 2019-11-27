@@ -12,6 +12,6 @@ export interface Subscriber {
     commit: Commit,
     options?: SubscribeOptionsParameter<T>
   ) => void
-  mapOf: <T extends FirestoreMapper>(mapper: T) => this
+  mapOf: <T extends FirestoreMapper>(className: T) => this
   isDocumentRef(): boolean
 }

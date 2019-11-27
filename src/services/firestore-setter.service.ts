@@ -1,5 +1,5 @@
-import { AppErrorOr } from '../types'
-import { Setter, Transaction } from '../models'
+import { AppErrorOr, Mapper } from '../types'
+import { Setter, Transaction, FirestoreMapper } from '../models'
 import { FirestoreRepository } from '../repositories'
 import { SetOptionsParameter } from '../parameters'
 
@@ -7,11 +7,22 @@ import { SetOptionsParameter } from '../parameters'
  * Class set data to firestore
  *
  * @example
+ *   class FirestoreMapperModel extends FirestoreMapper {
+ *     id: number
+ *     name: string
+ *     static fromJson(data: { [key: string]: any }) {
+ *        return { id: data.id, name: data.name } as FirestoreMapperModel
+ *     }
+ *     static toJson(data: FirestoreMapperModel) {
+ *        return { id: data.id, name: data.name }
+ *     }
+ *   }
+ *
  *   FirestoreSetter
  *     .to(firebase.firestore().collection('collection').doc('docId'))
  *     .transaction()  // <- call it if you wanna transaction
+ *     .mapOf(FirestoreMapperModel)  // <- options
  *     .set(data, {
- *         mapper,
  *         errorHandler,
  *         completionHandler
  *     })
@@ -19,6 +30,7 @@ import { SetOptionsParameter } from '../parameters'
 export class FirestoreSetter implements Setter, Transaction {
   private _ref: firebase.firestore.DocumentReference
   private _isTransaction = false
+  private _mapper?: Mapper<any>
 
   /**
    * Make FirestoreSetter instance
@@ -45,8 +57,19 @@ export class FirestoreSetter implements Setter, Transaction {
    * Call this if you wanna use transaction
    * @return  `FirestoreSetter class instance`
    */
-  transaction(): FirestoreSetter {
+  transaction(): this {
     this._isTransaction = true
+    return this
+  }
+
+  /**
+   * Convert data before registering data in Firestoren with the results of calling a provided function(toJson)
+   * @param className extends FirestoreMapper
+   * @returns FirestoreAdder
+   */
+  mapOf<T extends FirestoreMapper>(className: T): this {
+    // @ts-ignore
+    this._mapper = className.toJson
     return this
   }
 
@@ -54,7 +77,6 @@ export class FirestoreSetter implements Setter, Transaction {
    * Firestore.collection('hoge').doc('fuga').set, merge is false. call `transaction` before call it, if you wanna transaction
    * @param data : Set data to firestore
    * @param options : {
-   *         mapper,
    *         errorHandler,
    *         completionHandler
    *        } | undefined
@@ -65,11 +87,15 @@ export class FirestoreSetter implements Setter, Transaction {
     options?: SetOptionsParameter<T>
   ): Promise<AppErrorOr<void>> {
     const _data = { ...data }
+    const _options: SetOptionsParameter<any> = {
+      ...options,
+      ...{ mapper: this._mapper }
+    }
     const result = await FirestoreRepository.set({
       data: _data,
       ref: this._ref,
       isTransaction: this.isTransaction,
-      ...options,
+      ..._options,
       merge: false
     })
 

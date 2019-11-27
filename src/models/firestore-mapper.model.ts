@@ -1,9 +1,9 @@
 import { appErrorTree } from '../errors'
 
 /**
- * Delegator class that convert data subscribed from Firestore.
+ * Delegator class that convert data subscribed from Firestore or set to Firestore.
  * @example
- * class Model implements SubscribeData {
+ * class Model extends FirestoreMapper {
  *   static fromJson(data: { [key: string]: any }) {
  *     return new Model()
  *   }
@@ -15,7 +15,7 @@ export abstract class FirestoreMapper {
    * @param data  { [key: string]: any }
    * @returns any
    * @example
-   * class Model implements SubscribeData {
+   * class Model extends FirestoreMapper {
    *   id: string
    *   firstName: string
    *   familyName: string
@@ -36,6 +36,10 @@ export abstract class FirestoreMapper {
    * }
    */
   static fromJson(data: { [key: string]: any }): any {
+    throw appErrorTree.NOT_IMPLEMENTED
+  }
+
+  static toJson(data: { [key: string]: any }): any {
     throw appErrorTree.NOT_IMPLEMENTED
   }
 }

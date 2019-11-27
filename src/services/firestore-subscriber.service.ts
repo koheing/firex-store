@@ -25,7 +25,7 @@ import { FIREX_UNSUBSCRIBES } from '../configurations'
  *   FirestoreSubscriber
  *     .from(firebase.firestore().collection('collection'))
  *     .bindTo('statePropName')
- *     .mapOf(FirestoreMapperModel)
+ *     .mapOf(FirestoreMapperModel)  // <- options
  *     .subscribe(state, commit, {
  *         errorHandler,
  *         notFoundHandler,
@@ -69,8 +69,9 @@ export class FirestoreSubscriber implements Subscriber {
   }
 
   /**
-   * new data with the results of calling a provided function(fromJson)
+   * Convert new data with the results of calling a provided function(fromJson)
    * @param className extends FirestoreMapper
+   * @returns FirestoreSubscriber
    */
   mapOf<T extends FirestoreMapper>(className: T): this {
     // @ts-ignore
@@ -107,8 +108,8 @@ export class FirestoreSubscriber implements Subscriber {
     }
 
     const _options: SubscribeOptionsParameter<any> = {
-      ...{ mapper: this._mapper },
-      ...options
+      ...options,
+      ...{ mapper: this._mapper }
     }
 
     isDocumentRef(this.ref)
