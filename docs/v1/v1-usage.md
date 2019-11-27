@@ -678,13 +678,17 @@ export default {
 ```
 
 ## MappingModel
-- If you want to convert Subscribe or Fetched data, please use Class that inherits FirestoreMapper
+- If you want to convert data, please use Class that inherits FirestoreMapper
 ```Javascript
-import { FirestoreMapper, from } from 'firex-store'
+import { FirestoreMapper, from, to } from 'firex-store'
 
 class Model extends FirestoreMapper {
   static fromJson(data: { [key:string]: any }) {
     return new Model()
+  }
+
+  static toJson(data: Model) {
+    return {}
   }
 }
 
@@ -697,6 +701,10 @@ from(firestore.collection('comments'))
   .bindTo('comments')
   .mapOf(Model)
   .subscribe(state, commit)
+
+to(firestore.collection('comments'))
+  .mapOf(Model)
+  .add({})
 ```
 
 ## Options
