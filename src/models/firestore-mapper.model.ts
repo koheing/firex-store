@@ -7,6 +7,10 @@ import { appErrorTree } from '../errors'
  *   static fromJson(data: { [key: string]: any }) {
  *     return new Model()
  *   }
+ * 
+ *   static toJson(data: Model) {
+ *     return { id: data.id }
+ *   }
  * }
  */
 export abstract class FirestoreMapper {

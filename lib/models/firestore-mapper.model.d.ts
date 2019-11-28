@@ -5,6 +5,10 @@
  *   static fromJson(data: { [key: string]: any }) {
  *     return new Model()
  *   }
+ *
+ *   static toJson(data: Model) {
+ *     return { id: data.id }
+ *   }
  * }
  */
 export declare abstract class FirestoreMapper {
