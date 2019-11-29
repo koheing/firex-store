@@ -10,10 +10,12 @@
 import { FirestoreMapper } from 'firex-store'
 
 class Model extends FirestoreMapper {
+  // This is called when you use `mapOf` function in `from`, `FirestoreSubscriber`, `FirestoreFinder`
   static fromJson(data) {
     return new Model(data.id, `${data.family_name} ${data.first_name}` )
   }
 
+  // This is called when you use `mapOf` function in `to`, `FirestoreAdder`, `FirestoreSetter`, `FirestoreMergeSetter`
   static toJson(data) {
     return { id: data.id, family_name: data.fullName.split(' ')[0], first_name: data.fullName.split(' ')[1] }
   }

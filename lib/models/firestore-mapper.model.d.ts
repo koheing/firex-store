@@ -1,5 +1,6 @@
 /**
  * Delegator class that convert data subscribed from Firestore or set to Firestore.
+ * This is called when you use `mapOf` function in `from`, `FirestoreSubscriber`, `FirestoreFinder`
  * @example
  * class Model extends FirestoreMapper {
  *   static fromJson(data: { [key: string]: any }) {
@@ -41,7 +42,8 @@ export declare abstract class FirestoreMapper {
         [key: string]: any;
     }): any;
     /**
-     * Mapper used before registering data in Firestore
+     * Mapper used before registering data in Firestore.
+     * This is called when you use `mapOf` function in `to`, `FirestoreAdder`, `FirestoreSetter`, `FirestoreMergeSetter`
      * @param data  { [key: string]: any }
      * @returns any
      * @example
