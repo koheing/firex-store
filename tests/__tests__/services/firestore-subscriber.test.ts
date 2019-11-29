@@ -4,7 +4,8 @@ import { firestore } from '../../mocks/firebase'
 import { FIREX_UNSUBSCRIBES } from '../../../src/configurations'
 jest.mock('../../../src/repositories/index')
 
-describe('FirestoreFetcher', () => {
+describe('FirestoreFinder', () => {
+  
   beforeEach(() => {
     jest.clearAllMocks()
   })

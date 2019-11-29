@@ -1,6 +1,6 @@
 import { AppErrorOr } from '../../types';
 import { SetOptionsParameter, DeleteOptionsParameter } from '../../parameters';
-import { Transaction, MergeSetter, Setter } from '../../models';
+import { Transaction, MergeSetter, Setter, FirestoreMapper } from '../../models';
 /**
  * facade of FirestoreSetter and FirestoreMergeSetter
  * @param ref: firebase.firestore.DocumentReference
@@ -11,6 +11,7 @@ import { Transaction, MergeSetter, Setter } from '../../models';
 export declare class FirestoreDocumentWriterFacade implements Transaction, MergeSetter, Setter {
     private _ref;
     private _isTransaction;
+    private _mapper?;
     constructor(ref: firebase.firestore.DocumentReference);
     readonly ref: firebase.firestore.DocumentReference;
     readonly isTransaction: boolean;
@@ -18,12 +19,17 @@ export declare class FirestoreDocumentWriterFacade implements Transaction, Merge
      * Call it if you wanna transaction
      * @return `FirestoreDocumentWriterFacade class instance`
      */
-    transaction(): FirestoreDocumentWriterFacade;
+    transaction(): this;
+    /**
+     * Convert data before registering data in Firestoren with the results of calling a provided function(toJson)
+     * @param className extends FirestoreMapper
+     * @returns FirestoreAdder
+     */
+    mapOf<T extends FirestoreMapper>(className: T): this;
     /**
      * Firestore.collection('hoge').doc('fuga').set, merge is false. call `transaction` before call it, if you wanna transaction
      * @param data : Set data to firestore
      * @param options : {
-     *         mapper,
      *         errorHandler,
      *         completionHandler
      *        } | undefined
@@ -33,7 +39,7 @@ export declare class FirestoreDocumentWriterFacade implements Transaction, Merge
     /**
      * Firestore.collection('hoge').doc('fuga').set, merge is true. call `transaction` before call it, if you wanna transaction
      * @param data : Set data to firestore
-     * @param options : { mapper,
+     * @param options : {
      *         errorHandler,
      *         completionHandler
      *        } | undefined

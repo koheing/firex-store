@@ -26,7 +26,7 @@ export declare class FirestoreDeleter implements Deleter, Transaction {
      * Call this if you wanna use transaction
      * @return  `FirestoreSetter class instance`
      */
-    transaction(): FirestoreDeleter;
+    transaction(): this;
     /**
      * Firestore.collection('hoge').doc('fuga').delete. call `transaction` before call it, if you wanna transaction
      * @param options : {

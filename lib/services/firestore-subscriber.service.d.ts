@@ -1,4 +1,4 @@
-import { Subscriber } from '../models';
+import { Subscriber, FirestoreMapper } from '../models';
 import { FirestoreRef } from '../types';
 import { Commit } from 'vuex';
 import { SubscribeOptionsParameter } from '../parameters';
@@ -6,11 +6,19 @@ import { SubscribeOptionsParameter } from '../parameters';
  * Class subscribe firestore data to state property
  *
  * @example
+ *    class FirestoreMapperModel extends FirestoreMapper {
+ *     id: number
+ *     name: string
+ *     static fromJson(data: { [key: string]: any }) {
+ *        return { id: data.id, name: data.name } as FirestoreMapperModel
+ *     }
+ *   }
+ *
  *   FirestoreSubscriber
  *     .from(firebase.firestore().collection('collection'))
  *     .bindTo('statePropName')
+ *     .mapOf(FirestoreMapperModel)  // <- options
  *     .subscribe(state, commit, {
- *         mapper,
  *         errorHandler,
  *         notFoundHandler,
  *         afterMutationCalled
@@ -19,6 +27,7 @@ import { SubscribeOptionsParameter } from '../parameters';
 export declare class FirestoreSubscriber implements Subscriber {
     private _ref;
     private _statePropName?;
+    private _mapper?;
     /**
      * Make FirestoreSubscriber instance
      * @param ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
@@ -33,7 +42,13 @@ export declare class FirestoreSubscriber implements Subscriber {
      * @param statePropName: string
      * @returns FirestoreSubscriber
      */
-    bindTo(statePropName: string): FirestoreSubscriber;
+    bindTo(statePropName: string): this;
+    /**
+     * Convert new data with the results of calling a provided function(fromJson)
+     * @param className extends FirestoreMapper
+     * @returns FirestoreSubscriber
+     */
+    mapOf<T extends FirestoreMapper>(className: T): this;
     /**
      * Subscribe firestore data and bind to state property
      * @param state: any

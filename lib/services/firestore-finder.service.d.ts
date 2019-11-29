@@ -1,4 +1,4 @@
-import { Finder } from '../models';
+import { Finder, FirestoreMapper } from '../models';
 import { FirestoreRef, NullOr } from '../types';
 import { FindOptionsParameter } from '../parameters';
 /**
@@ -8,16 +8,25 @@ import { FindOptionsParameter } from '../parameters';
  *
  *
  * @example
+ *   class FirestoreMapperModel extends FirestoreMapper {
+ *     id: number
+ *     name: string
+ *     static fromJson(data: { [key: string]: any }) {
+ *        return { id: data.id, name: data.name } as FirestoreMapperModel
+ *     }
+ *   }
+ *
  *   FirestoreFinder
  *     .from(firebase.firestore().collection('collection'))
+ *     .mapOf(FirestoreMapperModel)  // <- options
  *     .find({
- *         mapper,
  *         errorHandler,
  *         completionHandler
  *     })
  */
 export declare class FirestoreFinder implements Finder {
     private _ref;
+    private _mapper?;
     /**
      * Make FirestoreFinder instance
      * @param ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
@@ -26,6 +35,12 @@ export declare class FirestoreFinder implements Finder {
     static from(ref: FirestoreRef): FirestoreFinder;
     constructor(ref: FirestoreRef);
     readonly ref: FirestoreRef;
+    /**
+     * Convert new data with the results of calling a provided function(fromJson)
+     * @param className extends FirestoreMapper
+     * @returns FirestoreFinder
+     */
+    mapOf<T extends FirestoreMapper>(className: T): this;
     /**
      * Find firestore data at once
      * @param options: {
