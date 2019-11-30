@@ -6,7 +6,7 @@
 - `If you use this npm, you can read and write firestore data, easily.`
 - It is inspired by [vuexfire](https://github.com/vuejs/vuefire)
 - With this NPM, you can read and write Firestore data like the following code
-```JavaScript
+```js
 import { FirestoreMapper } from 'firex-store'
 
 class Model extends FirestoreMapper {
@@ -27,7 +27,7 @@ class Model extends FirestoreMapper {
 }
 ```
 
-```JavaScript
+```js
 import { to, from, on, firestoreMutations } from 'firex-store'
 import { Model } from '~/model'
 import { firestore } from '~/plugins/firebase'
