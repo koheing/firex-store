@@ -9,6 +9,7 @@ export class MockQueryReference {
   where = jest.fn()
   orderBy = jest.fn()
   limit = jest.fn()
+  limitToLast = jest.fn()
   startAt = jest.fn()
   startAfter = jest.fn()
   endBefore = jest.fn()
