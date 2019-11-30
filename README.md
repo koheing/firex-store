@@ -5,9 +5,29 @@
 
 - `If you use this npm, you can read and write firestore data, easily.`
 - It is inspired by [vuexfire](https://github.com/vuejs/vuefire)
-- You can read or write firestore data, the following code, if you use this package.
-```JavaScript:store.js
+- With this NPM, you can read and write Firestore data like the following code
+```js
+import { FirestoreMapper } from 'firex-store'
+
+class Model extends FirestoreMapper {
+  static fromJson(data) {
+    return new Model(data.id, `${data.family_name} ${data.first_name}` )
+  }
+
+  static toJson(data) {
+    return { id: data.id, family_name: data.fullName.split(' ')[0], first_name: data.fullName.split(' ')[1] }
+  }
+
+  construnctor(id, fullName) {
+    this.id = id
+    this.fullName = fullName
+  }
+}
+```
+
+```js
 import { to, from, on, firestoreMutations } from 'firex-store'
+import { Model } from '~/model'
 import { firestore } from '~/plugins/firebase'
 
 // Vuex module
@@ -23,37 +43,45 @@ export default {
     subscribe: ({ state, commit }) => {
       const ref = firestore.collection('comments')
       from(ref)
+        .mapOf(Model)   // options. Model.fromJson called
         .bindTo('comments')
-        .subscribe(state, commit, /* { mapper, errorHandler, complectionHandler, afterMutationCalled } */)
+        .subscribe(state, commit, /* { errorHandler, complectionHandler, afterMutationCalled } */)
     },
     unsubscribe: ({ state }) => {
       on('comments').unsubscribe(state)
     },
     find: async (_, { commentId }) => {
       const ref = firestore.collection('comments').doc('commentId')
-      result = await from(ref).once().find(/* { mapper, errorHandler, completionHandler } */)
+      result = await from(ref)
+        .once()
+        .mapOf(Model)   // options. Model.fromJson called
+        .find(/* { errorHandler, completionHandler } */)
       return result
     },
     add: (_, { data }) => {
       const ref = firestore.collection('comments')
-      return to(ref).add(data, /* { mapper, errorHandler, completionHandler } */)
+      return to(ref)
+        .mapOf(Model)   // options. Model.toJson called
+        .add(data, /* { errorHandler, completionHandler } */)
     },
     set: (_, { data, commentId }) => {
       const ref = firestore.collection('comments').doc('commentId')
       return to(ref)
-        // .transaction()  <- comment out if you use transaction
-        .set(data, /* { mapper, errorHandler, completionHandler } */)
+        .mapOf(Model)   // options. Model.toJson called
+        .transaction()  // options
+        .set(data, /* { errorHandler, completionHandler } */)
     },
     mergeSet: (_, { data, commentId }) => {
       const ref = firestore.collection('comments').doc('commentId')
       return to(ref)
-        // .transaction()  <- comment out if you use transaction
-        .mergeSet(data, /* { mapper, errorHandler, completionHandler } */)
+        .mapOf(Model)   // options. Model.toJson called
+        .transaction()  // options
+        .mergeSet(data, /* { errorHandler, completionHandler } */)
     },
     delete: (_) => {
       const ref = firestore.collection('comments').doc('commentId')
       return to(ref)
-      // .transaction()  <- comment out if you use transaction
+        .transaction()  // options
         .delete(/* { errorHandler, completionHandler } */)
     }
   }

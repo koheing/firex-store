@@ -1,5 +1,5 @@
-import { AppErrorOr } from '../types'
-import { MergeSetter, Transaction } from '../models'
+import { AppErrorOr, Mapper } from '../types'
+import { MergeSetter, Transaction, FirestoreMapper } from '../models'
 import { FirestoreRepository } from '../repositories'
 import { SetOptionsParameter } from '../parameters'
 
@@ -7,11 +7,21 @@ import { SetOptionsParameter } from '../parameters'
  * Class merge set data to firestore
  *
  * @example
+ *   class FirestoreMapperModel extends FirestoreMapper {
+ *     id: number
+ *     name: string
+ *     static fromJson(data: { [key: string]: any }) {
+ *        return { id: data.id, name: data.name } as FirestoreMapperModel
+ *     }
+ *     static toJson(data: FirestoreMapperModel) {
+ *        return { id: data.id, name: data.name }
+ *     }
+ *   }
  *   FirestoreMergeSetter
  *     .to(firebase.firestore().collection('collection').doc('docId'))
  *     .transaction()  // <- call it if you wanna transaction
+ *     .mapOf(FirestoreMapperModel)  // <- option
  *     .mergeSet(data, {
- *         mapper,
  *         errorHandler,
  *         completionHandler
  *     })
@@ -19,6 +29,7 @@ import { SetOptionsParameter } from '../parameters'
 export class FirestoreMergeSetter implements MergeSetter, Transaction {
   private _ref: firebase.firestore.DocumentReference
   private _isTransaction = false
+  private _mapper?: Mapper<any>
 
   /**
    *  Make FirestoreMergeSetter instance
@@ -45,8 +56,19 @@ export class FirestoreMergeSetter implements MergeSetter, Transaction {
    * Call this if you wanna use transaction
    * @return `FirestoreMergeSetter class instance`
    */
-  transaction(): FirestoreMergeSetter {
+  transaction(): this {
     this._isTransaction = true
+    return this
+  }
+
+  /**
+   * Convert data before registering data in Firestore with the results of calling a provided function(toJson)
+   * @param className extends FirestoreMapper
+   * @returns FirestoreMergeSetter
+   */
+  mapOf<T extends FirestoreMapper>(className: T): this {
+    // @ts-ignore
+    this._mapper = className.toJson
     return this
   }
 
@@ -54,7 +76,6 @@ export class FirestoreMergeSetter implements MergeSetter, Transaction {
    * Firestore.collection('hoge').doc('fuga').set, merge is true. call `transaction` before call it, if you wanna transaction
    * @param data : Set data to firestore
    * @param options : {
-   *         mapper,
    *         errorHandler,
    *         completionHandler
    *        } | undefined
@@ -65,11 +86,15 @@ export class FirestoreMergeSetter implements MergeSetter, Transaction {
     options?: SetOptionsParameter<T>
   ): Promise<AppErrorOr<void>> {
     const _data = { ...data }
+    const _options: SetOptionsParameter<any> = {
+      ...options,
+      ...{ mapper: this._mapper }
+    }
     const result = await FirestoreRepository.set({
       data: _data,
       ref: this._ref,
       isTransaction: this.isTransaction,
-      ...options,
+      ..._options,
       merge: true
     })
 

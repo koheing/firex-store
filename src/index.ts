@@ -15,7 +15,7 @@ export {
   CompletionHandler,
   NotFoundHandler
 } from './types'
-export { Payload, DocumentResult, AppError } from './models'
+export { Payload, DocumentResult, AppError, FirestoreMapper } from './models'
 export { from, on, to } from './creators'
 
 import * as v0 from './v0'

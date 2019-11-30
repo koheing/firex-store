@@ -1,11 +1,11 @@
-import { AppErrorOr } from '../../types'
+import { AppErrorOr, Mapper } from '../../types'
 import { SetOptionsParameter, DeleteOptionsParameter } from '../../parameters'
 import {
   FirestoreSetter,
   FirestoreMergeSetter,
   FirestoreDeleter
 } from '../../services'
-import { Transaction, MergeSetter, Setter } from '../../models'
+import { Transaction, MergeSetter, Setter, FirestoreMapper } from '../../models'
 
 /**
  * facade of FirestoreSetter and FirestoreMergeSetter
@@ -18,6 +18,7 @@ export class FirestoreDocumentWriterFacade
   implements Transaction, MergeSetter, Setter {
   private _ref: firebase.firestore.DocumentReference
   private _isTransaction = false
+  private _mapper?: Mapper<any>
 
   constructor(ref: firebase.firestore.DocumentReference) {
     this._ref = ref
@@ -35,8 +36,19 @@ export class FirestoreDocumentWriterFacade
    * Call it if you wanna transaction
    * @return `FirestoreDocumentWriterFacade class instance`
    */
-  transaction(): FirestoreDocumentWriterFacade {
+  transaction(): this {
     this._isTransaction = true
+    return this
+  }
+
+  /**
+   * Convert data before registering data in Firestoren with the results of calling a provided function(toJson)
+   * @param className extends FirestoreMapper
+   * @returns FirestoreAdder
+   */
+  mapOf<T extends FirestoreMapper>(className: T): this {
+    // @ts-ignore
+    this._mapper = className.toJson
     return this
   }
 
@@ -44,7 +56,6 @@ export class FirestoreDocumentWriterFacade
    * Firestore.collection('hoge').doc('fuga').set, merge is false. call `transaction` before call it, if you wanna transaction
    * @param data : Set data to firestore
    * @param options : {
-   *         mapper,
    *         errorHandler,
    *         completionHandler
    *        } | undefined
@@ -54,17 +65,21 @@ export class FirestoreDocumentWriterFacade
     data: any,
     options?: SetOptionsParameter<T>
   ): Promise<AppErrorOr<void>> {
+    const _options: SetOptionsParameter<any> = {
+      ...options,
+      ...{ mapper: this._mapper }
+    }
     return this._isTransaction
       ? FirestoreSetter.to(this._ref)
           .transaction()
-          .set(data, options)
-      : FirestoreSetter.to(this._ref).set(data, options)
+          .set(data, _options)
+      : FirestoreSetter.to(this._ref).set(data, _options)
   }
 
   /**
    * Firestore.collection('hoge').doc('fuga').set, merge is true. call `transaction` before call it, if you wanna transaction
    * @param data : Set data to firestore
-   * @param options : { mapper,
+   * @param options : {
    *         errorHandler,
    *         completionHandler
    *        } | undefined
@@ -74,11 +89,15 @@ export class FirestoreDocumentWriterFacade
     data: any,
     options?: SetOptionsParameter<T>
   ): Promise<AppErrorOr<void>> {
+    const _options: SetOptionsParameter<any> = {
+      ...options,
+      ...{ mapper: this._mapper }
+    }
     return this._isTransaction
       ? FirestoreMergeSetter.to(this._ref)
           .transaction()
-          .mergeSet(data, options)
-      : FirestoreMergeSetter.to(this._ref).mergeSet(data, options)
+          .mergeSet(data, _options)
+      : FirestoreMergeSetter.to(this._ref).mergeSet(data, _options)
   }
 
   /**

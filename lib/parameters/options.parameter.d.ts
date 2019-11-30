@@ -3,6 +3,7 @@ export interface OptionsParameter<T> {
     /**
      * @param mapper convert subscribed data to something, if defined
      *   - type: <T>(data: { [key: string]: any }) => T
+     * @deprecated it will be removed at ^1.5.0~. Use FirestoreMapper, please.
      */
     mapper?: Mapper<T>;
     /**

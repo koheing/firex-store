@@ -20,13 +20,13 @@ export declare class FirestoreDeleter implements Deleter, Transaction {
      */
     static to(ref: firebase.firestore.DocumentReference): FirestoreDeleter;
     constructor(ref: firebase.firestore.DocumentReference);
-    readonly ref: firebase.firestore.DocumentReference;
-    readonly isTransaction: boolean;
+    get ref(): firebase.firestore.DocumentReference;
+    get isTransaction(): boolean;
     /**
      * Call this if you wanna use transaction
      * @return  `FirestoreSetter class instance`
      */
-    transaction(): FirestoreDeleter;
+    transaction(): this;
     /**
      * Firestore.collection('hoge').doc('fuga').delete. call `transaction` before call it, if you wanna transaction
      * @param options : {

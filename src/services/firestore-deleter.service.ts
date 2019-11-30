@@ -41,7 +41,7 @@ export class FirestoreDeleter implements Deleter, Transaction {
    * Call this if you wanna use transaction
    * @return  `FirestoreSetter class instance`
    */
-  transaction(): FirestoreDeleter {
+  transaction(): this {
     this._isTransaction = true
     return this
   }

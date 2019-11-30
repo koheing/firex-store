@@ -12,5 +12,9 @@ export const appErrorTree = {
   DATA_NOT_EXISTED: {
     name: 'Transaction Error',
     message: 'data not existed.'
+  } as AppError,
+  NOT_IMPLEMENTED: {
+    name: 'Not Implemented Error',
+    message: 'To be implemented.'
   } as AppError
 }

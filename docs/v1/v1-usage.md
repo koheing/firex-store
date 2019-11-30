@@ -12,6 +12,7 @@
   - [from and FirestoreReaderServiceFactory](#from-and-FirestoreReaderServiceFactory)
   - [on](#on)
   - [to and FirestoreDocumentWriterFacade](#to-and-FirestoreDocumentWriterFacade)
+- [MappingModel](#mappingmodel)
 - [Options](#options)
 
 ### Before Start...
@@ -62,6 +63,11 @@ export const firestore = firebase.firestore()
       - statePropName: string. state property
     - return:
       - FirestoreSubscriber
+  - mapOf: Mapping data subscribed from Firestore
+    - parameter:
+      - className: Class inheriting FirestoreMapper
+    - return:
+      - FirestoreSubscriber
 
 Ex. Subscribe collection and document
 
@@ -85,12 +91,14 @@ export default {
   actions: {
     ...firestoreSubscribeAction(
       FirestoreSubscriber
+        // .mapOf(Model)
         .from(firebase.firestore().collection('/comments'))
         .bindTo('comments')  // property name in state
     ),
     ...firestoreSubscribeAction(
       FirestoreSubscriber
         .from(firebase.firestore().collection('/comments').doc('commentId'))
+        // .mapOf(Model)
         .bindTo('comment'),  // property name in state,
         { actionName: 'subscribeComment' }
     ),
@@ -136,6 +144,11 @@ export default {
       - statePropName: string. state property
     - return:
       - FirestoreSubscriber
+  - mapOf: Mapping data subscribed from Firestore
+    - parameter:
+      - className: Class inheriting FirestoreMapper
+    - return:
+      - FirestoreSubscriber
   - subscribe: Subscribe firestore data
     - parameters:
       - state: any
@@ -163,6 +176,7 @@ export default {
     subscribeAll: ({ state, commit }) => {
       FirestoreSubscriber
         .from(firebase.firestore().collection('/comments'))
+        // .mapOf(Model)
         .bindTo('comments')
         .subscribe(state, commit)
     }
@@ -295,6 +309,7 @@ export default {
     subscribeAll: ({ state, commit }) => {
       FirestoreSubscriber
         .from(firebase.firestore().collection('/comments'))
+        // .mapOf(Model)
         .bindTo('comments')
         .subscribe(state, commit)
     },
@@ -333,6 +348,11 @@ export default {
       - ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
     - return:
       - FirestoreFinder
+  - mapOf: Mapping data fetched from Firestore
+    - parameter:
+      - className: Class inheriting FirestoreMapper
+    - return:
+      - FirestoreSubscriber
   - find: fetch firestore data at once
     - parameter:
       - options?:
@@ -349,11 +369,11 @@ export default {
   mutations: {},
   actions: {
     fetchComments: async ({ commit }) => {
-      const mapComment = (data) => ({ message: data.message, user: { firstName: data.user.first_name, familyName: data.user.family_name } })
       const ref = firestore.collection('/comments')
       const result = await FirestoreFinder
         .from(ref)
-        .find({ mapper: mapComment })
+        // .mapOf(Model)
+        .find()
       commit(***, result)
     }
   }
@@ -367,6 +387,11 @@ export default {
   - to: Make instance
     - parameter:
       - ref: firebase.firestore.CollectionReference
+    - return:
+      - FirestoreAdder
+  - mapOf: Convert data before registering data in Firestore
+    - parameter:
+      - className: Class inheriting FirestoreMapper
     - return:
       - FirestoreAdder
   - add: add data to firestore
@@ -388,7 +413,9 @@ export default {
     add: async (_, { data }) => {
       const result = await FirestoreAdder.to(
         firestore.collection('comments')
-      ).add(data, { mapper, errorHandler, completionHandler })
+      )
+      // .mapOf(Model)
+      .add(data, { errorHandler, completionHandler })
       if (typeof result !== 'string') {
         // error process
         // ...
@@ -411,6 +438,11 @@ export default {
     - `UseCase`: Call this if you wouldn't like to overwrite data
     - return:
       - FirestoreSetter
+  - mapOf: Convert data before registering data in Firestore
+    - parameter:
+      - className: Class inheriting FirestoreMapper
+    - return:
+      - FirestoreSetter
   - set: set data to firestore
     - data: data you wanna set to firestore
     - parameter:
@@ -431,8 +463,9 @@ export default {
       const result = await FirestoreSetter.to(
         firestore.collection('comments').doc('commentId')
       )
+        // .mapOf(Model)
         // .transaction() // <- comment out if you wanna use transaction
-        .set(data, { mapper, errorHandler, completionHandler })
+        .set(data, { errorHandler, completionHandler })
       if (typeof result !== 'undefined') {
         // error process
         // ...
@@ -455,6 +488,11 @@ export default {
     - `UseCase`: Call this if you would like to overwrite data or add property to data
     - return:
       - FirestoreMergeSetter
+  - mapOf: Convert data before registering data in Firestore
+    - parameter:
+      - className: Class inheriting FirestoreMapper
+    - return:
+      - FirestoreMergeSetter
   - mergeSet: set data to firestore
     - data: data you wanna mergeSet to firestore
     - parameter:
@@ -475,8 +513,9 @@ export default {
       const result = await FirestoreSetter.to(
         firestore.collection('comments').doc('commentId')
       )
+        // .mapOf(Model)
         // .transaction() // <- comment out if you wanna use transaction
-        .mergeSet(data, { mapper, errorHandler, completionHandler })
+        .mergeSet(data, { errorHandler, completionHandler })
       if (typeof result !== 'undefined') {
         // error process
         // ...
@@ -653,15 +692,45 @@ export default {
 }
 ```
 
+## MappingModel
+- If you want to convert data, please use Class that inherits FirestoreMapper
+```Javascript
+import { FirestoreMapper, from, to } from 'firex-store'
+
+class Model extends FirestoreMapper {
+  static fromJson(data: { [key:string]: any }) {
+    return new Model()
+  }
+
+  static toJson(data: Model) {
+    return {}
+  }
+}
+
+...
+from(firestore.collection('comments'))
+  .once()
+  .mapOf(Model)
+  .find()
+from(firestore.collection('comments'))
+  .bindTo('comments')
+  .mapOf(Model)
+  .subscribe(state, commit)
+
+to(firestore.collection('comments'))
+  .mapOf(Model)
+  .add({})
+```
+
 ## Options
 
 - Options
 
-  - mapper:
+  - mapper: `decrecated. It will be removed at 1.5.0~`
 
     - Map to something.
-      - `Subscribe case`: State prop bound to Firestore or return values map to something if mapper defined
-      - `Set or add case`: Data which set or added to firestore map to something if mapper defined
+      - `Subscribe and Fetch case`: State prop bound to Firestore or return values map to something if mapper defined
+      - `Set or Add case`: Data which set or added to firestore map to something if mapper defined
 
   - errorHandler
 
