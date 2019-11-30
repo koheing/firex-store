@@ -35,8 +35,8 @@ export declare class FirestoreSubscriber implements Subscriber {
      */
     static from(ref: FirestoreRef): FirestoreSubscriber;
     constructor(ref: FirestoreRef);
-    readonly ref: FirestoreRef;
-    readonly statePropName: string | undefined;
+    get ref(): FirestoreRef;
+    get statePropName(): string | undefined;
     /**
      * Set state property bound to firestore data
      * @param statePropName: string
