@@ -10,12 +10,10 @@
 import { FirestoreMapper } from 'firex-store'
 
 class Model extends FirestoreMapper {
-  // This is called when you use `mapOf` function in `from`, `FirestoreSubscriber`, `FirestoreFinder`
   static fromJson(data) {
     return new Model(data.id, `${data.family_name} ${data.first_name}` )
   }
 
-  // This is called when you use `mapOf` function in `to`, `FirestoreAdder`, `FirestoreSetter`, `FirestoreMergeSetter`
   static toJson(data) {
     return { id: data.id, family_name: data.fullName.split(' ')[0], first_name: data.fullName.split(' ')[1] }
   }
@@ -45,7 +43,7 @@ export default {
     subscribe: ({ state, commit }) => {
       const ref = firestore.collection('comments')
       from(ref)
-        .mapOf(Model)   // options
+        .mapOf(Model)   // options. Model.fromJson called
         .bindTo('comments')
         .subscribe(state, commit, /* { errorHandler, complectionHandler, afterMutationCalled } */)
     },
@@ -56,27 +54,27 @@ export default {
       const ref = firestore.collection('comments').doc('commentId')
       result = await from(ref)
         .once()
-        .mapOf(Model)   // options
+        .mapOf(Model)   // options. Model.fromJson called
         .find(/* { errorHandler, completionHandler } */)
       return result
     },
     add: (_, { data }) => {
       const ref = firestore.collection('comments')
       return to(ref)
-        .mapOf(Model)   // options
+        .mapOf(Model)   // options. Model.toJson called
         .add(data, /* { errorHandler, completionHandler } */)
     },
     set: (_, { data, commentId }) => {
       const ref = firestore.collection('comments').doc('commentId')
       return to(ref)
-        .mapOf(Model)   // options
+        .mapOf(Model)   // options. Model.toJson called
         .transaction()  // options
         .set(data, /* { errorHandler, completionHandler } */)
     },
     mergeSet: (_, { data, commentId }) => {
       const ref = firestore.collection('comments').doc('commentId')
       return to(ref)
-        .mapOf(Model)   // options
+        .mapOf(Model)   // options. Model.toJson called
         .transaction()  // options
         .mergeSet(data, /* { errorHandler, completionHandler } */)
     },
