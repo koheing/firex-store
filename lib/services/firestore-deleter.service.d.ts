@@ -20,8 +20,8 @@ export declare class FirestoreDeleter implements Deleter, Transaction {
      */
     static to(ref: firebase.firestore.DocumentReference): FirestoreDeleter;
     constructor(ref: firebase.firestore.DocumentReference);
-    get ref(): firebase.firestore.DocumentReference;
-    get isTransaction(): boolean;
+    readonly ref: firebase.firestore.DocumentReference;
+    readonly isTransaction: boolean;
     /**
      * Call this if you wanna use transaction
      * @return  `FirestoreSetter class instance`

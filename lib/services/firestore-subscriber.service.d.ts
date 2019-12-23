@@ -35,8 +35,8 @@ export declare class FirestoreSubscriber implements Subscriber {
      */
     static from(ref: FirestoreRef): FirestoreSubscriber;
     constructor(ref: FirestoreRef);
-    get ref(): FirestoreRef;
-    get statePropName(): string | undefined;
+    readonly ref: FirestoreRef;
+    readonly statePropName: string | undefined;
     /**
      * Set state property bound to firestore data
      * @param statePropName: string
@@ -60,5 +60,6 @@ export declare class FirestoreSubscriber implements Subscriber {
      *         afterMutationCalled } | undefined
      */
     subscribe<T = any>(state: any, commit: Commit, options?: SubscribeOptionsParameter<T>): void;
+    subscribeOnce<T = any>(commit: Commit, options?: SubscribeOptionsParameter<T>): Promise<void>;
     isDocumentRef(): boolean;
 }

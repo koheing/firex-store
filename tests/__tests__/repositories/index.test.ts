@@ -5,7 +5,13 @@ import { MockQueryReference } from '../../mocks/mock-query-reference'
 import { MockQuerySnapshot } from '../../mocks/mock-query-snapshot'
 import { MockCollectionReference } from '../../mocks/mock-collection-reference'
 import * as flushPromises from 'flush-promises'
-import { FirestoreFinder, FirestoreSubscriber, FirestoreAdder, FirestoreSetter, FirestoreMergeSetter } from '../../../src/services'
+import {
+  FirestoreFinder,
+  FirestoreSubscriber,
+  FirestoreAdder,
+  FirestoreSetter,
+  FirestoreMergeSetter
+} from '../../../src/services'
 import { FirestoreMapper } from '../../../src/models'
 
 describe('FirestoreRepository', () => {
@@ -60,13 +66,17 @@ describe('FirestoreRepository', () => {
   })
 
   it('findAll: return vaule', async (done) => {
-    const ref = new MockQueryReference(Promise.resolve(new MockQuerySnapshot())) as firebase.firestore.Query
+    const ref = new MockQueryReference(
+      Promise.resolve(new MockQuerySnapshot())
+    ) as firebase.firestore.Query
     const completionHandler = jest.fn()
     const result = await FirestoreRepository.findAll({
       ref,
       completionHandler
     })
-    expect(result[0].count).toEqual(0)
+    if (result instanceof Array) {
+      expect(result[1].count).toEqual(1)
+    }
     expect(completionHandler).toHaveBeenCalled()
     done()
   })
@@ -116,7 +126,9 @@ describe('FirestoreRepository', () => {
 
   it('add: return documentId', async (done) => {
     const data = {} as any
-    const ref = new MockCollectionReference(data) as firebase.firestore.CollectionReference
+    const ref = new MockCollectionReference(
+      data
+    ) as firebase.firestore.CollectionReference
     const mapper = (data: any) => ({ name: data.name })
 
     const result = await FirestoreRepository.add({
@@ -130,7 +142,9 @@ describe('FirestoreRepository', () => {
 
   it('add: return error', async (done) => {
     const data = {} as any
-    const ref = new MockCollectionReference(data, { message: 'error occured' }) as firebase.firestore.CollectionReference
+    const ref = new MockCollectionReference(data, {
+      message: 'error occured'
+    }) as firebase.firestore.CollectionReference
     const mapper = (data: any) => ({ name: data.name })
     const errorHandler = jest.fn(() => ({ message: 'error occured' } as Error))
 
@@ -199,7 +213,9 @@ describe('FirestoreRepository', () => {
   it('delete: no transaction, return error', async (done) => {
     const ref = new MockDocumentReference(
       Promise.resolve(new MockDocumentSnapshot()),
-      { deleteReturnData: Promise.reject({ message: 'error occured' } as Error) }
+      {
+        deleteReturnData: Promise.reject({ message: 'error occured' } as Error)
+      }
     ) as firebase.firestore.DocumentReference
     expect(ref.delete()).toBeInstanceOf(Promise)
     const result = await FirestoreRepository.delete({
@@ -217,7 +233,7 @@ describe('FirestoreRepository', () => {
     ) as firebase.firestore.DocumentReference
     const result = await FirestoreRepository.delete({
       ref,
-      isTransaction: true,
+      isTransaction: true
     })
     expect(result).toBeUndefined()
     done()
@@ -230,7 +246,9 @@ describe('FirestoreRepository', () => {
         new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
       )
     ) as firebase.firestore.Query
-    await FirestoreFinder.from(ref).mapOf(MockModel).find()
+    await FirestoreFinder.from(ref)
+      .mapOf(MockModel)
+      .find()
     if (spyMock.mock.calls[0][0].mapper) {
       expect(spyMock.mock.calls[0][0].mapper.name).toEqual('fromJson')
     }
@@ -245,7 +263,9 @@ describe('FirestoreRepository', () => {
         new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
       )
     ) as firebase.firestore.Query
-    await FirestoreFinder.from(ref).mapOf(MockModel).find({ mapper: (data: any) => ({ count: data.count }) })
+    await FirestoreFinder.from(ref)
+      .mapOf(MockModel)
+      .find({ mapper: (data: any) => ({ count: data.count }) })
     if (spyMock.mock.calls[0][0].mapper) {
       expect(spyMock.mock.calls[0][0].mapper.name).toEqual('fromJson')
     }
@@ -260,7 +280,10 @@ describe('FirestoreRepository', () => {
         new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
       )
     ) as firebase.firestore.Query
-    FirestoreSubscriber.from(ref).mapOf(MockModel).bindTo('test').subscribe({}, jest.fn())
+    FirestoreSubscriber.from(ref)
+      .mapOf(MockModel)
+      .bindTo('test')
+      .subscribe({}, jest.fn())
     if (spyMock.mock.calls[0][0].mapper) {
       expect(spyMock.mock.calls[0][0].mapper.name).toEqual('fromJson')
     }
@@ -274,7 +297,12 @@ describe('FirestoreRepository', () => {
         new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
       )
     ) as firebase.firestore.Query
-    FirestoreSubscriber.from(ref).mapOf(MockModel).bindTo('test').subscribe({}, jest.fn(), { mapper: (data: any) => ({ count: data.count }) })
+    FirestoreSubscriber.from(ref)
+      .mapOf(MockModel)
+      .bindTo('test')
+      .subscribe({}, jest.fn(), {
+        mapper: (data: any) => ({ count: data.count })
+      })
     if (spyMock.mock.calls[0][0].mapper) {
       expect(spyMock.mock.calls[0][0].mapper.name).toEqual('fromJson')
     }
@@ -288,7 +316,9 @@ describe('FirestoreRepository', () => {
         new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
       )
     ) as firebase.firestore.CollectionReference
-    FirestoreAdder.to(ref).mapOf(MockModel).add({}, { errorHandler: (error: any) => error })
+    FirestoreAdder.to(ref)
+      .mapOf(MockModel)
+      .add({}, { errorHandler: (error: any) => error })
     if (spyMock.mock.calls[0][0].mapper) {
       expect(spyMock.mock.calls[0][0].mapper.name).toEqual('toJson')
     }
@@ -297,8 +327,12 @@ describe('FirestoreRepository', () => {
 
   it('set: toJson called', () => {
     const spyMock = jest.spyOn(FirestoreRepository, 'set')
-    const ref = new MockDocumentReference(Promise.resolve(new MockDocumentSnapshot())) as firebase.firestore.DocumentReference
-    FirestoreSetter.to(ref).mapOf(MockModel).set({}, { errorHandler: (error: any) => error })
+    const ref = new MockDocumentReference(
+      Promise.resolve(new MockDocumentSnapshot())
+    ) as firebase.firestore.DocumentReference
+    FirestoreSetter.to(ref)
+      .mapOf(MockModel)
+      .set({}, { errorHandler: (error: any) => error })
     if (spyMock.mock.calls[0][0].mapper) {
       expect(spyMock.mock.calls[0][0].mapper.name).toEqual('toJson')
     }
@@ -307,8 +341,12 @@ describe('FirestoreRepository', () => {
 
   it('mergeSet: toJson called', () => {
     const spyMock = jest.spyOn(FirestoreRepository, 'set')
-    const ref = new MockDocumentReference(Promise.resolve(new MockDocumentSnapshot())) as firebase.firestore.DocumentReference
-    FirestoreMergeSetter.to(ref).mapOf(MockModel).mergeSet({}, { errorHandler: (error: any) => error })
+    const ref = new MockDocumentReference(
+      Promise.resolve(new MockDocumentSnapshot())
+    ) as firebase.firestore.DocumentReference
+    FirestoreMergeSetter.to(ref)
+      .mapOf(MockModel)
+      .mergeSet({}, { errorHandler: (error: any) => error })
     if (spyMock.mock.calls[0][0].mapper) {
       expect(spyMock.mock.calls[0][0].mapper.name).toEqual('toJson')
     }

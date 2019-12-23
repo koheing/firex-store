@@ -1,7 +1,7 @@
 import { DocumentResult } from './document-result.model'
 
-export interface Payload<T extends DocumentResult = any> {
-  data: T extends DocumentResult ? DocumentResult[] : DocumentResult
+export interface Payload {
+  data: DocumentResult
   statePropName: string
   isLast?: boolean
   [key: string]: any

@@ -9,5 +9,5 @@ declare type AdderOrSetter<T> = T extends firebase.firestore.CollectionReference
  * @param ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference
  * @returns `FirestoreAdder` or `FirestoreDocumentWriterFacade`
  */
-export declare const to: <T extends import("../types").Either<firebase.firestore.DocumentReference, firebase.firestore.CollectionReference>>(ref: T) => AdderOrSetter<T>;
+export declare const to: <T extends import("../types").Either<firebase.firestore.DocumentReference<firebase.firestore.DocumentData>, firebase.firestore.CollectionReference<firebase.firestore.DocumentData>>>(ref: T) => AdderOrSetter<T>;
 export {};

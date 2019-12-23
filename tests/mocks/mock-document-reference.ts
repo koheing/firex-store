@@ -2,7 +2,7 @@ import { firestore } from './firebase'
 
 interface Options {
   setReturnData?: Promise<any>
-  runTransactionReturnData?: Promise<any>,
+  runTransactionReturnData?: Promise<any>
   deleteReturnData?: Promise<any>
 }
 
@@ -52,4 +52,6 @@ export class MockDocumentReference {
   get(options?: any) {
     return this._promiseResult
   }
+
+  withConverter = jest.fn()
 }

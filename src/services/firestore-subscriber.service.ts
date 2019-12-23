@@ -151,7 +151,7 @@ export class FirestoreSubscriber implements Subscriber {
       ...{ mapper: this._mapper }
     }
 
-    const mutationType = this.isDocumentRef() ? 'document' : 'collection'
+    const mutationType = 'document'
     const callMutation: CallMutation = createMutation({ mutationType, commit })
 
     await FirestoreRepository.subscribeOnce<T>({
