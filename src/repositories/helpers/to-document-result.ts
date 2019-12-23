@@ -6,7 +6,7 @@ export const toDocumentResult = <T = any>(
     | firebase.firestore.DocumentSnapshot
     | firebase.firestore.QueryDocumentSnapshot,
   mapper?: Mapper<T>
-): DocumentResult => {
+): DocumentResult | T => {
   const data = { ...snapshot.data() }
   const result: DocumentResult = mapper ? mapper(data) : data
 

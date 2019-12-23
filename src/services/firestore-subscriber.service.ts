@@ -1,14 +1,22 @@
 import { Subscriber, FirestoreMapper } from '../models'
-import { FirestoreRef, Unsubscribes, Unsubscribe, Mapper } from '../types'
+import {
+  FirestoreRef,
+  Unsubscribes,
+  Unsubscribe,
+  Mapper,
+  CallMutation
+} from '../types'
 import { Commit } from 'vuex'
 import { SubscribeOptionsParameter } from '../parameters'
 import { errorMessageTree } from '../errors'
 import {
-  isDocumentRef,
   subscribeFirestoreDocument,
-  subscribeFirestoreCollection
+  subscribeFirestoreCollection,
+  createMutation
 } from './helpers'
 import { FIREX_UNSUBSCRIBES } from '../configurations'
+import { isDocumentRef } from '../utils/is-document-ref'
+import { FirestoreRepository } from '../repositories'
 
 /**
  * Class subscribe firestore data to state property
@@ -113,20 +121,45 @@ export class FirestoreSubscriber implements Subscriber {
     }
 
     isDocumentRef(this.ref)
-      ? subscribeFirestoreDocument({
+      ? subscribeFirestoreDocument<T>({
           statePropName: this.statePropName,
           state,
           commit,
           ref: this.ref,
           options: _options
         })
-      : subscribeFirestoreCollection({
+      : subscribeFirestoreCollection<T>({
           statePropName: this.statePropName,
           state,
           commit,
           ref: this.ref,
           options: _options
         })
+  }
+
+  async subscribeOnce<T = any>(
+    commit: Commit,
+    options?: SubscribeOptionsParameter<T>
+  ) {
+    if (!this.statePropName) {
+      console.error(errorMessageTree.BIND_TO_METHOD_NOT_CALLED)
+      return
+    }
+
+    const _options: SubscribeOptionsParameter<any> = {
+      ...options,
+      ...{ mapper: this._mapper }
+    }
+
+    const mutationType = this.isDocumentRef() ? 'document' : 'collection'
+    const callMutation: CallMutation = createMutation({ mutationType, commit })
+
+    await FirestoreRepository.subscribeOnce<T>({
+      statePropName: this.statePropName,
+      ref: this.ref,
+      callMutation,
+      ..._options
+    })
   }
 
   isDocumentRef(): boolean {
