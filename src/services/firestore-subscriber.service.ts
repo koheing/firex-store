@@ -137,6 +137,15 @@ export class FirestoreSubscriber implements Subscriber {
         })
   }
 
+  /**
+   * Subscribe firestore data and bind to state property at once
+   * @param commit: Commit
+   * @param options: { mapper,
+   *         errorHandler,
+   *         notFoundHandler,
+   *         completionHandler
+   *         afterMutationCalled } | undefined
+   */
   async subscribeOnce<T = any>(
     commit: Commit,
     options?: SubscribeOptionsParameter<T>

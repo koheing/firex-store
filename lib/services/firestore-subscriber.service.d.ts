@@ -60,6 +60,15 @@ export declare class FirestoreSubscriber implements Subscriber {
      *         afterMutationCalled } | undefined
      */
     subscribe<T = any>(state: any, commit: Commit, options?: SubscribeOptionsParameter<T>): void;
+    /**
+     * Subscribe firestore data and bind to state property at once
+     * @param commit: Commit
+     * @param options: { mapper,
+     *         errorHandler,
+     *         notFoundHandler,
+     *         completionHandler
+     *         afterMutationCalled } | undefined
+     */
     subscribeOnce<T = any>(commit: Commit, options?: SubscribeOptionsParameter<T>): Promise<void>;
     isDocumentRef(): boolean;
 }
