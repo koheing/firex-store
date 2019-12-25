@@ -352,4 +352,40 @@ describe('FirestoreRepository', () => {
     }
     jest.clearAllMocks()
   })
+
+  it('subscribeOnce: error occured', async (done) => {
+    const ref = new MockQueryReference(
+      Promise.reject({ message: 'test error' } as Error)
+    ) as firebase.firestore.Query
+    const errorHandler = jest.fn()
+    const result = await FirestoreRepository.subscribeOnce({
+      ref,
+      errorHandler,
+      callMutation: jest.fn(),
+      statePropName: ''
+    })
+    expect(errorHandler).toHaveBeenCalled()
+    if (result instanceof Error) {
+      expect(result).toHaveProperty('message')
+    }
+
+    done()
+  })
+
+  it('subscribeOnce: return null', async (done) => {
+    const ref = new MockQueryReference(
+      Promise.resolve(
+        new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
+      )
+    ) as firebase.firestore.Query
+    const completionHandler = jest.fn()
+    const result = await FirestoreRepository.subscribeOnce({
+      ref,
+      completionHandler,
+      statePropName: '',
+      callMutation: jest.fn()
+    })
+    expect(result).toBeNull()
+    done()
+  })
 })

@@ -129,14 +129,12 @@ export class FirestoreRepository {
       ? await this.find({
           ref,
           mapper,
-          errorHandler,
-          completionHandler
+          errorHandler
         })
       : await this.findAll({
           ref,
           mapper,
-          errorHandler,
-          completionHandler
+          errorHandler
         })
     if (result instanceof Error) {
       return result
@@ -152,6 +150,10 @@ export class FirestoreRepository {
 
     if (afterMutationCalled) {
       afterMutationCalled(payload)
+    }
+
+    if (completionHandler) {
+      completionHandler()
     }
 
     return result
