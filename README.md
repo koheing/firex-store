@@ -47,9 +47,9 @@ export default {
         .bindTo('comments')
         .subscribe(state, commit, /* { errorHandler, complectionHandler, afterMutationCalled } */)
     },
-    subscribeOnce: ({ commit }) => {
+    subscribeOnce: async ({ commit }) => {
       const ref = firestore.collection('comments')
-      from(ref)
+      await from(ref)
         .mapOf(Model)   // options. Model.fromJson called
         .bindTo('comments')
         .subscribeOnce(commit, /* { errorHandler, complectionHandler, afterMutationCalled } */)
