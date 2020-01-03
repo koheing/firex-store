@@ -353,22 +353,56 @@ describe('FirestoreRepository', () => {
     jest.clearAllMocks()
   })
 
-  it('subscribeOnce: error occured', async (done) => {
+  it('subscribeOnce: afterMutationCalled, completionHandler, errorHandler, callMutation called', async (done) => {
     const ref = new MockQueryReference(
       Promise.reject({ message: 'test error' } as Error)
     ) as firebase.firestore.Query
     const errorHandler = jest.fn()
+    const afterMutationCalled = jest.fn()
+    const completionHandler = jest.fn()
+    const callMutation = jest.fn()
     const result = await FirestoreRepository.subscribeOnce({
       ref,
       errorHandler,
-      callMutation: jest.fn(),
-      statePropName: ''
+      callMutation,
+      statePropName: '',
+      afterMutationCalled,
+      completionHandler
     })
     expect(errorHandler).toHaveBeenCalled()
+    expect(afterMutationCalled).toHaveBeenCalled()
+    expect(completionHandler).toHaveBeenCalled()
+    expect(callMutation).toHaveBeenCalled()
+
+    jest.clearAllMocks()
+    done()
+  })
+
+  it('subscribeOnce: error occured', async (done) => {
+    const ref = new MockQueryReference(
+      Promise.resolve(
+        new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
+      )
+    ) as firebase.firestore.Query
+    const mapper = (data: any) => ({ ...data })
+    const errorHandler = jest.fn()
+    FirestoreRepository.findAll = ({
+      errorHandler,
+      ref,
+      completionHandler,
+      mapper
+    }) => Promise.resolve(new Error('error occured'))
+    const result = await FirestoreRepository.subscribeOnce({
+      ref,
+      errorHandler,
+      statePropName: '',
+      callMutation: jest.fn()
+    })
     if (result instanceof Error) {
       expect(result).toHaveProperty('message')
     }
 
+    jest.clearAllMocks()
     done()
   })
 
@@ -378,14 +412,17 @@ describe('FirestoreRepository', () => {
         new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
       )
     ) as firebase.firestore.Query
-    const completionHandler = jest.fn()
+    const errorHandler = jest.fn()
+    FirestoreRepository.findAll = ({ ref, completionHandler, errorHandler }) =>
+      Promise.resolve(null)
     const result = await FirestoreRepository.subscribeOnce({
       ref,
-      completionHandler,
+      errorHandler,
       statePropName: '',
       callMutation: jest.fn()
     })
     expect(result).toBeNull()
+    jest.clearAllMocks()
     done()
   })
 })
