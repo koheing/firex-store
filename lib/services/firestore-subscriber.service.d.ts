@@ -23,6 +23,16 @@ import { SubscribeOptionsParameter } from '../parameters';
  *         notFoundHandler,
  *         afterMutationCalled
  *     })
+ *
+ *   FirestoreSubscriber
+ *     .from(firebase.firestore().collection('collection'))
+ *     .bindTo('statePropName')
+ *     .mapOf(FirestoreMapperModel)  // <- options
+ *     .subscribeOnce(commit, {
+ *         errorHandler,
+ *         notFoundHandler,
+ *         afterMutationCalled
+ *     })
  */
 export declare class FirestoreSubscriber implements Subscriber {
     private _ref;

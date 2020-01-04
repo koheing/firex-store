@@ -39,6 +39,16 @@ import { FirestoreRepository } from '../repositories'
  *         notFoundHandler,
  *         afterMutationCalled
  *     })
+ *
+ *   FirestoreSubscriber
+ *     .from(firebase.firestore().collection('collection'))
+ *     .bindTo('statePropName')
+ *     .mapOf(FirestoreMapperModel)  // <- options
+ *     .subscribeOnce(commit, {
+ *         errorHandler,
+ *         notFoundHandler,
+ *         afterMutationCalled
+ *     })
  */
 export class FirestoreSubscriber implements Subscriber {
   private _ref: FirestoreRef
