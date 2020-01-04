@@ -1,6 +1,7 @@
 import { toDocumentResult } from '../../../../src/repositories/helpers'
 import { MockDocumentSnapshot } from '../../../mocks/mock-document-snapshot'
 import * as jest from 'jest'
+import { DocumentResult } from '../../../../src/models'
 
 describe('toDocumentResult', () => {
   it('mapper not defined', () => {
@@ -19,7 +20,7 @@ describe('toDocumentResult', () => {
       name: data.name,
       count: data.count + 1
     })
-    const result = toDocumentResult(snapshot, mapper)
+    const result: DocumentResult = toDocumentResult(snapshot, mapper)
 
     expect(result.docId).toBe('test0001')
     expect(result.name).toBe('test')

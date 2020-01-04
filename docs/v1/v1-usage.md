@@ -5,10 +5,11 @@
 - [Unsubscribe Firestore, using firex-store actions](#3-unsubscribe-firestore-using-firex-store-actions)
 - [Unsubscribe Firestore, using custom actions](#4-unsubscribe-firestore-using-custom-actions)
 - [Fetch at Once](#5-fetch-at-once)
-- [Add to firestore](#6-add-to-firestore)
-- [Set to firestore](#7-set-to-firestore)
-- [MergeSet to firestore (like Update)](#8-mergeSet-to-firestore-like-update)
-- [Helpers](#9-helpers)
+- [Subscribe at Once](#6-subscribe-at-once)
+- [Add to firestore](#7-add-to-firestore)
+- [Set to firestore](#8-set-to-firestore)
+- [MergeSet to firestore (like Update)](#9-mergeSet-to-firestore-like-update)
+- [Helpers](#10-helpers)
   - [from and FirestoreReaderServiceFactory](#from-and-FirestoreReaderServiceFactory)
   - [on](#on)
   - [to and FirestoreDocumentWriterFacade](#to-and-FirestoreDocumentWriterFacade)
@@ -368,19 +369,60 @@ export default {
   getters: {},
   mutations: {},
   actions: {
-    fetchComments: async ({ commit }) => {
+    fetchComments: async () => {
       const ref = firestore.collection('/comments')
       const result = await FirestoreFinder
         .from(ref)
         // .mapOf(Model)
         .find()
-      commit(***, result)
+      return result
     }
   }
 }
 ```
 
-## 6. Add to firestore
+## 6. Subscribe at once
+
+- class: `FirestoreSubscriber`
+- class methods:
+  - from: Make instance
+    - parameter:
+      - ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
+    - return:
+      - FirestoreFinder
+  - mapOf: Mapping data fetched from Firestore
+    - parameter:
+      - className: Class inheriting FirestoreMapper
+    - return:
+      - FirestoreSubscriber
+  - subscribeOnce: subscribe firestore data at once
+    - parameter:
+      - commit: commit of Vuex
+      - options?:
+        - see [Options](#options)
+
+EX. Call in Store Action, to fetch collection
+
+```javascript
+import { FirestoreSubscriber } from 'firex-store'
+export default {
+  namespaced: true,
+  state: {},
+  getters: {},
+  mutations: {},
+  actions: {
+    subscribeOnceComments: async ({ commit }) => {
+      const ref = firestore.collection('/comments')
+      await FirestoreSubscriber
+        .from(ref)
+        // .mapOf(Model)
+        .subscribeOnce(commit)
+    }
+  }
+}
+```
+
+## 7. Add to firestore
 
 - class: `FirestoreAdder`
 - class methods:
@@ -425,7 +467,7 @@ export default {
 }
 ```
 
-## 7. Set to firestore
+## 8. Set to firestore
 
 - class: `FirestoreSetter`
 - class methods:
@@ -475,7 +517,7 @@ export default {
 }
 ```
 
-## 8. MergeSet to firestore (like Update)
+## 9. MergeSet to firestore (like Update)
 
 - class: `FirestoreMergeSetter`
 - class methods:
@@ -525,7 +567,7 @@ export default {
 }
 ```
 
-## 9. Helpers
+## 10. Helpers
 
 ### from and FirestoreReaderServiceFactory
 
@@ -726,7 +768,7 @@ to(firestore.collection('comments'))
 
 - Options
 
-  - mapper: `decrecated. It will be removed at 1.5.0~`
+  - mapper: `decrecated. It will be removed at 2.0.0~`
 
     - Map to something.
       - `Subscribe and Fetch case`: State prop bound to Firestore or return values map to something if mapper defined

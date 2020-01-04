@@ -3,7 +3,8 @@ import {
   NullOr,
   AppErrorOr,
   DocumentId,
-  Unsubscribe
+  Unsubscribe,
+  FirestoreRef
 } from '../types'
 import {
   SubscribeOptionsParameter,
@@ -22,7 +23,8 @@ import {
   transactionOfSetOrMergeSet,
   transacitonOfDelete
 } from './helpers'
-import { AppError } from '../models'
+import { AppError, Payload, DocumentResult } from '../models'
+import { isDocumentRef } from '../utils'
 
 interface SubscribeParameter<T, U> extends SubscribeOptionsParameter<T> {
   statePropName: string
@@ -109,15 +111,63 @@ export class FirestoreRepository {
     )
   }
 
+  static async subscribeOnce<T = any>({
+    statePropName,
+    ref,
+    callMutation,
+    mapper,
+    errorHandler,
+    completionHandler,
+    afterMutationCalled,
+    notFoundHandler
+  }: SubscribeParameter<T, FirestoreRef>): Promise<
+    NullOr<Error | T | T[] | DocumentResult | DocumentResult[]>
+  > {
+    const result: NullOr<
+      Error | T | T[] | DocumentResult | DocumentResult[]
+    > = isDocumentRef(ref)
+      ? await this.find({
+          ref,
+          mapper,
+          errorHandler
+        })
+      : await this.findAll({
+          ref,
+          mapper,
+          errorHandler
+        })
+    if (result instanceof Error) {
+      return result
+    }
+    if (result === null) {
+      const isArray = !isDocumentRef(ref)
+      const _type = isArray ? 'collection' : 'document'
+      notifyNotFound(_type, notFoundHandler, isArray)
+      return result
+    }
+    const payload: Payload = { data: result, statePropName, isLast: true }
+    callMutation('added', payload)
+
+    if (afterMutationCalled) {
+      afterMutationCalled(payload)
+    }
+
+    if (completionHandler) {
+      completionHandler()
+    }
+
+    return result
+  }
+
   static async find<T = any>({
     ref,
     mapper,
     errorHandler,
     completionHandler
   }: FindParameter<T, firebase.firestore.DocumentReference>): Promise<
-    NullOr<T | any>
+    NullOr<T | DocumentResult | Error>
   > {
-    const result = await ref
+    const result: NullOr<T | DocumentResult | Error> = await ref
       .get()
       .then((doc) => (!doc.exists ? null : toDocumentResult(doc, mapper)))
       .catch((error: any) => notifyErrorOccurred(error, errorHandler))
@@ -134,8 +184,8 @@ export class FirestoreRepository {
   }: FindParameter<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
-  >): Promise<NullOr<T[] | any | any[]>> {
-    const result = await ref
+  >): Promise<NullOr<T[] | DocumentResult[] | Error>> {
+    const result: NullOr<T[] | DocumentResult[] | Error> = await ref
       .get()
       .then((snapshot) =>
         snapshot.empty

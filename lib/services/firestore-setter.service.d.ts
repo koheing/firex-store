@@ -36,8 +36,8 @@ export declare class FirestoreSetter implements Setter, Transaction {
      */
     static to(ref: firebase.firestore.DocumentReference): FirestoreSetter;
     constructor(ref: firebase.firestore.DocumentReference);
-    get ref(): firebase.firestore.DocumentReference;
-    get isTransaction(): boolean;
+    readonly ref: firebase.firestore.DocumentReference;
+    readonly isTransaction: boolean;
     /**
      * Call this if you wanna use transaction
      * @return  `FirestoreSetter class instance`

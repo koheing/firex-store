@@ -5,7 +5,6 @@ import { FIREX_UNSUBSCRIBES } from '../../../src/configurations'
 jest.mock('../../../src/repositories/index')
 
 describe('FirestoreFinder', () => {
-  
   beforeEach(() => {
     jest.clearAllMocks()
   })
@@ -44,5 +43,21 @@ describe('FirestoreFinder', () => {
     ).subscribe({}, jest.fn())
 
     expect(console.error).toHaveBeenCalled()
+  })
+
+  it('subscribeOnce method called', () => {
+    FirestoreSubscriber.from(firestore.collection('comments'))
+      .bindTo('comments')
+      .subscribeOnce(jest.fn())
+
+    expect(FirestoreRepository.subscribeOnce).toHaveBeenCalled()
+  })
+
+  it('subscribeOnce method not called if bindTo method not called', () => {
+    FirestoreSubscriber.from(firestore.collection('comments')).subscribeOnce(
+      jest.fn()
+    )
+
+    expect(FirestoreRepository.subscribeOnce).not.toHaveBeenCalled()
   })
 })

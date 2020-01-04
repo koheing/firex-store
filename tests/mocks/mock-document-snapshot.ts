@@ -12,8 +12,9 @@ export class MockDocumentSnapshot {
   _data: any
   exists: boolean
   constructor(
-    exists: boolean = true,
-    data: { name: string; count: number } | null = {
+    exists = true,
+    data: { id: string; name: string; count: number } | null = {
+      id: '',
       name: 'test',
       count: 0
     }
@@ -23,6 +24,9 @@ export class MockDocumentSnapshot {
   }
 
   data() {
+    if (this._data) {
+      this._data.id = this.id
+    }
     return this._data
   }
 
