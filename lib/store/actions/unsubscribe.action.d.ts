@@ -1,5 +1,5 @@
 import { ActionTree } from 'vuex';
-import { FirestoreUnsubscriber } from '../../services/firestore-unsubscriber.service';
+import { Unsubscriber } from '../../models';
 /**
  * Unsubscribe firestore data to state property
  * @param firestoreUnsubscriber: FirestoreUnsubscriber instance
@@ -22,7 +22,7 @@ import { FirestoreUnsubscriber } from '../../services/firestore-unsubscriber.ser
  *   }
  *
  */
-export declare const firestoreUnsubscribeAction: (firestoreUnsubscriber: FirestoreUnsubscriber, parameter: {
+export declare const firestoreUnsubscribeAction: (firestoreUnsubscriber: Unsubscriber, parameter: {
     type: "document" | "collection";
     actionName?: string | undefined;
 }) => ActionTree<any, any>;
