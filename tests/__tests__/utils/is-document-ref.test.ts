@@ -1,5 +1,5 @@
-import { isDocumentRef } from '../../../../src/services/helpers/is-document-ref'
-import { firestore } from '../../../mocks/firebase'
+import { isDocumentRef } from '../../../src/utils'
+import { firestore } from '../../mocks/firebase'
 
 describe('isDocumentRef', () => {
   it('return true', () => {

@@ -1,7 +1,7 @@
-import { Finder, FirestoreMapper } from '../models'
+import { Finder, FirestoreMapper, DocumentResult } from '../models'
 import { FirestoreRef, NullOr, Mapper } from '../types'
 import { FindOptionsParameter } from '../parameters'
-import { isDocumentRef } from './helpers'
+import { isDocumentRef } from '../utils'
 import { FirestoreRepository } from '../repositories'
 
 /**
@@ -68,13 +68,15 @@ export class FirestoreFinder implements Finder {
    * @returns null | error | any
    *   - error: if you defined errorHandler, it changed any
    */
-  find<T = any>(options?: FindOptionsParameter<T>): Promise<NullOr<T | any>> {
-    const _options: FindOptionsParameter<any> = {
+  find<T = any>(
+    options?: FindOptionsParameter<T>
+  ): Promise<NullOr<T | T[] | DocumentResult | DocumentResult[] | Error>> {
+    const _options: FindOptionsParameter<T> = {
       ...options,
       ...{ mapper: this._mapper }
     }
     return isDocumentRef(this.ref)
-      ? FirestoreRepository.find({ ref: this.ref, ..._options })
-      : FirestoreRepository.findAll({ ref: this.ref, ..._options })
+      ? FirestoreRepository.find<T>({ ref: this.ref, ..._options })
+      : FirestoreRepository.findAll<T>({ ref: this.ref, ..._options })
   }
 }

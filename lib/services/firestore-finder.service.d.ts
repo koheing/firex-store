@@ -1,4 +1,4 @@
-import { Finder, FirestoreMapper } from '../models';
+import { Finder, FirestoreMapper, DocumentResult } from '../models';
 import { FirestoreRef, NullOr } from '../types';
 import { FindOptionsParameter } from '../parameters';
 /**
@@ -34,7 +34,7 @@ export declare class FirestoreFinder implements Finder {
      */
     static from(ref: FirestoreRef): FirestoreFinder;
     constructor(ref: FirestoreRef);
-    get ref(): FirestoreRef;
+    readonly ref: FirestoreRef;
     /**
      * Convert new data with the results of calling a provided function(fromJson)
      * @param className extends FirestoreMapper
@@ -50,5 +50,5 @@ export declare class FirestoreFinder implements Finder {
      * @returns null | error | any
      *   - error: if you defined errorHandler, it changed any
      */
-    find<T = any>(options?: FindOptionsParameter<T>): Promise<NullOr<T | any>>;
+    find<T = any>(options?: FindOptionsParameter<T>): Promise<NullOr<T | T[] | DocumentResult | DocumentResult[] | Error>>;
 }

@@ -13,8 +13,8 @@ export declare class FirestoreDocumentWriterFacade implements Transaction, Merge
     private _isTransaction;
     private _mapper?;
     constructor(ref: firebase.firestore.DocumentReference);
-    get ref(): firebase.firestore.DocumentReference;
-    get isTransaction(): boolean;
+    readonly ref: firebase.firestore.DocumentReference;
+    readonly isTransaction: boolean;
     /**
      * Call it if you wanna transaction
      * @return `FirestoreDocumentWriterFacade class instance`

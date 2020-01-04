@@ -16,7 +16,7 @@ export declare class FirestoreUnsubscriber implements Unsubscriber {
      */
     static on(statePropName: string): FirestoreUnsubscriber;
     constructor(statePropName: string);
-    get statePropName(): string;
+    readonly statePropName: string;
     /**
      * Unsubscribe firestore data
      * @param state: any

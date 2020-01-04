@@ -1,4 +1,7 @@
-import { transactionOfSetOrMergeSet, transacitonOfDelete } from '../../../../src/repositories/helpers'
+import {
+  transactionOfSetOrMergeSet,
+  transacitonOfDelete
+} from '../../../../src/repositories/helpers'
 import { MockDocumentReference } from '../../../mocks/mock-document-reference'
 import { MockDocumentSnapshot } from '../../../mocks/mock-document-snapshot'
 import { MockTransaction } from '../../../mocks/mock-transaction'
@@ -13,7 +16,7 @@ describe('transactionOfSetOrMergeSet', () => {
     const result = await transactionOfSetOrMergeSet({
       ref: new MockDocumentReference(
         Promise.resolve(
-          new MockDocumentSnapshot(false, { name: 'test', count: 1 })
+          new MockDocumentSnapshot(false, { id: '', name: 'test', count: 1 })
         )
       ) as firebase.firestore.DocumentReference,
       data: { name: 'test' },
@@ -35,7 +38,7 @@ describe('transactionOfSetOrMergeSet', () => {
     const result = await transactionOfSetOrMergeSet({
       ref: new MockDocumentReference(
         Promise.resolve(
-          new MockDocumentSnapshot(true, { name: 'test', count: 1 })
+          new MockDocumentSnapshot(true, { id: '', name: 'test', count: 1 })
         )
       ) as firebase.firestore.DocumentReference,
       data: { name: 'test' },
@@ -57,7 +60,7 @@ describe('transactionOfSetOrMergeSet', () => {
     const result = await transactionOfSetOrMergeSet({
       ref: new MockDocumentReference(
         Promise.resolve(
-          new MockDocumentSnapshot(true, { name: 'test', count: 1 })
+          new MockDocumentSnapshot(true, { id: '', name: 'test', count: 1 })
         )
       ) as firebase.firestore.DocumentReference,
       data: { name: 'test' },
@@ -67,7 +70,9 @@ describe('transactionOfSetOrMergeSet', () => {
     await flushPromises()
     expect(result).not.toBeUndefined()
     if (result) {
-      expect(result.message).toEqual(appErrorTree.ID_HAS_ALREADY_BEEN_USED.message)
+      expect(result.message).toEqual(
+        appErrorTree.ID_HAS_ALREADY_BEEN_USED.message
+      )
     }
     jest.clearAllMocks()
     done()
@@ -82,9 +87,7 @@ describe('transactionOfSetOrMergeSet', () => {
     documentSnap._data = undefined
     const result = await transactionOfSetOrMergeSet({
       ref: new MockDocumentReference(
-        Promise.resolve(
-          documentSnap
-        )
+        Promise.resolve(documentSnap)
       ) as firebase.firestore.DocumentReference,
       data: { name: 'test' },
       merge: false,
@@ -96,7 +99,6 @@ describe('transactionOfSetOrMergeSet', () => {
     jest.clearAllMocks()
     done()
   })
-
 })
 
 describe('transacitonOfDelete', () => {
@@ -106,9 +108,7 @@ describe('transacitonOfDelete', () => {
     transaction.delete = mockDelete
     const result = await transacitonOfDelete({
       ref: new MockDocumentReference(
-        Promise.resolve(
-          new MockDocumentSnapshot(false)
-        )
+        Promise.resolve(new MockDocumentSnapshot(false))
       ) as firebase.firestore.DocumentReference,
       transaction
     })
@@ -130,9 +130,7 @@ describe('transacitonOfDelete', () => {
     documentSnap._data = undefined
     const result = await transacitonOfDelete({
       ref: new MockDocumentReference(
-        Promise.resolve(
-          documentSnap
-        )
+        Promise.resolve(documentSnap)
       ) as firebase.firestore.DocumentReference,
       transaction,
       errorHandler

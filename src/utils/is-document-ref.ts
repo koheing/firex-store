@@ -1,4 +1,4 @@
-import { FirestoreRef } from '../../types'
+import { FirestoreRef } from '../types'
 import * as firebase from 'firebase'
 
 export const isDocumentRef = (

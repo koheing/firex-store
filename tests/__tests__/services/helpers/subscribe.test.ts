@@ -19,7 +19,9 @@ describe('subscribe test', () => {
       statePropName: 'test',
       state: mockState,
       commit: jest.fn(),
-      ref: new MockQueryReference(Promise.resolve(new MockQuerySnapshot())) as firebase.firestore.Query
+      ref: new MockQueryReference(
+        Promise.resolve(new MockQuerySnapshot())
+      ) as firebase.firestore.Query
     })
 
     expect(mockState[FIREX_UNSUBSCRIBES].size).toEqual(2)

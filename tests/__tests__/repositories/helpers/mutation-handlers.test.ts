@@ -55,7 +55,7 @@ describe('callCollectionMutation', () => {
       statePropName: 'test',
       snapshot: new MockQuerySnapshot(true, [
         new MockDocumentSnapshot(),
-        new MockDocumentSnapshot(true, { name: 'test0002', count: 1 })
+        new MockDocumentSnapshot(true, { id: '', name: 'test0002', count: 1 })
       ]),
       callMutation,
       afterMutationCalled,

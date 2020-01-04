@@ -23,6 +23,16 @@ import { SubscribeOptionsParameter } from '../parameters';
  *         notFoundHandler,
  *         afterMutationCalled
  *     })
+ *
+ *   FirestoreSubscriber
+ *     .from(firebase.firestore().collection('collection'))
+ *     .bindTo('statePropName')
+ *     .mapOf(FirestoreMapperModel)  // <- options
+ *     .subscribeOnce(commit, {
+ *         errorHandler,
+ *         notFoundHandler,
+ *         afterMutationCalled
+ *     })
  */
 export declare class FirestoreSubscriber implements Subscriber {
     private _ref;
@@ -35,8 +45,8 @@ export declare class FirestoreSubscriber implements Subscriber {
      */
     static from(ref: FirestoreRef): FirestoreSubscriber;
     constructor(ref: FirestoreRef);
-    get ref(): FirestoreRef;
-    get statePropName(): string | undefined;
+    readonly ref: FirestoreRef;
+    readonly statePropName: string | undefined;
     /**
      * Set state property bound to firestore data
      * @param statePropName: string
@@ -60,5 +70,15 @@ export declare class FirestoreSubscriber implements Subscriber {
      *         afterMutationCalled } | undefined
      */
     subscribe<T = any>(state: any, commit: Commit, options?: SubscribeOptionsParameter<T>): void;
+    /**
+     * Subscribe firestore data and bind to state property at once
+     * @param commit: Commit
+     * @param options: { mapper,
+     *         errorHandler,
+     *         notFoundHandler,
+     *         completionHandler
+     *         afterMutationCalled } | undefined
+     */
+    subscribeOnce<T = any>(commit: Commit, options?: SubscribeOptionsParameter<T>): Promise<void>;
     isDocumentRef(): boolean;
 }

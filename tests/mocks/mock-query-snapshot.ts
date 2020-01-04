@@ -22,7 +22,11 @@ export class MockQuerySnapshot {
       },
       {
         type: 'added',
-        doc: new MockDocumentSnapshot(true, { name: 'test0002', count: 1 }),
+        doc: new MockDocumentSnapshot(true, {
+          id: '',
+          name: 'test0002',
+          count: 1
+        }),
         oldIndex: 1,
         newIndex: 1
       }
@@ -37,7 +41,7 @@ export class MockQuerySnapshot {
     empty = false,
     docs = [
       new MockDocumentSnapshot(),
-      new MockDocumentSnapshot(true, { name: 'test0002', count: 1 })
+      new MockDocumentSnapshot(true, { id: '', name: 'test0002', count: 1 })
     ]
   ) {
     this.empty = empty

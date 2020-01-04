@@ -19,4 +19,5 @@ export class MockQueryReference {
     return this.promiseResult
   }
   onSnapshot = jest.fn()
+  withConverter = jest.fn()
 }

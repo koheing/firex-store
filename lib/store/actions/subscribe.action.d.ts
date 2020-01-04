@@ -1,6 +1,6 @@
 import { ActionTree } from 'vuex';
 import { SubscribeOptionsParameter } from '../../parameters';
-import { FirestoreSubscriber } from '../../services/firestore-subscriber.service';
+import { Subscriber } from '../../models';
 interface OptionsParameter<T> extends SubscribeOptionsParameter<T> {
     /**
      * @param actionName action name registered to ActionTree
@@ -36,5 +36,5 @@ interface OptionsParameter<T> extends SubscribeOptionsParameter<T> {
  *   }
  *
  */
-export declare const firestoreSubscribeAction: (firestoreSubscriber: FirestoreSubscriber, options?: OptionsParameter<any> | undefined) => ActionTree<any, any>;
+export declare const firestoreSubscribeAction: (firestoreSubscriber: Subscriber, options?: OptionsParameter<any> | undefined) => ActionTree<any, any>;
 export {};

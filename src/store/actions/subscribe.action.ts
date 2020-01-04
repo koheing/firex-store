@@ -1,7 +1,7 @@
 import { ActionTree } from 'vuex'
 import { SubscribeOptionsParameter } from '../../parameters'
 import { actionTypes } from '../types/action'
-import { FirestoreSubscriber } from '../../services/firestore-subscriber.service'
+import { Subscriber } from '../../models'
 
 interface OptionsParameter<T> extends SubscribeOptionsParameter<T> {
   /**
@@ -40,7 +40,7 @@ interface OptionsParameter<T> extends SubscribeOptionsParameter<T> {
  *
  */
 export const firestoreSubscribeAction = (
-  firestoreSubscriber: FirestoreSubscriber,
+  firestoreSubscriber: Subscriber,
   options?: OptionsParameter<any>
 ): ActionTree<any, any> => {
   const defaultActionName = firestoreSubscriber.isDocumentRef()
