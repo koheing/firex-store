@@ -59,7 +59,7 @@ export default {
       on('comments').unsubscribe(state)
     },
     find: async (_, { commentId }) => {
-      const ref = firestore.collection('comments').doc('commentId')
+      const ref = firestore.collection('comments').doc(commentId)
       result = await from(ref)
         .once()
         .mapOf(Model)   // options. Model.fromJson called
@@ -73,14 +73,14 @@ export default {
         .add(data, /* { errorHandler, completionHandler } */)
     },
     set: (_, { data, commentId }) => {
-      const ref = firestore.collection('comments').doc('commentId')
+      const ref = firestore.collection('comments').doc(commentId)
       return to(ref)
         .mapOf(Model)   // options. Model.toJson called
         .transaction()  // options
         .set(data, /* { errorHandler, completionHandler } */)
     },
     mergeSet: (_, { data, commentId }) => {
-      const ref = firestore.collection('comments').doc('commentId')
+      const ref = firestore.collection('comments').doc(commentId)
       return to(ref)
         .mapOf(Model)   // options. Model.toJson called
         .transaction()  // options
