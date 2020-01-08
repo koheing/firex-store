@@ -1,4 +1,5 @@
 import { Commit } from 'vuex';
+import { FirestoreRef } from '../../types';
 import { SubscribeCriteriaOptions } from '../../options';
 interface Criteria<T, U> {
     state: any;
@@ -19,5 +20,5 @@ interface Criteria<T, U> {
  *   - afterMutationCalled
  *   - onCompleted `deprecated`
  */
-export declare const subscribeFirestore: <T = any>({ state, commit, ref, options }: Criteria<import("../../../types").FirestoreRef, T>) => void;
+export declare const subscribeFirestore: <T = any>({ state, commit, ref, options }: Criteria<FirestoreRef, T>) => void;
 export {};

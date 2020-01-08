@@ -35,8 +35,8 @@ export declare class FirestoreMergeSetter implements MergeSetter, Transaction {
      */
     static to(ref: firebase.firestore.DocumentReference): FirestoreMergeSetter;
     constructor(ref: firebase.firestore.DocumentReference);
-    readonly ref: firebase.firestore.DocumentReference;
-    readonly isTransaction: boolean;
+    get ref(): firebase.firestore.DocumentReference;
+    get isTransaction(): boolean;
     /**
      * Call this if you wanna use transaction
      * @return `FirestoreMergeSetter class instance`
