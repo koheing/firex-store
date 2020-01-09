@@ -7,7 +7,7 @@ export interface Subscriber {
     readonly statePropName: string | undefined;
     bindTo: (statePropName: string) => this;
     subscribe: <T = any>(state: any, commit: Commit, options?: SubscribeOptionsParameter<T>) => void;
-    subscribeOnce: <T = any>(commit: Commit, options?: SubscribeOptionsParameter<T>) => void;
+    subscribeOnce: <T = any>(commit: Commit, options?: SubscribeOptionsParameter<T>) => Promise<void>;
     mapOf: <T extends FirestoreMapper>(className: T) => this;
     isDocumentRef(): boolean;
 }

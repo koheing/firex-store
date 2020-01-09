@@ -34,7 +34,7 @@ export declare class FirestoreFinder implements Finder {
      */
     static from(ref: FirestoreRef): FirestoreFinder;
     constructor(ref: FirestoreRef);
-    readonly ref: FirestoreRef;
+    get ref(): FirestoreRef;
     /**
      * Convert new data with the results of calling a provided function(fromJson)
      * @param className extends FirestoreMapper

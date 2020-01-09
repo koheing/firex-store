@@ -407,15 +407,18 @@ EX. Call in Store Action, to fetch collection
 import { FirestoreSubscriber } from 'firex-store'
 export default {
   namespaced: true,
-  state: {},
+  state: {
+    comment: null
+  },
   getters: {},
   mutations: {},
   actions: {
-    subscribeOnceComments: async ({ commit }) => {
-      const ref = firestore.collection('/comments')
+    subscribeOnceComments: async ({ commit }, { commentId }) => {
+      const ref = firestore.collection('/comments').doc(commentId)
       await FirestoreSubscriber
         .from(ref)
         // .mapOf(Model)
+        .bindTo('comment')
         .subscribeOnce(commit)
     }
   }
