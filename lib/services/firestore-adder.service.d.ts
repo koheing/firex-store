@@ -28,7 +28,7 @@ export declare class FirestoreAdder implements Adder {
     private _mapper?;
     static to(ref: firebase.firestore.CollectionReference): FirestoreAdder;
     constructor(ref: firebase.firestore.CollectionReference);
-    readonly ref: firebase.firestore.CollectionReference;
+    get ref(): firebase.firestore.CollectionReference;
     /**
      * Convert data before registering data in Firestore with the results of calling a provided function(toJson)
      * @param className extends FirestoreMapper

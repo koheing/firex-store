@@ -159,7 +159,7 @@ export class FirestoreSubscriber implements Subscriber {
   async subscribeOnce<T = any>(
     commit: Commit,
     options?: SubscribeOptionsParameter<T>
-  ) {
+  ): Promise<void> {
     if (!this.statePropName) {
       console.error(errorMessageTree.BIND_TO_METHOD_NOT_CALLED)
       return
