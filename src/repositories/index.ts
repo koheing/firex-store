@@ -4,7 +4,8 @@ import {
   AppErrorOr,
   DocumentId,
   Unsubscribe,
-  FirestoreRef
+  FirestoreRef,
+  MutationHandler
 } from '../types'
 import {
   SubscribeOptionsParameter,
@@ -15,8 +16,6 @@ import {
 } from '../parameters'
 import {
   toDocumentResult,
-  callDocumentMutation,
-  callCollectionMutation,
   notifyNotFound,
   notifyErrorOccurred,
   notifyCompletionIfDefined,
@@ -26,10 +25,19 @@ import {
 import { AppError, Payload, DocumentResult } from '../models'
 import { isDocumentRef } from '../utils'
 
-interface SubscribeParameter<T, U> extends SubscribeOptionsParameter<T> {
+interface SubscribeOnceParameter<T, U> extends SubscribeOptionsParameter<T> {
   statePropName: string
   ref: U
   callMutation: CallMutation
+}
+
+interface SubscribeParameter<T, U>
+  extends Pick<
+    SubscribeOptionsParameter<T>,
+    'notFoundHandler' | 'errorHandler' | 'completionHandler'
+  > {
+  ref: U
+  mutationHandler: MutationHandler
 }
 
 interface FindParameter<T, U> extends FindOptionsParameter<T> {
@@ -55,57 +63,53 @@ interface DeleteParamater<T> extends DeleteOptionsParameter {
 
 export class FirestoreRepository {
   static subscribe<T = any>({
-    statePropName,
     ref,
-    callMutation,
-    mapper,
+    mutationHandler,
     errorHandler,
     completionHandler,
-    afterMutationCalled,
     notFoundHandler
   }: SubscribeParameter<T, firebase.firestore.DocumentReference>): Unsubscribe {
     return ref.onSnapshot(
       (snapshot) =>
         !snapshot.exists
           ? notifyNotFound('document', notFoundHandler)
-          : callDocumentMutation<T>({
-              statePropName,
-              snapshot,
-              callMutation,
-              mapper,
-              afterMutationCalled
-            }),
+          : mutationHandler(
+              { ...snapshot.data(), docId: snapshot.id },
+              'added',
+              true
+            ),
       (error: any) => notifyErrorOccurred(error, errorHandler),
       () => notifyCompletionIfDefined(completionHandler)
     )
   }
 
   static subscribeAll<T = any>({
-    statePropName,
     ref,
-    callMutation,
-    mapper,
+    mutationHandler,
     errorHandler,
     completionHandler,
-    afterMutationCalled,
     notFoundHandler
   }: SubscribeParameter<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
   >): Unsubscribe {
     return ref.onSnapshot(
-      (snapshot) =>
-        snapshot.empty
-          ? notifyNotFound('collection', notFoundHandler, true)
-          : callCollectionMutation<T>({
-              statePropName,
-              snapshot,
-              callMutation,
-              mapper,
-              afterMutationCalled,
-              notifyNotFound: () =>
-                notifyNotFound('collection', notFoundHandler, false)
-            }),
+      (snapshot) => {
+        if (snapshot.empty) {
+          notifyNotFound('collection', notFoundHandler, true)
+          return
+        }
+
+        const docChanges = snapshot.docChanges()
+        const docCount = docChanges.length
+        docChanges.forEach((it, index) => {
+          mutationHandler(
+            { ...it.doc.data(), docId: it.doc.id },
+            it.type,
+            docCount === index
+          )
+        })
+      },
       (error: any) => notifyErrorOccurred(error, errorHandler),
       () => notifyCompletionIfDefined(completionHandler)
     )
@@ -120,7 +124,7 @@ export class FirestoreRepository {
     completionHandler,
     afterMutationCalled,
     notFoundHandler
-  }: SubscribeParameter<T, FirestoreRef>): Promise<
+  }: SubscribeOnceParameter<T, FirestoreRef>): Promise<
     NullOr<Error | T | T[] | DocumentResult | DocumentResult[]>
   > {
     const result: NullOr<

@@ -1,5 +1,10 @@
-import { FirestoreRef } from '../../types'
-import { FirestoreSubscriber, FirestoreFinder } from '../../services'
+import { FirestoreRef, Context } from '../../types'
+import {
+  FirestoreSubscriber,
+  FirestoreFinder,
+  FirestoreStreamSubscriber
+} from '../../services'
+import { Action } from 'stream-executor'
 
 /**
  * Factory of FirestoreSubscriber and FirestoreFinder
@@ -29,5 +34,31 @@ export class FirestoreReaderServiceFactory {
    */
   once(): FirestoreFinder {
     return FirestoreFinder.from(this._ref)
+  }
+
+  stream<A, B, C, D, E, F, G, H, I, J>(
+    act1: Action<Context<{ docId: string } & Record<string, any>>, A>,
+    act2?: Action<A, B>,
+    act3?: Action<B, C>,
+    act4?: Action<C, D>,
+    act5?: Action<D, E>,
+    act6?: Action<E, F>,
+    act7?: Action<F, G>,
+    act8?: Action<G, H>,
+    act9?: Action<H, I>,
+    act10?: Action<I, J>
+  ) {
+    return FirestoreStreamSubscriber.from(this._ref).stream(
+      act1,
+      act2,
+      act3,
+      act4,
+      act5,
+      act6,
+      act7,
+      act8,
+      act9,
+      act10
+    )
   }
 }

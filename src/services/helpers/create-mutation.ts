@@ -8,10 +8,15 @@ interface MutationParameter {
   commit: Commit
 }
 
-export const createMutation = ({
-  mutationType,
-  commit
-}: MutationParameter): CallMutation => (
+export const createMutation = ({ mutationType, commit }: MutationParameter) => (
+  statePropName: string
+): CallMutation => (
   changeType: firebase.firestore.DocumentChangeType,
-  payload: Payload
-) => callMutation({ mutationType, changeType, commit, payload })
+  { isLast, data }: Omit<Payload, 'statePropName'>
+) =>
+  callMutation({
+    mutationType,
+    changeType,
+    commit,
+    payload: { statePropName, isLast, data }
+  })

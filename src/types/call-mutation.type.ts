@@ -3,5 +3,5 @@ import { Payload } from '../models'
 
 export type CallMutation = (
   changeType: firestore.DocumentChangeType,
-  payload: Payload
+  payload: Omit<Payload, 'statePropName'>
 ) => void

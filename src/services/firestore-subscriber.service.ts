@@ -10,9 +10,9 @@ import { Commit } from 'vuex'
 import { SubscribeOptionsParameter } from '../parameters'
 import { errorMessageTree } from '../errors'
 import {
-  subscribeFirestoreDocument,
-  subscribeFirestoreCollection,
-  createMutation
+  createSubscriber,
+  createMutation,
+  createMutationHandler
 } from './helpers'
 import { FIREX_UNSUBSCRIBES } from '../configurations'
 import { isDocumentRef } from '../utils/is-document-ref'
@@ -130,7 +130,12 @@ export class FirestoreSubscriber implements Subscriber {
       ...{ mapper: this._mapper }
     }
 
-    isDocumentRef(this.ref)
+    const {
+      subscribeFirestoreCollection,
+      subscribeFirestoreDocument
+    } = createSubscriber().asProcedure()
+
+    const unsubscribe = isDocumentRef(this.ref)
       ? subscribeFirestoreDocument<T>({
           statePropName: this.statePropName,
           state,
@@ -145,6 +150,9 @@ export class FirestoreSubscriber implements Subscriber {
           ref: this.ref,
           options: _options
         })
+
+    const unsubscribes: Unsubscribes = state[FIREX_UNSUBSCRIBES]
+    unsubscribes.set(this.statePropName, unsubscribe)
   }
 
   /**
@@ -171,7 +179,9 @@ export class FirestoreSubscriber implements Subscriber {
     }
 
     const mutationType = 'document'
-    const callMutation: CallMutation = createMutation({ mutationType, commit })
+    const callMutation = createMutation({ mutationType, commit })(
+      this.statePropName
+    )
 
     await FirestoreRepository.subscribeOnce<T>({
       statePropName: this.statePropName,
