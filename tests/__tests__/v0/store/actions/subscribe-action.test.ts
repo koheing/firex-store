@@ -5,7 +5,7 @@ import {
   firestoreSubscribeActions,
   firestoreSubscribeAction,
   actionTypes,
-  firestoreMutations
+  firestoreMutations,
 } from '../../../../../src/v0'
 import { firestore } from '../../../../mocks/firebase'
 import { subscribeFirestore } from '../../../../../src/v0/store/helpers/subscribe'
@@ -21,7 +21,7 @@ describe('subscribe-action', () => {
       state: {},
       getters: {},
       mutations: {},
-      actions: {}
+      actions: {},
     })
   })
 
@@ -29,15 +29,20 @@ describe('subscribe-action', () => {
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
-        comments: null
+        comments: null,
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
+        ...firestoreMutations({
+          statePropName: 'comments',
+          type: 'collection',
+        }),
       },
       actions: {
-        ...firestoreSubscribeActions({ ref: firestore.collection('/comments') })
-      }
+        ...firestoreSubscribeActions({
+          ref: firestore.collection('/comments'),
+        }),
+      },
     }
 
     store.registerModule('comment', commentModule)
@@ -53,18 +58,21 @@ describe('subscribe-action', () => {
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
-        comments: null
+        comments: null,
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
+        ...firestoreMutations({
+          statePropName: 'comments',
+          type: 'collection',
+        }),
       },
       actions: {
         ...firestoreSubscribeActions({
           ref: firestore.collection('/comments'),
-          actionName: 'test'
-        })
-      }
+          actionName: 'test',
+        }),
+      },
     }
 
     store.registerModule('comment', commentModule)
@@ -80,17 +88,17 @@ describe('subscribe-action', () => {
     const userModule: Module<any, any> = {
       namespaced: true,
       state: {
-        user: null
+        user: null,
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'user', type: 'document' })
+        ...firestoreMutations({ statePropName: 'user', type: 'document' }),
       },
       actions: {
         ...firestoreSubscribeActions({
-          ref: firestore.collection('/users').doc('userId')
-        })
-      }
+          ref: firestore.collection('/users').doc('userId'),
+        }),
+      },
     }
 
     store.registerModule('user', userModule)
@@ -111,7 +119,7 @@ describe('subscribe-action', () => {
       state: {},
       getters: {},
       mutations: {},
-      actions: {}
+      actions: {},
     })
   })
 
@@ -119,15 +127,18 @@ describe('subscribe-action', () => {
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
-        comments: null
+        comments: null,
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
+        ...firestoreMutations({
+          statePropName: 'comments',
+          type: 'collection',
+        }),
       },
       actions: {
-        ...firestoreSubscribeAction({ ref: firestore.collection('/comments') })
-      }
+        ...firestoreSubscribeAction({ ref: firestore.collection('/comments') }),
+      },
     }
 
     store.registerModule('comment', commentModule)
@@ -143,18 +154,21 @@ describe('subscribe-action', () => {
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
-        comments: null
+        comments: null,
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
+        ...firestoreMutations({
+          statePropName: 'comments',
+          type: 'collection',
+        }),
       },
       actions: {
         ...firestoreSubscribeAction({
           ref: firestore.collection('/comments'),
-          actionName: 'test'
-        })
-      }
+          actionName: 'test',
+        }),
+      },
     }
 
     store.registerModule('comment', commentModule)
@@ -170,17 +184,17 @@ describe('subscribe-action', () => {
     const userModule: Module<any, any> = {
       namespaced: true,
       state: {
-        user: null
+        user: null,
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'user', type: 'document' })
+        ...firestoreMutations({ statePropName: 'user', type: 'document' }),
       },
       actions: {
         ...firestoreSubscribeAction({
-          ref: firestore.collection('/users').doc('userId')
-        })
-      }
+          ref: firestore.collection('/users').doc('userId'),
+        }),
+      },
     }
 
     store.registerModule('user', userModule)

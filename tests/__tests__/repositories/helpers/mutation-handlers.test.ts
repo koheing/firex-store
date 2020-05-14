@@ -1,6 +1,6 @@
 import {
   callDocumentMutation,
-  callCollectionMutation
+  callCollectionMutation,
 } from '../../../../src/repositories/helpers/mutation-handlers'
 import { MockDocumentSnapshot } from '../../../mocks/mock-document-snapshot'
 import { MockQuerySnapshot } from '../../../mocks/mock-query-snapshot'
@@ -14,7 +14,7 @@ describe('callDocumentMutation', () => {
       statePropName: 'test',
       snapshot: new MockDocumentSnapshot(),
       callMutation,
-      afterMutationCalled
+      afterMutationCalled,
     })
 
     expect(callMutation).toHaveBeenCalled()
@@ -34,7 +34,7 @@ describe('callDocumentMutation', () => {
       callMutation,
       afterMutationCalled,
       type: 'modified',
-      isLast: false
+      isLast: false,
     })
 
     expect(callMutation).toHaveBeenCalled()
@@ -55,11 +55,11 @@ describe('callCollectionMutation', () => {
       statePropName: 'test',
       snapshot: new MockQuerySnapshot(true, [
         new MockDocumentSnapshot(),
-        new MockDocumentSnapshot(true, { id: '', name: 'test0002', count: 1 })
+        new MockDocumentSnapshot(true, { id: '', name: 'test0002', count: 1 }),
       ]),
       callMutation,
       afterMutationCalled,
-      notifyNotFound
+      notifyNotFound,
     })
 
     expect(callMutation).toHaveBeenCalled()

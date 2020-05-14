@@ -4,7 +4,7 @@ import { Store, Module } from 'vuex'
 import {
   actionTypes,
   firestoreMutations,
-  firestoreUnsubscribeAction
+  firestoreUnsubscribeAction,
 } from '../../../../src'
 import { FirestoreUnsubscriber } from '../../../../src/services'
 import { FIREX_UNSUBSCRIBES } from '../../../../src/configurations'
@@ -19,7 +19,7 @@ describe('unsubscribe-action', () => {
       state: {},
       getters: {},
       mutations: {},
-      actions: {}
+      actions: {},
     })
   })
 
@@ -31,17 +31,17 @@ describe('unsubscribe-action', () => {
       namespaced: true,
       state: {
         comments: null,
-        [FIREX_UNSUBSCRIBES]: mockMap
+        [FIREX_UNSUBSCRIBES]: mockMap,
       },
       getters: {},
       mutations: {
-        ...firestoreMutations('collection')
+        ...firestoreMutations('collection'),
       },
       actions: {
         ...firestoreUnsubscribeAction(FirestoreUnsubscriber.on('comments'), {
-          type: 'collection'
-        })
-      }
+          type: 'collection',
+        }),
+      },
     }
 
     store.registerModule('comment', commentModule)
@@ -61,18 +61,18 @@ describe('unsubscribe-action', () => {
       namespaced: true,
       state: {
         comments: null,
-        [FIREX_UNSUBSCRIBES]: mockMap
+        [FIREX_UNSUBSCRIBES]: mockMap,
       },
       getters: {},
       mutations: {
-        ...firestoreMutations('collection')
+        ...firestoreMutations('collection'),
       },
       actions: {
         ...firestoreUnsubscribeAction(FirestoreUnsubscriber.on('comments'), {
           type: 'collection',
-          actionName: 'test'
-        })
-      }
+          actionName: 'test',
+        }),
+      },
     }
 
     store.registerModule('comment', commentModule)
@@ -92,17 +92,17 @@ describe('unsubscribe-action', () => {
       namespaced: true,
       state: {
         user: null,
-        [FIREX_UNSUBSCRIBES]: mockMap
+        [FIREX_UNSUBSCRIBES]: mockMap,
       },
       getters: {},
       mutations: {
-        ...firestoreMutations('document')
+        ...firestoreMutations('document'),
       },
       actions: {
         ...firestoreUnsubscribeAction(FirestoreUnsubscriber.on('user'), {
-          type: 'document'
-        })
-      }
+          type: 'document',
+        }),
+      },
     }
 
     store.registerModule('user', userModule)

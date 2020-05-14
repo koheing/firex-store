@@ -32,7 +32,9 @@ describe('FirestoreSetter', () => {
     const mockSetter = jest.spyOn(FirestoreRepository, 'set')
     const data = {} as any
     const setter = FirestoreSetter.to(
-      new MockCollectionReference(data).doc('documentId') as firebase.firestore.DocumentReference
+      new MockCollectionReference(data).doc(
+        'documentId'
+      ) as firebase.firestore.DocumentReference
     )
     const result = setter.set({ name: 'test' })
     await flushPromises()

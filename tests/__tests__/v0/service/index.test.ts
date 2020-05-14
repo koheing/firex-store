@@ -14,7 +14,7 @@ describe('FirestoreService', () => {
     const result = await FirestoreService.find({
       ref,
       errorHandler,
-      completionHandler
+      completionHandler,
     })
     expect(result.name).toEqual('test')
     expect(completionHandler).toHaveBeenCalled()
@@ -28,7 +28,7 @@ describe('FirestoreService', () => {
     const errorHandler = jest.fn()
     const result = await FirestoreService.find({
       ref,
-      errorHandler
+      errorHandler,
     })
     expect(errorHandler).toHaveBeenCalled()
     done()
@@ -43,7 +43,7 @@ describe('FirestoreService', () => {
     const result = await FirestoreService.find({
       ref,
       errorHandler,
-      completionHandler
+      completionHandler,
     })
     expect(result).toBeNull()
     expect(completionHandler).toHaveBeenCalled()
@@ -51,11 +51,13 @@ describe('FirestoreService', () => {
   })
 
   it('findAll: return vaule', async (done) => {
-    const ref = new MockQueryReference(Promise.resolve(new MockQuerySnapshot())) as firebase.firestore.Query
+    const ref = new MockQueryReference(
+      Promise.resolve(new MockQuerySnapshot())
+    ) as firebase.firestore.Query
     const completionHandler = jest.fn()
     const result = await FirestoreService.findAll({
       ref,
-      completionHandler
+      completionHandler,
     })
     expect(result[0].count).toEqual(0)
     expect(completionHandler).toHaveBeenCalled()
@@ -69,7 +71,7 @@ describe('FirestoreService', () => {
     const errorHandler = jest.fn()
     const result = await FirestoreService.findAll({
       ref,
-      errorHandler
+      errorHandler,
     })
     expect(errorHandler).toHaveBeenCalled()
     done()
@@ -82,7 +84,7 @@ describe('FirestoreService', () => {
     const completionHandler = jest.fn()
     const result = await FirestoreService.findAll({
       ref,
-      completionHandler
+      completionHandler,
     })
     expect(result).toBeNull()
     expect(completionHandler).toHaveBeenCalled()
@@ -98,7 +100,7 @@ describe('FirestoreService', () => {
     const completionHandler = jest.fn()
     const result = await FirestoreService.findAll({
       ref,
-      completionHandler
+      completionHandler,
     })
     expect(result).toBeNull()
     expect(completionHandler).toHaveBeenCalled()

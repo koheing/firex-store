@@ -262,7 +262,7 @@ describe('FirestoreRepository', () => {
     expect(errorHandler).toHaveBeenCalled()
   })
 
-  xit('delete: with transaction, return void', async (done) => {
+  it('delete: with transaction, return void', async () => {
     const mockDeleteTransaction = transacitonOfDelete as jest.Mock
     mockDeleteTransaction.mockImplementation((...args: any[]) =>
       Promise.resolve()
@@ -398,7 +398,7 @@ describe('FirestoreRepository', () => {
     expect(errorHandler).toHaveBeenCalled()
   })
 
-  it('subscribeOnce: succeeded', async () => {
+  it('subscribeOnce: succeeded, find', async () => {
     const mockIsDocumentRef = (isDocumentRef as unknown) as jest.Mock
     mockIsDocumentRef.mockImplementationOnce(() => true)
     const ref = {
@@ -421,5 +421,22 @@ describe('FirestoreRepository', () => {
     expect(errorHandler).not.toHaveBeenCalled()
     expect(afterMutationCalled).toHaveBeenCalled()
     expect(completionHandler).toHaveBeenCalled()
+  })
+
+  it('subscribeOnce: succeeded, findAll', async () => {
+    const mockIsDocumentRef = (isDocumentRef as unknown) as jest.Mock
+    mockIsDocumentRef.mockImplementationOnce(() => false)
+    const ref = {
+      get: () => Promise.resolve(mockQuerySnapshot),
+    }
+
+    const result = await FirestoreRepository.subscribeOnce({
+      statePropName: '',
+      callMutation: jest.fn(),
+      // @ts-ignore
+      ref,
+    })
+
+    expect(result.length).toEqual(2)
   })
 })

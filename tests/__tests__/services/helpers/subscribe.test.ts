@@ -2,7 +2,7 @@ import { MockQueryReference } from '../../../mocks/mock-query-reference'
 import { MockDocumentReference } from '../../../mocks/mock-document-reference'
 import {
   subscribeFirestoreCollection,
-  subscribeFirestoreDocument
+  subscribeFirestoreDocument,
 } from '../../../../src/services/helpers'
 import { MockQuerySnapshot } from '../../../mocks/mock-query-snapshot'
 import { FirestoreRepository } from '../../../../src/repositories'
@@ -21,7 +21,7 @@ describe('subscribe test', () => {
       commit: jest.fn(),
       ref: new MockQueryReference(
         Promise.resolve(new MockQuerySnapshot())
-      ) as firebase.firestore.Query
+      ) as firebase.firestore.Query,
     })
 
     expect(mockState[FIREX_UNSUBSCRIBES].size).toEqual(2)
@@ -40,7 +40,7 @@ describe('subscribe test', () => {
       commit: jest.fn(),
       ref: new MockDocumentReference(
         Promise.resolve(new MockDocumentSnapshot())
-      ) as firebase.firestore.DocumentReference
+      ) as firebase.firestore.DocumentReference,
     })
 
     expect(mockState[FIREX_UNSUBSCRIBES].size).toEqual(2)

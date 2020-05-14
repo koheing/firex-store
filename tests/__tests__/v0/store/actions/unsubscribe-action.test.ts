@@ -5,7 +5,7 @@ import {
   actionTypes,
   firestoreMutations,
   firestoreUnsubscribeActions,
-  firestoreUnsubscribeAction
+  firestoreUnsubscribeAction,
 } from '../../../../../src/v0'
 import { unsubscribeFirestore } from '../../../../../src/v0/store/helpers/unsubscribe'
 jest.mock('../../../../../src/v0/store/helpers/unsubscribe')
@@ -20,7 +20,7 @@ describe('unsubscribe-action', () => {
       state: {},
       getters: {},
       mutations: {},
-      actions: {}
+      actions: {},
     })
   })
 
@@ -28,17 +28,20 @@ describe('unsubscribe-action', () => {
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
-        comments: null
+        comments: null,
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
+        ...firestoreMutations({
+          statePropName: 'comments',
+          type: 'collection',
+        }),
       },
       actions: {
         ...firestoreUnsubscribeActions({
-          type: 'collection'
-        })
-      }
+          type: 'collection',
+        }),
+      },
     }
 
     store.registerModule('comment', commentModule)
@@ -54,18 +57,21 @@ describe('unsubscribe-action', () => {
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
-        comments: null
+        comments: null,
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
+        ...firestoreMutations({
+          statePropName: 'comments',
+          type: 'collection',
+        }),
       },
       actions: {
         ...firestoreUnsubscribeActions({
           type: 'collection',
-          actionName: 'test'
-        })
-      }
+          actionName: 'test',
+        }),
+      },
     }
 
     store.registerModule('comment', commentModule)
@@ -81,17 +87,17 @@ describe('unsubscribe-action', () => {
     const userModule: Module<any, any> = {
       namespaced: true,
       state: {
-        user: null
+        user: null,
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'user', type: 'document' })
+        ...firestoreMutations({ statePropName: 'user', type: 'document' }),
       },
       actions: {
         ...firestoreUnsubscribeActions({
-          type: 'document'
-        })
-      }
+          type: 'document',
+        }),
+      },
     }
 
     store.registerModule('user', userModule)
@@ -112,7 +118,7 @@ describe('unsubscribe-action', () => {
       state: {},
       getters: {},
       mutations: {},
-      actions: {}
+      actions: {},
     })
   })
 
@@ -120,17 +126,20 @@ describe('unsubscribe-action', () => {
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
-        comments: null
+        comments: null,
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
+        ...firestoreMutations({
+          statePropName: 'comments',
+          type: 'collection',
+        }),
       },
       actions: {
         ...firestoreUnsubscribeAction({
-          type: 'collection'
-        })
-      }
+          type: 'collection',
+        }),
+      },
     }
 
     store.registerModule('comment', commentModule)
@@ -146,18 +155,21 @@ describe('unsubscribe-action', () => {
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
-        comments: null
+        comments: null,
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'comments', type: 'collection' })
+        ...firestoreMutations({
+          statePropName: 'comments',
+          type: 'collection',
+        }),
       },
       actions: {
         ...firestoreUnsubscribeAction({
           type: 'collection',
-          actionName: 'test'
-        })
-      }
+          actionName: 'test',
+        }),
+      },
     }
 
     store.registerModule('comment', commentModule)
@@ -173,17 +185,17 @@ describe('unsubscribe-action', () => {
     const userModule: Module<any, any> = {
       namespaced: true,
       state: {
-        user: null
+        user: null,
       },
       getters: {},
       mutations: {
-        ...firestoreMutations({ statePropName: 'user', type: 'document' })
+        ...firestoreMutations({ statePropName: 'user', type: 'document' }),
       },
       actions: {
         ...firestoreUnsubscribeAction({
-          type: 'document'
-        })
-      }
+          type: 'document',
+        }),
+      },
     }
 
     store.registerModule('user', userModule)

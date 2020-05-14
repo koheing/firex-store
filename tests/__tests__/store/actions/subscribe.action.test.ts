@@ -4,12 +4,12 @@ import { Store, Module } from 'vuex'
 import {
   firestoreSubscribeAction,
   actionTypes,
-  firestoreMutations
+  firestoreMutations,
 } from '../../../../src'
 import { firestore } from '../../../mocks/firebase'
 import {
   subscribeFirestoreCollection,
-  subscribeFirestoreDocument
+  subscribeFirestoreDocument,
 } from '../../../../src/services/helpers/subscribe'
 import { FirestoreSubscriber } from '../../../../src/services'
 jest.mock('../../../../src/services/helpers/subscribe')
@@ -24,7 +24,7 @@ describe('subscribe-action', () => {
       state: {},
       getters: {},
       mutations: {},
-      actions: {}
+      actions: {},
     })
 
     jest.clearAllMocks()
@@ -34,19 +34,19 @@ describe('subscribe-action', () => {
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
-        comments: null
+        comments: null,
       },
       getters: {},
       mutations: {
-        ...firestoreMutations('collection')
+        ...firestoreMutations('collection'),
       },
       actions: {
         ...firestoreSubscribeAction(
           FirestoreSubscriber.from(firestore.collection('/comments')).bindTo(
             'comments'
           )
-        )
-      }
+        ),
+      },
     }
 
     store.registerModule('comment', commentModule)
@@ -62,11 +62,11 @@ describe('subscribe-action', () => {
     const commentModule: Module<any, any> = {
       namespaced: true,
       state: {
-        comments: null
+        comments: null,
       },
       getters: {},
       mutations: {
-        ...firestoreMutations('collection')
+        ...firestoreMutations('collection'),
       },
       actions: {
         ...firestoreSubscribeAction(
@@ -74,8 +74,8 @@ describe('subscribe-action', () => {
             'comments'
           ),
           { actionName: 'test' }
-        )
-      }
+        ),
+      },
     }
 
     store.registerModule('comment', commentModule)
@@ -91,19 +91,19 @@ describe('subscribe-action', () => {
     const userModule: Module<any, any> = {
       namespaced: true,
       state: {
-        user: null
+        user: null,
       },
       getters: {},
       mutations: {
-        ...firestoreMutations('document')
+        ...firestoreMutations('document'),
       },
       actions: {
         ...firestoreSubscribeAction(
           FirestoreSubscriber.from(
             firestore.collection('/users').doc('docId')
           ).bindTo('userId')
-        )
-      }
+        ),
+      },
     }
 
     store.registerModule('user', userModule)

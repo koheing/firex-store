@@ -1,6 +1,6 @@
 import {
   transactionOfSetOrMergeSet,
-  transacitonOfDelete
+  transacitonOfDelete,
 } from '../../../../src/repositories/helpers'
 import { MockDocumentReference } from '../../../mocks/mock-document-reference'
 import { MockDocumentSnapshot } from '../../../mocks/mock-document-snapshot'
@@ -21,7 +21,7 @@ describe('transactionOfSetOrMergeSet', () => {
       ) as firebase.firestore.DocumentReference,
       data: { name: 'test' },
       merge: true,
-      transaction
+      transaction,
     })
     await flushPromises()
     expect(result).not.toBeUndefined()
@@ -44,7 +44,7 @@ describe('transactionOfSetOrMergeSet', () => {
       data: { name: 'test' },
       merge: true,
       transaction,
-      errorHandler
+      errorHandler,
     })
     await flushPromises()
     expect(result).toBeUndefined()
@@ -65,7 +65,7 @@ describe('transactionOfSetOrMergeSet', () => {
       ) as firebase.firestore.DocumentReference,
       data: { name: 'test' },
       merge: false,
-      transaction
+      transaction,
     })
     await flushPromises()
     expect(result).not.toBeUndefined()
@@ -91,7 +91,7 @@ describe('transactionOfSetOrMergeSet', () => {
       ) as firebase.firestore.DocumentReference,
       data: { name: 'test' },
       merge: false,
-      transaction
+      transaction,
     })
     await flushPromises()
     expect(result).toBeUndefined()
@@ -110,7 +110,7 @@ describe('transacitonOfDelete', () => {
       ref: new MockDocumentReference(
         Promise.resolve(new MockDocumentSnapshot(false))
       ) as firebase.firestore.DocumentReference,
-      transaction
+      transaction,
     })
     await flushPromises()
     expect(result).not.toBeUndefined()
@@ -133,7 +133,7 @@ describe('transacitonOfDelete', () => {
         Promise.resolve(documentSnap)
       ) as firebase.firestore.DocumentReference,
       transaction,
-      errorHandler
+      errorHandler,
     })
     await flushPromises()
     expect(result).toBeUndefined()

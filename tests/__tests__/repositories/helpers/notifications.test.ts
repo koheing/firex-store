@@ -1,7 +1,7 @@
 import {
   notifyNotFound,
   notifyCompletionIfDefined,
-  notifyErrorOccurred
+  notifyErrorOccurred,
 } from '../../../../src/repositories/helpers'
 
 describe('notifyErrorHandler', () => {
