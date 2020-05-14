@@ -4,7 +4,7 @@ import {
   AfterMutationCalled,
   Context,
   FirestoreAction,
-  MutationHandler
+  MutationHandler,
 } from '../../types'
 import { createStream } from 'stream-executor'
 

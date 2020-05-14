@@ -2,7 +2,7 @@ import {
   NotFoundHandler,
   MutationType,
   ErrorHandler,
-  CompletionHandler
+  CompletionHandler,
 } from '../../types'
 
 export const notifyNotFound = (

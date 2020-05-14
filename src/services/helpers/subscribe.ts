@@ -28,7 +28,7 @@ const asProcedure = () => {
     state,
     commit,
     ref,
-    options
+    options,
   }: ProcedureParameter<
     firebase.firestore.Query | firebase.firestore.CollectionReference,
     T
@@ -46,7 +46,7 @@ const asProcedure = () => {
     const unsubscribe = FirestoreRepository.subscribeAll({
       ref,
       mutationHandler,
-      ...options
+      ...options,
     })
 
     return unsubscribe
@@ -56,7 +56,7 @@ const asProcedure = () => {
     state,
     commit,
     ref,
-    options
+    options,
   }: ProcedureParameter<firebase.firestore.DocumentReference, T>) => {
     const { mapper, afterMutationCalled } = options
     const callMutation = createMutation({ mutationType: 'document', commit })
@@ -70,7 +70,7 @@ const asProcedure = () => {
     const unsubscribe = FirestoreRepository.subscribe({
       ref,
       mutationHandler,
-      ...options
+      ...options,
     })
 
     return unsubscribe
@@ -85,7 +85,7 @@ const asStream = () => {
     setUnsubscriber,
     actions,
     ref,
-    options
+    options,
   }: StreamParameter<
     firebase.firestore.Query | firebase.firestore.CollectionReference
   >) => {
@@ -100,7 +100,7 @@ const asStream = () => {
     const unsubscribe = FirestoreRepository.subscribeAll({
       ref,
       mutationHandler,
-      ...options
+      ...options,
     })
 
     return unsubscribe
@@ -110,7 +110,7 @@ const asStream = () => {
     setUnsubscriber,
     actions,
     ref,
-    options
+    options,
   }: StreamParameter<firebase.firestore.DocumentReference>) => {
     const callMutation = createMutation({ mutationType: 'document', commit })
 
@@ -123,7 +123,7 @@ const asStream = () => {
     const unsubscribe = FirestoreRepository.subscribe({
       ref,
       mutationHandler,
-      ...options
+      ...options,
     })
 
     return unsubscribe

@@ -1,7 +1,7 @@
 import { Commit } from 'vuex'
 import {
   FIREX_COLLECTION_UNSUBSCRIBER,
-  FIREX_DOCUMENT_UNSUBSCRIBER
+  FIREX_DOCUMENT_UNSUBSCRIBER,
 } from '../configurations'
 import { FirestoreService } from '../../service'
 import { FirestoreRef, CallMutation } from '../../types'
@@ -21,7 +21,7 @@ const subscribeFirestoreCollection = <T = any>({
   state,
   commit,
   ref,
-  options
+  options,
 }: Criteria<
   firebase.firestore.Query | firebase.firestore.CollectionReference,
   T
@@ -37,7 +37,7 @@ const subscribeFirestoreCollection = <T = any>({
   const unsubscriber = FirestoreService.subscribeAll({
     ref,
     callMutation: mutation,
-    ...options
+    ...options,
   })
 
   state[FIREX_COLLECTION_UNSUBSCRIBER] = unsubscriber
@@ -47,7 +47,7 @@ const subscribeFirestoreDocument = <T = any>({
   state,
   commit,
   ref,
-  options
+  options,
 }: Criteria<firebase.firestore.DocumentReference, T>) => {
   if (state[FIREX_DOCUMENT_UNSUBSCRIBER]) {
     return
@@ -60,7 +60,7 @@ const subscribeFirestoreDocument = <T = any>({
   const unsubscriber = FirestoreService.subscribe({
     ref,
     callMutation: mutation,
-    ...options
+    ...options,
   })
 
   state[FIREX_DOCUMENT_UNSUBSCRIBER] = unsubscriber
@@ -83,19 +83,19 @@ export const subscribeFirestore = <T = any>({
   state,
   commit,
   ref,
-  options
+  options,
 }: Criteria<FirestoreRef, T>) => {
   isDocumentRef(ref)
     ? subscribeFirestoreDocument({
         state,
         commit,
         ref,
-        options
+        options,
       })
     : subscribeFirestoreCollection({
         state,
         commit,
         ref,
-        options
+        options,
       })
 }

@@ -1,20 +1,22 @@
+/* eslint-disable no-import-assign */
 import { FirestoreRepository } from '../../../src/repositories'
-import { FirestoreMapper } from '../../../src/models'
-import * as RepositoryHelpers from '../../../src/repositories/helpers'
+import {
+  transactionOfSetOrMergeSet,
+  transacitonOfDelete,
+} from '../../../src/repositories/helpers/transactions'
+import { isDocumentRef } from '../../../src/utils/is-document-ref'
+
+jest.mock('../../../src/repositories/helpers/transactions')
+jest.mock('../../../src/utils/is-document-ref')
 
 describe('FirestoreRepository', () => {
   afterEach(() => {
     jest.clearAllMocks()
   })
-  class MockModel extends FirestoreMapper {
-    static fromJson(data: any) {
-      console.log('mapper')
-    }
-  }
   const mockDocumentSnapshot = {
     id: 'chara001',
     exists: true,
-    data: jest.fn(() => ({ name: 'sans' }))
+    data: jest.fn(() => ({ name: 'sans' })),
   }
 
   const mockQuerySnapshot = {
@@ -24,14 +26,24 @@ describe('FirestoreRepository', () => {
       {
         id: 'chara002',
         exists: true,
-        data: jest.fn(() => ({ name: 'papyrus' }))
-      }
-    ]
+        data: jest.fn(() => ({ name: 'papyrus' })),
+      },
+    ],
+    docChanges: () => [
+      { doc: mockDocumentSnapshot },
+      {
+        doc: {
+          id: 'chara002',
+          exists: true,
+          data: jest.fn(() => ({ name: 'papyrus' })),
+        },
+      },
+    ],
   }
 
   it('find: return vaule', async () => {
     const ref = {
-      get: () => Promise.resolve(mockDocumentSnapshot)
+      get: () => Promise.resolve(mockDocumentSnapshot),
     }
     const errorHandler = (error?: any) => jest.fn()
     const completionHandler = jest.fn()
@@ -39,7 +51,7 @@ describe('FirestoreRepository', () => {
       // @ts-ignore
       ref,
       errorHandler,
-      completionHandler
+      completionHandler,
     })
     expect(result.name).toEqual('sans')
     expect(completionHandler).toHaveBeenCalled()
@@ -47,19 +59,19 @@ describe('FirestoreRepository', () => {
 
   it('find: return null', async () => {
     const ref = {
-      get: () => Promise.resolve({ ...mockDocumentSnapshot, exists: false })
+      get: () => Promise.resolve({ ...mockDocumentSnapshot, exists: false }),
     }
 
     const result = await FirestoreRepository.find({
       // @ts-ignore
-      ref
+      ref,
     })
     expect(result).toBeNull()
   })
 
   it('find: error occured', async () => {
     const ref = {
-      get: () => Promise.reject(new Error('find error'))
+      get: () => Promise.reject(new Error('find error')),
     }
 
     const errorHandler = jest.fn()
@@ -72,7 +84,7 @@ describe('FirestoreRepository', () => {
 
   it('findAll: return vaule', async () => {
     const ref = {
-      get: () => Promise.resolve(mockQuerySnapshot)
+      get: () => Promise.resolve(mockQuerySnapshot),
     }
     const errorHandler = (error?: any) => jest.fn()
     const completionHandler = jest.fn()
@@ -80,20 +92,22 @@ describe('FirestoreRepository', () => {
       // @ts-ignore
       ref,
       errorHandler,
-      completionHandler
+      completionHandler,
     })
-    expect(result.length).toEqual(2)
+    if (result && Array.isArray(result)) {
+      expect(result.length).toEqual(2)
+    }
     expect(completionHandler).toHaveBeenCalled()
   })
 
   it('findAll: return null', async () => {
     const ref = {
-      get: () => Promise.resolve({ ...mockQuerySnapshot, empty: true })
+      get: () => Promise.resolve({ ...mockQuerySnapshot, empty: true }),
     }
 
     const result = await FirestoreRepository.findAll({
       // @ts-ignore
-      ref
+      ref,
     })
     expect(result).toBeNull()
   })
@@ -103,20 +117,20 @@ describe('FirestoreRepository', () => {
       get: () =>
         Promise.resolve({
           ...mockQuerySnapshot,
-          docs: mockQuerySnapshot.docs.map((it) => ({ ...it, exists: false }))
-        })
+          docs: mockQuerySnapshot.docs.map((it) => ({ ...it, exists: false })),
+        }),
     }
 
     const result = await FirestoreRepository.findAll({
       // @ts-ignore
-      ref
+      ref,
     })
     expect(result).toBeNull()
   })
 
   it('findAll: error occured', async () => {
     const ref = {
-      get: () => Promise.reject(new Error('find error'))
+      get: () => Promise.reject(new Error('find error')),
     }
 
     const errorHandler = jest.fn()
@@ -129,14 +143,14 @@ describe('FirestoreRepository', () => {
 
   it('add: return documentId', async () => {
     const ref = {
-      add: (data: any) => Promise.resolve({ ...data, id: 'chara002' })
+      add: (data: any) => Promise.resolve({ ...data, id: 'chara002' }),
     }
 
     const result = await FirestoreRepository.add({
       data: { name: 'ariel' },
       // @ts-ignore
       ref,
-      mapper: (it) => it
+      mapper: (it) => it,
     })
 
     expect(result).toEqual('chara002')
@@ -145,14 +159,14 @@ describe('FirestoreRepository', () => {
   it('add: error occured', async () => {
     const error = new Error('add error')
     const ref = {
-      add: (data: any) => Promise.reject(error)
+      add: (data: any) => Promise.reject(error),
     }
 
     const result = await FirestoreRepository.add({
       data: { name: 'ariel' },
       // @ts-ignore
       ref,
-      mapper: (it) => it
+      mapper: (it) => it,
     })
 
     expect(result).toEqual(error)
@@ -160,7 +174,7 @@ describe('FirestoreRepository', () => {
 
   it('set: no transaction, return void', async () => {
     const ref = {
-      set: (data: any, options?: any) => Promise.resolve()
+      set: (data: any, options?: any) => Promise.resolve(),
     }
 
     const result = await FirestoreRepository.set({
@@ -169,7 +183,7 @@ describe('FirestoreRepository', () => {
       isTransaction: false,
       // @ts-ignore
       ref,
-      mapper: (it) => it
+      mapper: (it) => it,
     })
 
     expect(result).toBeUndefined()
@@ -178,7 +192,7 @@ describe('FirestoreRepository', () => {
   it('set: no transaction, error occured', async () => {
     const error = new Error('set error')
     const ref = {
-      set: (data: any, options?: any) => Promise.reject(error)
+      set: (data: any, options?: any) => Promise.reject(error),
     }
 
     const result = await FirestoreRepository.set({
@@ -187,26 +201,22 @@ describe('FirestoreRepository', () => {
       isTransaction: false,
       // @ts-ignore
       ref,
-      mapper: (it) => it
+      mapper: (it) => it,
     })
 
     expect(result).toEqual(error)
   })
 
   it('set: with transaction, return void', async () => {
-    const mockTransaction = jest.fn()
-    const transactionOfSetOrMergeSet =
-      RepositoryHelpers.transactionOfSetOrMergeSet
-
-    // @ts-ignore
-    RepositoryHelpers.transactionOfSetOrMergeSet = mockTransaction
+    const mockSetTransaction = transactionOfSetOrMergeSet as jest.Mock
+    mockSetTransaction.mockImplementation((...args: any[]) => undefined)
     const ref = {
       set: (data: any, options?: any) => Promise.resolve(),
       firestore: {
-        runTransaction: (runTransaction: any) => {
-          runTransaction()
-        }
-      }
+        runTransaction: async (runTransaction: any) => {
+          await runTransaction()
+        },
+      },
     }
 
     await FirestoreRepository.set({
@@ -215,279 +225,201 @@ describe('FirestoreRepository', () => {
       isTransaction: true,
       // @ts-ignore
       ref,
-      mapper: (it) => it
+      mapper: (it) => it,
     })
 
-    // @ts-ignore
-    RepositoryHelpers.transactionOfSetOrMergeSet = transactionOfSetOrMergeSet
-
-    expect(mockTransaction).toHaveBeenCalled()
+    expect(mockSetTransaction).toHaveBeenCalled()
   })
 
-  // it('set: no transaction, return void', async (done) => {
-  //   const ref = new MockDocumentReference(
-  //     Promise.resolve(new MockDocumentSnapshot())
-  //   ) as firebase.firestore.DocumentReference
-  //   const mapper = (data: any) => ({ name: data.name })
-  //   const result = await FirestoreRepository.set({
-  //     data: { name: 'test' },
-  //     ref,
-  //     merge: false,
-  //     isTransaction: false,
-  //     mapper
-  //   })
-  //   expect(result).toBeUndefined()
-  //   done()
-  // })
+  it('delete: no transaction, return error', async () => {
+    const ref = {
+      delete: () => Promise.resolve(),
+    }
 
-  // it('set: no transaction, return error', async (done) => {
-  //   const ref = new MockDocumentReference(
-  //     Promise.resolve(new MockDocumentSnapshot()),
-  //     { setReturnData: Promise.reject({ message: 'error occured' } as Error) }
-  //   ) as firebase.firestore.DocumentReference
-  //   const mapper = (data: any) => ({ name: data.name })
-  //   const errorHandler = jest.fn(() => ({ message: 'error occured' } as Error))
-  //   const result = await FirestoreRepository.set({
-  //     data: { name: 'test' },
-  //     ref,
-  //     merge: false,
-  //     isTransaction: false,
-  //     mapper,
-  //     errorHandler
-  //   })
-  //   expect(result).toHaveProperty('message')
-  //   done()
-  // })
+    const result = await FirestoreRepository.delete({
+      // @ts-ignore
+      ref,
+      isTransaction: false,
+    })
 
-  // it('set: transaction, return void', async (done) => {
-  //   const ref = new MockDocumentReference(
-  //     Promise.resolve(new MockDocumentSnapshot())
-  //   ) as firebase.firestore.DocumentReference
-  //   const mapper = (data: any) => ({ name: data.name })
-  //   const result = await FirestoreRepository.set({
-  //     data: { name: 'test' },
-  //     ref,
-  //     merge: false,
-  //     isTransaction: true,
-  //     mapper
-  //   })
-  //   expect(result).toBeUndefined()
-  //   done()
-  // })
+    expect(result).toBeUndefined()
+  })
 
-  // it('delete: no transaction, return error', async (done) => {
-  //   const ref = new MockDocumentReference(
-  //     Promise.resolve(new MockDocumentSnapshot()),
-  //     {
-  //       deleteReturnData: Promise.reject({ message: 'error occured' } as Error)
-  //     }
-  //   ) as firebase.firestore.DocumentReference
-  //   expect(ref.delete()).toBeInstanceOf(Promise)
-  //   const result = await FirestoreRepository.delete({
-  //     ref,
-  //     isTransaction: false
-  //   })
-  //   await flushPromises()
-  //   expect(result).toHaveProperty('message')
-  //   done()
-  // })
+  it('delete: no transaction, error occured', async () => {
+    const error = new Error('delete error')
+    const ref = {
+      delete: () => Promise.reject(error),
+    }
 
-  // it('delete: transaction, return void', async (done) => {
-  //   const ref = new MockDocumentReference(
-  //     Promise.resolve(new MockDocumentSnapshot())
-  //   ) as firebase.firestore.DocumentReference
-  //   const result = await FirestoreRepository.delete({
-  //     ref,
-  //     isTransaction: true
-  //   })
-  //   expect(result).toBeUndefined()
-  //   done()
-  // })
+    const errorHandler = jest.fn()
+    const result = await FirestoreRepository.delete({
+      // @ts-ignore
+      ref,
+      isTransaction: false,
+      errorHandler,
+    })
 
-  // it('findAll and find: fromJson called', async (done) => {
-  //   const spyMock = jest.spyOn(FirestoreRepository, 'findAll')
-  //   const ref = new MockQueryReference(
-  //     Promise.resolve(
-  //       new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
-  //     )
-  //   ) as firebase.firestore.Query
-  //   await FirestoreFinder.from(ref)
-  //     .mapOf(MockModel)
-  //     .find()
-  //   if (spyMock.mock.calls[0][0].mapper) {
-  //     expect(spyMock.mock.calls[0][0].mapper.name).toEqual('fromJson')
-  //   }
-  //   jest.clearAllMocks()
-  //   done()
-  // })
+    expect(errorHandler).toHaveBeenCalled()
+  })
 
-  // it('findAll and find: fromJson not called', async (done) => {
-  //   const spyMock = jest.spyOn(FirestoreRepository, 'findAll')
-  //   const ref = new MockQueryReference(
-  //     Promise.resolve(
-  //       new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
-  //     )
-  //   ) as firebase.firestore.Query
-  //   await FirestoreFinder.from(ref)
-  //     .mapOf(MockModel)
-  //     .find({ mapper: (data: any) => ({ count: data.count }) })
-  //   if (spyMock.mock.calls[0][0].mapper) {
-  //     expect(spyMock.mock.calls[0][0].mapper.name).toEqual('fromJson')
-  //   }
-  //   jest.clearAllMocks()
-  //   done()
-  // })
+  xit('delete: with transaction, return void', async (done) => {
+    const mockDeleteTransaction = transacitonOfDelete as jest.Mock
+    mockDeleteTransaction.mockImplementation((...args: any[]) =>
+      Promise.resolve()
+    )
+    const ref = {
+      firestore: {
+        runTransaction: async (
+          transaction: (...args: any[]) => Promise<void>
+        ) => {
+          await transaction()
+        },
+      },
+    }
+    const result = await FirestoreRepository.delete({
+      // @ts-ignore
+      ref,
+      isTransaction: true,
+    })
+    expect(result).toBeUndefined()
+  })
 
-  // it('subscribeAll and subscribe: fromJson called', () => {
-  //   const spyMock = jest.spyOn(FirestoreRepository, 'subscribeAll')
-  //   const ref = new MockQueryReference(
-  //     Promise.resolve(
-  //       new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
-  //     )
-  //   ) as firebase.firestore.Query
-  //   FirestoreSubscriber.from(ref)
-  //     .mapOf(MockModel)
-  //     .bindTo('test')
-  //     .subscribe({}, jest.fn())
-  //   if (spyMock.mock.calls[0][0].mapper) {
-  //     expect(spyMock.mock.calls[0][0].mapper.name).toEqual('fromJson')
-  //   }
-  //   jest.clearAllMocks()
-  // })
+  it('subscribe: succeeded', () => {
+    const ref = {
+      onSnapshot: (onNext: any) => {
+        onNext(mockDocumentSnapshot)
+      },
+    }
 
-  // it('subscribeAll and subscribe: fromJson not called', () => {
-  //   const spyMock = jest.spyOn(FirestoreRepository, 'subscribeAll')
-  //   const ref = new MockQueryReference(
-  //     Promise.resolve(
-  //       new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
-  //     )
-  //   ) as firebase.firestore.Query
-  //   FirestoreSubscriber.from(ref)
-  //     .mapOf(MockModel)
-  //     .bindTo('test')
-  //     .subscribe({}, jest.fn(), {
-  //       mapper: (data: any) => ({ count: data.count })
-  //     })
-  //   if (spyMock.mock.calls[0][0].mapper) {
-  //     expect(spyMock.mock.calls[0][0].mapper.name).toEqual('fromJson')
-  //   }
-  //   jest.clearAllMocks()
-  // })
+    const mutationHandler = jest.fn((...args: any[]) => undefined)
 
-  // it('add: toJson called', () => {
-  //   const spyMock = jest.spyOn(FirestoreRepository, 'add')
-  //   const ref = new MockCollectionReference(
-  //     Promise.resolve(
-  //       new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
-  //     )
-  //   ) as firebase.firestore.CollectionReference
-  //   FirestoreAdder.to(ref)
-  //     .mapOf(MockModel)
-  //     .add({}, { errorHandler: (error: any) => error })
-  //   if (spyMock.mock.calls[0][0].mapper) {
-  //     expect(spyMock.mock.calls[0][0].mapper.name).toEqual('toJson')
-  //   }
-  //   jest.clearAllMocks()
-  // })
+    FirestoreRepository.subscribe({
+      // @ts-ignore
+      ref,
+      mutationHandler,
+    })
 
-  // it('set: toJson called', () => {
-  //   const spyMock = jest.spyOn(FirestoreRepository, 'set')
-  //   const ref = new MockDocumentReference(
-  //     Promise.resolve(new MockDocumentSnapshot())
-  //   ) as firebase.firestore.DocumentReference
-  //   FirestoreSetter.to(ref)
-  //     .mapOf(MockModel)
-  //     .set({}, { errorHandler: (error: any) => error })
-  //   if (spyMock.mock.calls[0][0].mapper) {
-  //     expect(spyMock.mock.calls[0][0].mapper.name).toEqual('toJson')
-  //   }
-  //   jest.clearAllMocks()
-  // })
+    expect(mutationHandler).toHaveBeenCalled()
+    expect(mutationHandler.mock.calls[0][0].docId).toEqual('chara001')
+  })
 
-  // it('mergeSet: toJson called', () => {
-  //   const spyMock = jest.spyOn(FirestoreRepository, 'set')
-  //   const ref = new MockDocumentReference(
-  //     Promise.resolve(new MockDocumentSnapshot())
-  //   ) as firebase.firestore.DocumentReference
-  //   FirestoreMergeSetter.to(ref)
-  //     .mapOf(MockModel)
-  //     .mergeSet({}, { errorHandler: (error: any) => error })
-  //   if (spyMock.mock.calls[0][0].mapper) {
-  //     expect(spyMock.mock.calls[0][0].mapper.name).toEqual('toJson')
-  //   }
-  //   jest.clearAllMocks()
-  // })
+  it('subscribe: return null', () => {
+    const ref = {
+      onSnapshot: (onNext: any) => {
+        onNext({ exists: false })
+      },
+    }
 
-  // it('subscribeOnce: afterMutationCalled, completionHandler, errorHandler, callMutation called', async (done) => {
-  //   const ref = new MockQueryReference(
-  //     Promise.reject({ message: 'test error' } as Error)
-  //   ) as firebase.firestore.Query
-  //   const errorHandler = jest.fn()
-  //   const afterMutationCalled = jest.fn()
-  //   const completionHandler = jest.fn()
-  //   const callMutation = jest.fn()
-  //   const result = await FirestoreRepository.subscribeOnce({
-  //     ref,
-  //     errorHandler,
-  //     callMutation,
-  //     statePropName: '',
-  //     afterMutationCalled,
-  //     completionHandler
-  //   })
-  //   expect(errorHandler).toHaveBeenCalled()
-  //   expect(afterMutationCalled).toHaveBeenCalled()
-  //   expect(completionHandler).toHaveBeenCalled()
-  //   expect(callMutation).toHaveBeenCalled()
+    const notFoundHandler = jest.fn()
 
-  //   jest.clearAllMocks()
-  //   done()
-  // })
+    FirestoreRepository.subscribe({
+      // @ts-ignore
+      ref,
+      mutationHandler: jest.fn(),
+      notFoundHandler,
+    })
 
-  // it('subscribeOnce: error occured', async (done) => {
-  //   const ref = new MockQueryReference(
-  //     Promise.resolve(
-  //       new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
-  //     )
-  //   ) as firebase.firestore.Query
-  //   const mapper = (data: any) => ({ ...data })
-  //   const errorHandler = jest.fn()
-  //   FirestoreRepository.findAll = ({
-  //     errorHandler,
-  //     ref,
-  //     completionHandler,
-  //     mapper
-  //   }) => Promise.resolve(new Error('error occured'))
-  //   const result = await FirestoreRepository.subscribeOnce({
-  //     ref,
-  //     errorHandler,
-  //     statePropName: '',
-  //     callMutation: jest.fn()
-  //   })
-  //   if (result instanceof Error) {
-  //     expect(result).toHaveProperty('message')
-  //   }
+    expect(notFoundHandler).toHaveBeenCalled()
+  })
 
-  //   jest.clearAllMocks()
-  //   done()
-  // })
+  it('subscribe: error occured', () => {
+    const ref = {
+      onSnapshot: (_: any, onError: any) => {
+        onError(new Error('subscribe error'))
+      },
+    }
 
-  // it('subscribeOnce: return null', async (done) => {
-  //   const ref = new MockQueryReference(
-  //     Promise.resolve(
-  //       new MockQuerySnapshot(false, [new MockDocumentSnapshot(false, null)])
-  //     )
-  //   ) as firebase.firestore.Query
-  //   const errorHandler = jest.fn()
-  //   FirestoreRepository.findAll = ({ ref, completionHandler, errorHandler }) =>
-  //     Promise.resolve(null)
-  //   const result = await FirestoreRepository.subscribeOnce({
-  //     ref,
-  //     errorHandler,
-  //     statePropName: '',
-  //     callMutation: jest.fn()
-  //   })
-  //   expect(result).toBeNull()
-  //   jest.clearAllMocks()
-  //   done()
-  // })
+    const errorHandler = jest.fn()
+
+    FirestoreRepository.subscribe({
+      // @ts-ignore
+      ref,
+      mutationHandler: jest.fn(),
+      errorHandler,
+    })
+
+    expect(errorHandler).toHaveBeenCalled()
+  })
+
+  it('subscribeAll: succeeded', () => {
+    const ref = {
+      onSnapshot: (onNext: any) => {
+        onNext(mockQuerySnapshot)
+      },
+    }
+
+    const mutationHandler = jest.fn((...args: any[]) => undefined)
+
+    FirestoreRepository.subscribeAll({
+      // @ts-ignore
+      ref,
+      mutationHandler,
+    })
+
+    expect(mutationHandler).toHaveBeenCalled()
+    expect(mutationHandler.mock.calls[0][0].docId).toEqual('chara001')
+  })
+
+  it('subscribeAll: return null', () => {
+    const ref = {
+      onSnapshot: (onNext: any) => {
+        onNext({ empty: true })
+      },
+    }
+
+    const notFoundHandler = jest.fn()
+
+    FirestoreRepository.subscribeAll({
+      // @ts-ignore
+      ref,
+      mutationHandler: jest.fn(),
+      notFoundHandler,
+    })
+
+    expect(notFoundHandler).toHaveBeenCalled()
+  })
+
+  it('subscribeAll: error occured', () => {
+    const ref = {
+      onSnapshot: (_: any, onError: any) => {
+        onError(new Error('subscribeAll error'))
+      },
+    }
+
+    const errorHandler = jest.fn()
+
+    FirestoreRepository.subscribeAll({
+      // @ts-ignore
+      ref,
+      mutationHandler: jest.fn(),
+      errorHandler,
+    })
+
+    expect(errorHandler).toHaveBeenCalled()
+  })
+
+  it('subscribeOnce: succeeded', async () => {
+    const mockIsDocumentRef = (isDocumentRef as unknown) as jest.Mock
+    mockIsDocumentRef.mockImplementationOnce(() => true)
+    const ref = {
+      get: () => Promise.resolve(mockDocumentSnapshot),
+    }
+    const errorHandler = jest.fn()
+    const afterMutationCalled = jest.fn()
+    const completionHandler = jest.fn()
+    const result = await FirestoreRepository.subscribeOnce({
+      statePropName: 'charactors',
+      // @ts-ignore
+      ref,
+      callMutation: jest.fn(),
+      errorHandler,
+      completionHandler,
+      afterMutationCalled,
+    })
+
+    expect(result.docId).toEqual('chara001')
+    expect(errorHandler).not.toHaveBeenCalled()
+    expect(afterMutationCalled).toHaveBeenCalled()
+    expect(completionHandler).toHaveBeenCalled()
+  })
 })

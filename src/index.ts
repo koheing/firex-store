@@ -6,14 +6,14 @@ export {
   FirestoreAdder,
   FirestoreMergeSetter,
   FirestoreSetter,
-  FirestoreDeleter
+  FirestoreDeleter,
 } from './services'
 export {
   Mapper,
   AfterMutationCalled,
   ErrorHandler,
   CompletionHandler,
-  NotFoundHandler
+  NotFoundHandler,
 } from './types'
 export { Payload, DocumentResult, AppError, FirestoreMapper } from './models'
 export { from, on, to } from './creators'

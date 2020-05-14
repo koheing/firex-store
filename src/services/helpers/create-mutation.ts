@@ -18,5 +18,5 @@ export const createMutation = ({ mutationType, commit }: MutationParameter) => (
     mutationType,
     changeType,
     commit,
-    payload: { statePropName, isLast, data }
+    payload: { statePropName, isLast, data },
   })

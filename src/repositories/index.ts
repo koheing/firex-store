@@ -5,14 +5,14 @@ import {
   DocumentId,
   Unsubscribe,
   FirestoreRef,
-  MutationHandler
+  MutationHandler,
 } from '../types'
 import {
   SubscribeOptionsParameter,
   FindOptionsParameter,
   AddOptionsParameter,
   SetOptionsParameter,
-  DeleteOptionsParameter
+  DeleteOptionsParameter,
 } from '../parameters'
 import {
   toDocumentResult,
@@ -20,7 +20,7 @@ import {
   notifyErrorOccurred,
   notifyCompletionIfDefined,
   transactionOfSetOrMergeSet,
-  transacitonOfDelete
+  transacitonOfDelete,
 } from './helpers'
 import { AppError, Payload, DocumentResult } from '../models'
 import { isDocumentRef } from '../utils'
@@ -67,7 +67,7 @@ export class FirestoreRepository {
     mutationHandler,
     errorHandler,
     completionHandler,
-    notFoundHandler
+    notFoundHandler,
   }: SubscribeParameter<T, firebase.firestore.DocumentReference>): Unsubscribe {
     return ref.onSnapshot(
       (snapshot) =>
@@ -88,7 +88,7 @@ export class FirestoreRepository {
     mutationHandler,
     errorHandler,
     completionHandler,
-    notFoundHandler
+    notFoundHandler,
   }: SubscribeParameter<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
@@ -123,7 +123,7 @@ export class FirestoreRepository {
     errorHandler,
     completionHandler,
     afterMutationCalled,
-    notFoundHandler
+    notFoundHandler,
   }: SubscribeOnceParameter<T, FirestoreRef>): Promise<
     NullOr<Error | T | T[] | DocumentResult | DocumentResult[]>
   > {
@@ -133,12 +133,12 @@ export class FirestoreRepository {
       ? await this.find({
           ref,
           mapper,
-          errorHandler
+          errorHandler,
         })
       : await this.findAll({
           ref,
           mapper,
-          errorHandler
+          errorHandler,
         })
     if (result instanceof Error) {
       return result
@@ -167,7 +167,7 @@ export class FirestoreRepository {
     ref,
     mapper,
     errorHandler,
-    completionHandler
+    completionHandler,
   }: FindParameter<T, firebase.firestore.DocumentReference>): Promise<
     NullOr<T | DocumentResult | Error>
   > {
@@ -184,7 +184,7 @@ export class FirestoreRepository {
     ref,
     mapper,
     errorHandler,
-    completionHandler
+    completionHandler,
   }: FindParameter<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
@@ -214,7 +214,7 @@ export class FirestoreRepository {
     ref,
     mapper,
     errorHandler,
-    completionHandler
+    completionHandler,
   }: AddParameter<T, firebase.firestore.CollectionReference>): Promise<
     AppErrorOr<DocumentId>
   > {
@@ -236,7 +236,7 @@ export class FirestoreRepository {
     isTransaction,
     mapper,
     errorHandler,
-    completionHandler
+    completionHandler,
   }: SetParameter<T, firebase.firestore.DocumentReference>): Promise<
     AppErrorOr<void>
   > {
@@ -253,7 +253,7 @@ export class FirestoreRepository {
               ref,
               merge,
               mapper,
-              errorHandler
+              errorHandler,
             })
         )
 
@@ -266,7 +266,7 @@ export class FirestoreRepository {
     ref,
     isTransaction,
     errorHandler,
-    completionHandler
+    completionHandler,
   }: DeleteParamater<firebase.firestore.DocumentReference>) {
     const result: AppErrorOr<void> = !isTransaction
       ? await ref
@@ -277,7 +277,7 @@ export class FirestoreRepository {
             await transacitonOfDelete({
               ref,
               transaction,
-              errorHandler
+              errorHandler,
             })
         )
 

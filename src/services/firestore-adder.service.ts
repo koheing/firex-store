@@ -68,12 +68,12 @@ export class FirestoreAdder implements Adder {
     const _data = { ...data }
     const _options: AddOptionsParameter<any> = {
       ...options,
-      ...{ mapper: this._mapper }
+      ...{ mapper: this._mapper },
     }
     const result = await FirestoreRepository.add({
       ref: this._ref,
       data: _data,
-      ..._options
+      ..._options,
     })
     return result
   }

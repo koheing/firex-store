@@ -2,7 +2,7 @@ import { FirestoreRef, Context } from '../../types'
 import {
   FirestoreSubscriber,
   FirestoreFinder,
-  FirestoreStreamSubscriber
+  FirestoreStreamSubscriber,
 } from '../../services'
 import { Action } from 'stream-executor'
 

@@ -28,7 +28,7 @@ export const callDocumentMutation = <T = any>({
   isLast,
   type,
   mapper,
-  afterMutationCalled
+  afterMutationCalled,
 }: DocumentParameter<T>) => {
   const _type = type ? type : 'added'
 
@@ -48,7 +48,7 @@ export const callCollectionMutation = <T = any>({
   callMutation,
   mapper,
   afterMutationCalled,
-  notifyNotFound
+  notifyNotFound,
 }: CollectionParameter<T>) => {
   const length = snapshot.docChanges().length
   snapshot.docChanges().forEach((change, index) => {
@@ -61,7 +61,7 @@ export const callCollectionMutation = <T = any>({
           isLast: length === index + 1,
           type: change.type,
           mapper,
-          afterMutationCalled
+          afterMutationCalled,
         })
   })
 }

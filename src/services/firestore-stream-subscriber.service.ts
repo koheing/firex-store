@@ -46,7 +46,7 @@ export class FirestoreStreamSubscriber {
       act7,
       act8,
       act9,
-      act10
+      act10,
     ].filter((it) => typeof it !== 'undefined') as Action<any, any>[]
 
     return this as Pick<this, 'subscribe'>
@@ -71,7 +71,7 @@ export class FirestoreStreamSubscriber {
 
     const {
       subscribeFirestoreCollection,
-      subscribeFirestoreDocument
+      subscribeFirestoreDocument,
     } = createSubscriber().asStream()
 
     this._unsubscribe = isDocumentRef(this._ref)
@@ -80,14 +80,14 @@ export class FirestoreStreamSubscriber {
           setUnsubscriber,
           ref: this._ref,
           actions: this._actions,
-          options
+          options,
         })
       : subscribeFirestoreCollection({
           commit,
           setUnsubscriber,
           ref: this._ref,
           actions: this._actions,
-          options
+          options,
         })
   }
 }

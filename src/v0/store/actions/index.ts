@@ -1,8 +1,8 @@
 export {
   firestoreSubscribeActions,
-  firestoreSubscribeAction
+  firestoreSubscribeAction,
 } from './subscribe-action'
 export {
   firestoreUnsubscribeActions,
-  firestoreUnsubscribeAction
+  firestoreUnsubscribeAction,
 } from './unsibscribe-action'
