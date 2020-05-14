@@ -439,4 +439,63 @@ describe('FirestoreRepository', () => {
 
     expect(result.length).toEqual(2)
   })
+
+  it('subscribeOnce: error occured', async () => {
+    const error = new Error('subscribeOnce error')
+    const mockIsDocumentRef = (isDocumentRef as unknown) as jest.Mock
+    mockIsDocumentRef.mockImplementationOnce(() => true)
+    const ref = {
+      get: () => Promise.reject(error),
+    }
+    const errorHandler = jest.fn((error: any) => error)
+    const result = await FirestoreRepository.subscribeOnce({
+      statePropName: 'charactors',
+      // @ts-ignore
+      ref,
+      callMutation: jest.fn(),
+      errorHandler,
+    })
+    expect(errorHandler).toHaveBeenCalled()
+    expect(result).toEqual(error)
+  })
+
+  it('subscribeOnce: return null', async () => {
+    const mockIsDocumentRef = (isDocumentRef as unknown) as jest.Mock
+    mockIsDocumentRef.mockImplementation(() => true)
+    const ref = {
+      get: () => Promise.resolve({ exists: false }),
+    }
+    const notFoundHandler = jest.fn()
+    const result = await FirestoreRepository.subscribeOnce({
+      statePropName: 'charactors',
+      // @ts-ignore
+      ref,
+      callMutation: jest.fn(),
+      notFoundHandler,
+    })
+    expect(notFoundHandler).toHaveBeenCalled()
+    expect(result).toEqual(null)
+  })
+
+  it('subscribeOnce: return null', async () => {
+    const mockIsDocumentRef = (isDocumentRef as unknown) as jest.Mock
+    mockIsDocumentRef.mockImplementation(() => false)
+    const ref = {
+      get: () =>
+        Promise.resolve({
+          ...mockQuerySnapshot,
+          docs: mockQuerySnapshot.docs.map((it) => ({ ...it, exists: false })),
+        }),
+    }
+    const notFoundHandler = jest.fn()
+    const result = await FirestoreRepository.subscribeOnce({
+      statePropName: 'charactors',
+      // @ts-ignore
+      ref,
+      callMutation: jest.fn(),
+      notFoundHandler,
+    })
+    expect(notFoundHandler).toHaveBeenCalled()
+    expect(result).toEqual(null)
+  })
 })

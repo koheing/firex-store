@@ -3,10 +3,9 @@ import {
   CallMutation,
   AfterMutationCalled,
   Context,
-  FirestoreAction,
   MutationHandler,
 } from '../../types'
-import { createStream } from 'stream-executor'
+import { createStream, Action } from 'stream-executor'
 
 export const createMutationHandler = () => {
   const forProcedure = <T = any>(
@@ -32,7 +31,7 @@ export const createMutationHandler = () => {
   const forStream = (
     callMutation: (statePropName: string) => CallMutation,
     setUnsubscriber: (statePropName: string) => void,
-    actions: FirestoreAction<any, any>[]
+    actions: Action<any, any>[]
   ): MutationHandler => (
     data: { docId: string } & Record<string, any>,
     type: firebase.firestore.DocumentChangeType,

@@ -25,7 +25,7 @@ describe('createMutation', () => {
           const callMutation = createMutation({
             mutationType: 'collection',
             commit,
-          })
+          })('counts')
 
           callMutation('added', { data: { count: 1 }, statePropName: 'counts' })
         },
