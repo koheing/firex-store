@@ -46,11 +46,12 @@ export default {
   },
   actions: {
     streamSubscribe: ({ state, commit }) => {
+      const toComment = (data) => new Comment(...data)
       const ref = firestore.collection('comments')
       // write code like Rxjs
       from(ref)
-        .stream(
-          map((data) => ({ docId: data.docId, userId: data.user_id })), // option
+        .pipe(
+          map(toComment), // option
           bindTo('comments'),                                           // required
           (({ isLast }) => commit('setIsLoaded', isLast))               //option
         )

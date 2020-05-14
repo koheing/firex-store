@@ -48,7 +48,7 @@ export class FirestoreReaderServiceFactory {
     act9?: Action<H, I>,
     act10?: Action<I, J>
   ) {
-    return FirestoreStreamSubscriber.from(this._ref).stream(
+    return FirestoreStreamSubscriber.from(this._ref).pipe(
       act1,
       act2,
       act3,

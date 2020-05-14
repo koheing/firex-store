@@ -24,7 +24,7 @@ export class FirestoreStreamSubscriber {
     this._ref = ref
   }
 
-  stream<A, B, C, D, E, F, G, H, I, J>(
+  pipe<A, B, C, D, E, F, G, H, I, J>(
     act1: Action<Context<{ docId: string } & Record<string, any>>, A>,
     act2?: Action<A, B>,
     act3?: Action<B, C>,
