@@ -43,7 +43,7 @@ export class FirestoreUnsubscriber implements Unsubscriber {
     }
 
     const unsubscribe = unsubscribes.get(this.statePropName)
-    if (unsubscribe) {
+    if (unsubscribe && typeof unsubscribe == 'function') {
       unsubscribe()
     }
     unsubscribes.delete(this.statePropName)

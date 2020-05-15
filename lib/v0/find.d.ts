@@ -13,5 +13,5 @@ interface Criteria<T, U> {
  *   - completionHandler
  *   - onCompleted `deprecated`
  */
-export declare const findFirestore: <T = any>({ ref, options }: Criteria<FirestoreRef, T>) => Promise<NullOr<T>>;
+export declare const findFirestore: <T = any>({ ref, options, }: Criteria<FirestoreRef, T>) => Promise<NullOr<T>>;
 export {};

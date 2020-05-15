@@ -1,15 +1,16 @@
 ## Usage
 
-- [Subscribe Firestore, using firex-store actions](#1-subscribe-firestore-using-firex-store-actions)
-- [Subscribe Firestore, using custom actions](#2-subscribe-firestore-using-custom-actions)
-- [Unsubscribe Firestore, using firex-store actions](#3-unsubscribe-firestore-using-firex-store-actions)
-- [Unsubscribe Firestore, using custom actions](#4-unsubscribe-firestore-using-custom-actions)
-- [Fetch at Once](#5-fetch-at-once)
-- [Subscribe at Once](#6-subscribe-at-once)
-- [Add to firestore](#7-add-to-firestore)
-- [Set to firestore](#8-set-to-firestore)
-- [MergeSet to firestore (like Update)](#9-mergeSet-to-firestore-like-update)
-- [Helpers](#10-helpers)
+- [Subscribe Firestore, using firex-store actions](#subscribe-firestore-using-firex-store-actions)
+- [Subscribe Firestore, using custom actions](#subscribe-firestore-using-custom-actions)
+- [Subscribe Firestore, like rxjs](#subscribe-firestore-using-custom-actions)
+- [Unsubscribe Firestore, using firex-store actions](#unsubscribe-firestore-using-firex-store-actions)
+- [Unsubscribe Firestore, using custom actions](#unsubscribe-firestore-using-custom-actions)
+- [Fetch at Once](#fetch-at-once)
+- [Subscribe at Once](#subscribe-at-once)
+- [Add to firestore](#add-to-firestore)
+- [Set to firestore](#set-to-firestore)
+- [MergeSet to firestore (like Update)](#mergeSet-to-firestore-like-update)
+- [Helpers](#helpers)
   - [from and FirestoreReaderServiceFactory](#from-and-FirestoreReaderServiceFactory)
   - [on](#on)
   - [to and FirestoreDocumentWriterFacade](#to-and-FirestoreDocumentWriterFacade)
@@ -36,7 +37,7 @@ export const firestore = firebase.firestore()
 
 - `import { } from 'firex-store'`
 
-### 1. Subscribe Firestore, using firex-store actions
+### Subscribe Firestore, using firex-store actions
 
 - method: `firestoreMutations`
 - parameters:
@@ -125,7 +126,7 @@ export default {
 </script>
 ```
 
-### 2. Subscribe Firestore, using custom actions
+### Subscribe Firestore, using custom actions
 
 - method: `firestoreMutations`
 - parameters:
@@ -201,7 +202,73 @@ export default {
 </script>
 ```
 
-### 3. Unsubscribe Firestore, using firex-store actions
+### Subscribe Firestore, using like rxjs
+
+Ex. Unsubscribe collection, compared with `from(ref).bindTo('')`
+
+#### use `from(ref).pipe(...args)`
+```javascript
+import { from, map, bndTo, firestoreMutations } from 'firex-store'
+   
+const toCharactor = (data) => ({ id: data.docId, name: `${data.first_name} ${data.family_name}` })
+
+export default {
+  state: {
+    charactors: null,
+    isLoaded: false
+  },
+  mutations: {
+    ...firestoreMutations('all'),
+    setIsLoaded: (state, paylaod) => {
+      state.charactors = payload
+    }
+  },
+  actions: {
+    subscribe: ({ commit, state }, { collectionName }) => {
+      from(firebase.collections(collectionName))
+        .pipe(
+          map(toCharactor),
+          bindTo('charactor'),
+          ({ data }) => commit('setIsLoaded', data)
+        )
+        .subscribe(state, commit)
+    }
+  }
+}
+```
+
+#### use `from(ref).bondTo(statePropName)`
+```javascript
+import { from, map, bndTo, firestoreMutations } from 'firex-store'
+   
+const toCharactor = (data) => ({ id: data.docId, name: `${data.first_name} ${data.family_name}` })
+
+export default {
+  state: {
+    charactors: null,
+    isLoaded: false
+  },
+  mutations: {
+    ...firestoreMutations('all'),
+    setIsLoaded: (state, paylaod) => {
+      state.charactors = payload
+    }
+  },
+  actions: {
+    subscribe: ({ commit, state }, { collectionName }) => {
+      from(firebase.collections(collectionName))
+        bindTo('charactors')
+        .subscribe(state, commit, {
+          afterMutationCalled: (data, isLast) => {
+            commit('setIsLoaded', isLast)
+          }
+        })
+    }
+  }
+}
+```
+
+### Unsubscribe Firestore, using firex-store actions
 
 Ex. Unsubscribe collection
 
@@ -281,7 +348,7 @@ export default {
 </script>
 ```
 
-### 4. Unsubscribe Firestore, using custom actions
+### Unsubscribe Firestore, using custom actions
 
 - class `FirestoreUnsubscriber`
 - class method:
@@ -340,7 +407,7 @@ export default {
 </script>
 ```
 
-## 5. Fetch at once
+## Fetch at once
 
 - class: `FirestoreFinder`
 - class methods:
@@ -381,7 +448,7 @@ export default {
 }
 ```
 
-## 6. Subscribe at once
+## Subscribe at once
 
 - class: `FirestoreSubscriber`
 - class methods:
@@ -425,7 +492,7 @@ export default {
 }
 ```
 
-## 7. Add to firestore
+## Add to firestore
 
 - class: `FirestoreAdder`
 - class methods:
@@ -470,7 +537,7 @@ export default {
 }
 ```
 
-## 8. Set to firestore
+## Set to firestore
 
 - class: `FirestoreSetter`
 - class methods:
@@ -520,7 +587,7 @@ export default {
 }
 ```
 
-## 9. MergeSet to firestore (like Update)
+## MergeSet to firestore (like Update)
 
 - class: `FirestoreMergeSetter`
 - class methods:
@@ -570,7 +637,7 @@ export default {
 }
 ```
 
-## 10. Helpers
+## Helpers
 
 ### from and FirestoreReaderServiceFactory
 

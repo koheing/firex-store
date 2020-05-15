@@ -5,3 +5,4 @@ export * from './firestore-adder.service';
 export * from './firestore-setter.service';
 export * from './firestore-merge-setter.service';
 export * from './firestore-deleter.service';
+export * from './firestore-stream-subscriber.service';

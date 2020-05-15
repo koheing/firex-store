@@ -65,8 +65,6 @@ describe('FirestoreStreamSubscriber', () => {
       )
       .subscribe(state, jest.fn())
 
-    console.log(state)
-
     const unsubscribes: Unsubscribes = (state as any)[FIREX_UNSUBSCRIBES]
     expect(unsubscribes.get('charactor')).not.toBeUndefined()
   })

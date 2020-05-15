@@ -14,6 +14,6 @@ interface CollectionCriteria<T> {
     mapper?: Mapper<T>;
     afterMutationCalled?: AfterMutationCalled;
 }
-export declare const callDocumentMutation: <T = any>({ snapshot, callMutation, isLast, type, mapper, afterMutationCalled }: DocumentCriteria<T>) => void;
-export declare const callCollectionMutation: <T = any>({ snapshot, callMutation, mapper, afterMutationCalled, notifyNotFound }: CollectionCriteria<T>) => void;
+export declare const callDocumentMutation: <T = any>({ snapshot, callMutation, isLast, type, mapper, afterMutationCalled, }: DocumentCriteria<T>) => void;
+export declare const callCollectionMutation: <T = any>({ snapshot, callMutation, mapper, afterMutationCalled, notifyNotFound, }: CollectionCriteria<T>) => void;
 export {};

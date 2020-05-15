@@ -11,6 +11,7 @@ import { Action } from 'stream-executor'
  * @param ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
  * @method bindTo(statePropName): return FirestoreSubscriber
  * @method once: return FirestoreFinder
+ * @method pipe(...args): return FirestoreStreamSubscriber
  */
 export class FirestoreReaderServiceFactory {
   private _ref: FirestoreRef
@@ -36,7 +37,51 @@ export class FirestoreReaderServiceFactory {
     return FirestoreFinder.from(this._ref)
   }
 
-  stream<A, B, C, D, E, F, G, H, I, J>(
+  /**
+   * Subscribe firestore data like rxjs
+   * @param act1 <T, U>(data: { isLast: boolean, data: T, bindTo: (statePropName: string) => void }) => U
+   * @param act2 <T, U>(data: T) => U
+   * @param act3 <T, U>(data: T) => U
+   * @param act4 <T, U>(data: T) => U
+   * @param act5 <T, U>(data: T) => U
+   * @param act6 <T, U>(data: T) => U
+   * @param act7 <T, U>(data: T) => U
+   * @param act8 <T, U>(data: T) => U
+   * @param act9 <T, U>(data: T) => U
+   * @param act10 <T, U>(data: T) => U
+   *
+   * @example
+   * import { from, map, bndTo, firestoreMutations } from 'firex-store'
+   *
+   * const toCharactor = (data) => ({ id: data.docId, name: `${data.first_name} ${data.family_name}` })
+   *
+   * export default {
+   *   state: {
+   *     charactors: null,
+   *     isLoaded: false
+   *   },
+   *   mutations: {
+   *     ...firestoreMutations('all'),
+   *     setIsLoaded: (state, paylaod) => {
+   *       state.charactors = payload
+   *     }
+   *   },
+   *   actions: {
+   *     subscribe: ({ commit, state }, { collectionName }) => {
+   *       from(firebase.collections(collectionName))
+   *         .pipe(
+   *           map(toCharactor),
+   *           bindTo('charactor'),
+   *           ({ data }) => {
+   *             commit('setIsLoaded', data)
+   *           }
+   *         )
+   *         .subscribe(state, commit)
+   *     }
+   *   }
+   * }
+   */
+  pipe<A, B, C, D, E, F, G, H, I, J>(
     act1: Action<Context<{ docId: string } & Record<string, any>>, A>,
     act2?: Action<A, B>,
     act3?: Action<B, C>,

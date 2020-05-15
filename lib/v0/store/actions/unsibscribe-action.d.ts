@@ -10,11 +10,11 @@ interface Criteria {
  * @param type 'document' | 'collection'
  * @param actionName can undefined. But if you define actionName in `firestoreSubscribeActions`, set same name.
  */
-export declare const firestoreUnsubscribeActions: ({ type, actionName }: Criteria) => ActionTree<any, any>;
+export declare const firestoreUnsubscribeActions: ({ type, actionName, }: Criteria) => ActionTree<any, any>;
 /**
  *  unsubscribe firestore data
  * @param type 'document' | 'collection'
  * @param actionName can undefined. But if you define actionName in `firestoreSubscribeAction`, set same name.
  */
-export declare const firestoreUnsubscribeAction: ({ type, actionName }: Criteria) => ActionTree<any, any>;
+export declare const firestoreUnsubscribeAction: ({ type, actionName, }: Criteria) => ActionTree<any, any>;
 export {};
