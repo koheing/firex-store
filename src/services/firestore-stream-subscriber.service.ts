@@ -9,7 +9,6 @@ import { tap, Action, map as _map } from 'stream-executor'
 export class FirestoreStreamSubscriber {
   private _ref: FirestoreRef
   private _actions: Action<any, any>[] = []
-  private _unsubscribe?: Unsubscribe
 
   /**
    * Make FirestoreSubscriber instance
@@ -64,9 +63,12 @@ export class FirestoreStreamSubscriber {
       state[FIREX_UNSUBSCRIBES] = new Map<string, Unsubscribe>()
     }
 
-    const setUnsubscriber = (statePropName: string) => {
+    const firestoreRefType = this._isDocumentRef
+      ? '[firex-store] document'
+      : '[firex-store] collection'
+    const createSetUnsubscriber = (state: any) => (statePropName: string) => {
       const unsubscribes: Unsubscribes = state[FIREX_UNSUBSCRIBES]
-      unsubscribes.set(statePropName, this._unsubscribe!)
+      unsubscribes.set(firestoreRefType, statePropName)
     }
 
     const {
@@ -74,31 +76,37 @@ export class FirestoreStreamSubscriber {
       subscribeFirestoreDocument,
     } = createSubscriber().asStream()
 
-    this._unsubscribe = isDocumentRef(this._ref)
+    const unsubscribe = isDocumentRef(this._ref)
       ? subscribeFirestoreDocument({
           commit,
-          setUnsubscriber,
           ref: this._ref,
+          setUnsubscriber: createSetUnsubscriber(state),
           actions: this._actions,
           options,
         })
       : subscribeFirestoreCollection({
           commit,
-          setUnsubscriber,
           ref: this._ref,
+          setUnsubscriber: createSetUnsubscriber(state),
           actions: this._actions,
           options,
         })
+
+    const unsubscribes: Unsubscribes = state[FIREX_UNSUBSCRIBES]
+    const statePropName = unsubscribes.get(firestoreRefType) as string
+    unsubscribes.set(statePropName, unsubscribe)
+    unsubscribes.delete(firestoreRefType)
+  }
+
+  private get _isDocumentRef(): boolean {
+    return isDocumentRef(this._ref)
   }
 }
 
-export const bindTo = <T extends { docId: string } & Record<string, any>>(
-  statePropName: string
-) => tap<Context<T>>((it) => it.bindTo(statePropName)(it.data, it.isLast))
+export const bindTo = <T extends Record<string, any>>(statePropName: string) =>
+  tap<Context<T>>((it) => it.bindTo(statePropName)(it.data, it.isLast))
 
-export const map = <T extends { docId: string } & Record<string, any>, U>(
-  mapper: (data: T) => U
-) =>
+export const map = <T extends Record<string, any>, U>(mapper: (data: T) => U) =>
   _map<Context<T>, Context<ReturnType<typeof mapper>>>(
     ({ bindTo, data, isLast }) => {
       const _d = mapper(data)

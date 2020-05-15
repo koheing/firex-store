@@ -33,17 +33,18 @@ export const createMutationHandler = () => {
     setUnsubscriber: (statePropName: string) => void,
     actions: Action<any, any>[]
   ): MutationHandler => (
-    data: { docId: string } & Record<string, any>,
+    data: Record<string, any>,
     type: firebase.firestore.DocumentChangeType,
     isLast: boolean
   ) => {
     const bindTo = (statePropName: string) => (
-      data: { docId: string } & Record<string, any>,
+      data: Record<string, any>,
       isLast: boolean
     ) => {
       setUnsubscriber(statePropName)
       callMutation(statePropName)(type, { data, isLast })
     }
+
     const context: Context<any> = { data, isLast, bindTo }
 
     createStream(context)

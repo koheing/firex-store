@@ -3,5 +3,5 @@ export interface Context<T> extends Record<string, any> {
   isLast: boolean
   bindTo: (
     statePropName: string
-  ) => (data: { docId: string } & Record<string, any>, isLast: boolean) => void
+  ) => (data: Record<string, any>, isLast: boolean) => void
 }

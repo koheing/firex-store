@@ -25,7 +25,7 @@ interface StreamParameter<T> {
 
 const asProcedure = () => {
   const subscribeFirestoreCollection = <T = any>({
-    state,
+    statePropName,
     commit,
     ref,
     options,
@@ -37,7 +37,7 @@ const asProcedure = () => {
     const callMutation = createMutation({ mutationType: 'collection', commit })
 
     const mutationHandler = createMutationHandler().forProcedure(
-      state,
+      statePropName,
       callMutation,
       mapper,
       afterMutationCalled
@@ -53,7 +53,7 @@ const asProcedure = () => {
   }
 
   const subscribeFirestoreDocument = <T = any>({
-    state,
+    statePropName,
     commit,
     ref,
     options,
@@ -62,7 +62,7 @@ const asProcedure = () => {
     const callMutation = createMutation({ mutationType: 'document', commit })
 
     const mutationHandler = createMutationHandler().forProcedure(
-      state,
+      statePropName,
       callMutation,
       mapper,
       afterMutationCalled
