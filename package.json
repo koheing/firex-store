@@ -1,6 +1,6 @@
 {
   "name": "firex-store",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Subscribe and write firestore data, easily",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
