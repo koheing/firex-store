@@ -7,6 +7,7 @@ export {
   FirestoreMergeSetter,
   FirestoreSetter,
   FirestoreDeleter,
+  FirestoreStreamSubscriber,
   map,
   bindTo,
 } from './services'
