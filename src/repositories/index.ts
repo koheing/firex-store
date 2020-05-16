@@ -106,7 +106,7 @@ export class FirestoreRepository {
           mutationHandler(
             { ...it.doc.data(), docId: it.doc.id },
             it.type,
-            docCount === index
+            docCount === index + 1
           )
         })
       },
