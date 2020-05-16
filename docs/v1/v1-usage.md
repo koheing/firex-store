@@ -2,7 +2,7 @@
 
 - [Subscribe Firestore, using firex-store actions](#subscribe-firestore-using-firex-store-actions)
 - [Subscribe Firestore, using custom actions](#subscribe-firestore-using-custom-actions)
-- [Subscribe Firestore, like rxjs](#subscribe-firestore-using-custom-actions)
+- [Subscribe Firestore, like rxjs](#subscribe-firestore-using-like-rxjs)
 - [Unsubscribe Firestore, using firex-store actions](#unsubscribe-firestore-using-firex-store-actions)
 - [Unsubscribe Firestore, using custom actions](#unsubscribe-firestore-using-custom-actions)
 - [Fetch at Once](#fetch-at-once)
