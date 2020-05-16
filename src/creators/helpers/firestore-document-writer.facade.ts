@@ -3,7 +3,7 @@ import { SetOptionsParameter, DeleteOptionsParameter } from '../../parameters'
 import {
   FirestoreSetter,
   FirestoreMergeSetter,
-  FirestoreDeleter
+  FirestoreDeleter,
 } from '../../services'
 import { Transaction, MergeSetter, Setter, FirestoreMapper } from '../../models'
 
@@ -67,12 +67,10 @@ export class FirestoreDocumentWriterFacade
   ): Promise<AppErrorOr<void>> {
     const _options: SetOptionsParameter<any> = {
       ...options,
-      ...{ mapper: this._mapper }
+      ...{ mapper: this._mapper },
     }
     return this._isTransaction
-      ? FirestoreSetter.to(this._ref)
-          .transaction()
-          .set(data, _options)
+      ? FirestoreSetter.to(this._ref).transaction().set(data, _options)
       : FirestoreSetter.to(this._ref).set(data, _options)
   }
 
@@ -91,7 +89,7 @@ export class FirestoreDocumentWriterFacade
   ): Promise<AppErrorOr<void>> {
     const _options: SetOptionsParameter<any> = {
       ...options,
-      ...{ mapper: this._mapper }
+      ...{ mapper: this._mapper },
     }
     return this._isTransaction
       ? FirestoreMergeSetter.to(this._ref)
@@ -110,9 +108,7 @@ export class FirestoreDocumentWriterFacade
    */
   async delete(options?: DeleteOptionsParameter): Promise<AppErrorOr<void>> {
     return this._isTransaction
-      ? FirestoreDeleter.to(this._ref)
-          .transaction()
-          .delete(options)
+      ? FirestoreDeleter.to(this._ref).transaction().delete(options)
       : FirestoreDeleter.to(this._ref).delete()
   }
 }

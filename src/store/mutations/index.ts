@@ -16,7 +16,7 @@ const documentMutations = (): MutationTree<any> => {
     [types.REMOVE](state, payload: Payload) {
       const prop = payload.statePropName
       state[prop] = null
-    }
+    },
   }
 }
 
@@ -49,7 +49,7 @@ const collectionMutations = (): MutationTree<any> => {
         return
       }
       ;(state[prop] as Array<any>).splice(index, 1)
-    }
+    },
   }
 }
 
@@ -64,7 +64,7 @@ export const firestoreMutations = (
     default:
       return {
         ...documentMutations(),
-        ...collectionMutations()
+        ...collectionMutations(),
       }
   }
 }

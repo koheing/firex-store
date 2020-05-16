@@ -19,7 +19,7 @@ interface Criteria<T, U> {
  */
 export const findFirestore = <T = any>({
   ref,
-  options
+  options,
 }: Criteria<FirestoreRef, T>): Promise<NullOr<T>> => {
   return isDocumentRef(ref)
     ? FirestoreService.find<T>({ ref, ...options })

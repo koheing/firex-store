@@ -88,14 +88,14 @@ export class FirestoreMergeSetter implements MergeSetter, Transaction {
     const _data = { ...data }
     const _options: SetOptionsParameter<any> = {
       ...options,
-      ...{ mapper: this._mapper }
+      ...{ mapper: this._mapper },
     }
     const result = await FirestoreRepository.set({
       data: _data,
       ref: this._ref,
       isTransaction: this.isTransaction,
       ..._options,
-      merge: true
+      merge: true,
     })
 
     return result

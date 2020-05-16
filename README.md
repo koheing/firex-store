@@ -27,20 +27,36 @@ class Model extends FirestoreMapper {
 ```
 
 ```js
-import { to, from, on, firestoreMutations } from 'firex-store'
+import { to, from, on, firestoreMutations, bindTo, map } from 'firex-store'
 import { Model } from '~/model'
 import { firestore } from '~/plugins/firebase'
 
 // Vuex module
 export default {
   state: {
-    comments: []
+    comments: [],
+    isLoaded: false
   },
   mutations: {
     ...firestoreMutations('collection'),
     // ...firestoreMutations('all')
+    setIsLoaded: (state, isLast) => {
+      state.isLoaded = isLast
+    }
   },
   actions: {
+    streamSubscribe: ({ state, commit }) => {
+      const toComment = (data) => new Comment(...data)
+      const ref = firestore.collection('comments')
+      // write code like Rxjs
+      from(ref)
+        .pipe(
+          map(toComment), // option
+          bindTo('comments'),                                           // required
+          (({ isLast }) => commit('setIsLoaded', isLast))               //option
+        )
+        .subscribe(state, commit)
+    },
     subscribe: ({ state, commit }) => {
       const ref = firestore.collection('comments')
       from(ref)
@@ -106,13 +122,11 @@ npm install --save firex-store
 
 - [firex-store-sample](https://github.com/nor-ko-hi-jp/firex-store-sample)
 
-others comming soon
-
 ## Important
 
 - Return values or state values bound to Firestore has `docId`(documentId in Firestore) property.
 
-- A store module cannot subscribe to more than one 'collection' and 'document'
+- A state in store cannot subscribe to more than one 'collection' and 'document'
 
 - If you'd like to subscribe again after unsubscribing 'collection', set the property of the store you'd like to subscribe to `[]` and then subscribe.
 

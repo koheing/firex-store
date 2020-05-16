@@ -15,21 +15,21 @@ describe('createMutation', () => {
     store = new Store<any>({
       state: {
         document: { count: 0 },
-        array: []
+        array: [],
       },
       mutations: {
-        ...firestoreMutations('all')
+        ...firestoreMutations('all'),
       },
       actions: {
         documentAdd: ({ commit }) => {
           const callMutation = createMutation({
             mutationType: 'collection',
-            commit
-          })
+            commit,
+          })('counts')
 
           callMutation('added', { data: { count: 1 }, statePropName: 'counts' })
-        }
-      }
+        },
+      },
     })
   })
 

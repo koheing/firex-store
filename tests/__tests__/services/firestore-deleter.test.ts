@@ -32,7 +32,9 @@ describe('FirestoreDeleter', () => {
     const mockDeleter = jest.spyOn(FirestoreRepository, 'delete')
     const data = {} as any
     const deleter = FirestoreDeleter.to(
-      new MockCollectionReference(data).doc('documentId') as firebase.firestore.DocumentReference
+      new MockCollectionReference(data).doc(
+        'documentId'
+      ) as firebase.firestore.DocumentReference
     )
     const result = deleter.delete()
     await flushPromises()

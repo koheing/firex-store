@@ -26,7 +26,7 @@ interface Criteria<T = any> {
 export const firestoreSubscribeActions = <T = any>({
   ref,
   actionName,
-  options
+  options,
 }: Criteria<T>): ActionTree<any, any> => {
   const defaultActionName = isDocumentRef(ref)
     ? actionTypes.document.SUBSCRIBE
@@ -37,7 +37,7 @@ export const firestoreSubscribeActions = <T = any>({
   const tree: ActionTree<any, any> = {
     [action]({ state, commit }) {
       subscribeFirestore({ state, commit, ref, options })
-    }
+    },
   }
   return tree
 }
@@ -57,7 +57,7 @@ export const firestoreSubscribeActions = <T = any>({
 export const firestoreSubscribeAction = <T = any>({
   ref,
   actionName,
-  options
+  options,
 }: Criteria<T>): ActionTree<any, any> => {
   const defaultActionName = isDocumentRef(ref)
     ? actionTypes.document.SUBSCRIBE
@@ -68,7 +68,7 @@ export const firestoreSubscribeAction = <T = any>({
   const tree: ActionTree<any, any> = {
     [action]({ state, commit }) {
       subscribeFirestore({ state, commit, ref, options })
-    }
+    },
   }
   return tree
 }

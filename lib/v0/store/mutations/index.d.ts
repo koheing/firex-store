@@ -4,5 +4,5 @@ interface Criteria {
     statePropName: string;
     type: MutationType;
 }
-export declare const firestoreMutations: ({ statePropName, type }: Criteria) => MutationTree<any>;
+export declare const firestoreMutations: ({ statePropName, type, }: Criteria) => MutationTree<any>;
 export {};

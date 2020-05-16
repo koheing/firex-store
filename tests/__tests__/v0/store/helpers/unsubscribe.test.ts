@@ -4,7 +4,7 @@ import { Store, Module } from 'vuex'
 import { unsubscribeFirestore } from '../../../../../src/v0/'
 import {
   FIREX_COLLECTION_UNSUBSCRIBER,
-  FIREX_DOCUMENT_UNSUBSCRIBER
+  FIREX_DOCUMENT_UNSUBSCRIBER,
 } from '../../../../../src/v0/store/configurations'
 
 const localVue = createLocalVue()
@@ -19,7 +19,7 @@ describe('subscribe', () => {
       state: {},
       getters: {},
       mutations: {},
-      actions: {}
+      actions: {},
     })
   })
 
@@ -29,15 +29,15 @@ describe('subscribe', () => {
       namespaced: true,
       state: {
         comments: null,
-        [FIREX_COLLECTION_UNSUBSCRIBER]: mockFunction()
+        [FIREX_COLLECTION_UNSUBSCRIBER]: mockFunction(),
       },
       getters: {},
       mutations: {},
       actions: {
         unsubscribe: ({ state }) => {
           unsubscribeFirestore({ state, type: 'collection' })
-        }
-      }
+        },
+      },
     }
 
     store.registerModule('comment', commentModule)
@@ -54,15 +54,15 @@ describe('subscribe', () => {
       namespaced: true,
       state: {
         user: null,
-        [FIREX_COLLECTION_UNSUBSCRIBER]: mockFunction()
+        [FIREX_COLLECTION_UNSUBSCRIBER]: mockFunction(),
       },
       getters: {},
       mutations: {},
       actions: {
         unsubscribe: ({ state }) => {
           unsubscribeFirestore({ state, type: 'document' })
-        }
-      }
+        },
+      },
     }
 
     store.registerModule('user', userMocule)

@@ -5,6 +5,6 @@ export {
   AfterMutationCalled,
   ErrorHandler,
   CompletionHandler,
-  NotFoundHandler
+  NotFoundHandler,
 } from './types'
 export { Payload, DocumentResult } from './models'

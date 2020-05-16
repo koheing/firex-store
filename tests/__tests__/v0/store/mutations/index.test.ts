@@ -16,40 +16,40 @@ describe('firestoreMutation', () => {
         user: {
           namespaced: true,
           state: {
-            user: null
+            user: null,
           },
           getters: {},
           mutations: {
-            ...firestoreMutations({ statePropName: 'user', type: 'document' })
+            ...firestoreMutations({ statePropName: 'user', type: 'document' }),
           },
-          actions: {}
+          actions: {},
         },
         comment: {
           namespaced: true,
           state: {
-            comments: null
+            comments: null,
           },
           getters: {},
           mutations: {
             ...firestoreMutations({
               statePropName: 'comments',
-              type: 'collection'
-            })
+              type: 'collection',
+            }),
           },
-          actions: {}
-        }
+          actions: {},
+        },
       },
       state: {},
       getters: {},
       mutations: {},
-      actions: {}
+      actions: {},
     })
   })
 
   it('document mutations defined', () => {
     const result = firestoreMutations({
       statePropName: 'test',
-      type: 'document'
+      type: 'document',
     })
 
     expect(result[mutationTypes.document.ADD]).not.toEqual(undefined)
@@ -58,7 +58,7 @@ describe('firestoreMutation', () => {
   it('collection mutations defined', () => {
     const result = firestoreMutations({
       statePropName: 'test',
-      type: 'collection'
+      type: 'collection',
     })
 
     expect(result[mutationTypes.collection.ADD]).not.toEqual(undefined)
@@ -68,8 +68,8 @@ describe('firestoreMutation', () => {
     store.commit(`user/${mutationTypes.document.ADD}`, {
       data: {
         docId: 'testId',
-        test: { name: 'testName1' }
-      }
+        test: { name: 'testName1' },
+      },
     })
     expect(store.state.user['user'].docId).toEqual('testId')
     expect(store.state.user['user'].test.name).toEqual('testName1')
@@ -79,14 +79,14 @@ describe('firestoreMutation', () => {
     store.commit(`user/${mutationTypes.document.ADD}`, {
       data: {
         docId: 'testId',
-        test: { name: 'testName1' }
-      }
+        test: { name: 'testName1' },
+      },
     })
     store.commit(`user/${mutationTypes.document.MODIFY}`, {
       data: {
         docId: 'id',
-        test: { name: 'testName2' }
-      }
+        test: { name: 'testName2' },
+      },
     })
 
     expect(store.state.user['user'].docId).toEqual('id')
@@ -97,8 +97,8 @@ describe('firestoreMutation', () => {
     store.commit(`user/${mutationTypes.document.ADD}`, {
       data: {
         docId: 'testId',
-        test: { name: 'testName1' }
-      }
+        test: { name: 'testName1' },
+      },
     })
     store.commit(`user/${mutationTypes.document.REMOVE}`)
 
@@ -110,8 +110,8 @@ describe('firestoreMutation', () => {
       data: {
         docId: 'comment1',
         message: 'first',
-        user: { name: 'testName1' }
-      }
+        user: { name: 'testName1' },
+      },
     })
 
     expect(store.state.comment['comments'][0].docId).toEqual('comment1')
@@ -123,23 +123,23 @@ describe('firestoreMutation', () => {
       data: {
         docId: 'comment1',
         message: 'first',
-        user: { name: 'testName1' }
-      }
+        user: { name: 'testName1' },
+      },
     })
     store.commit(`comment/${mutationTypes.collection.ADD}`, {
       data: {
         docId: 'comment2',
         message: 'second',
-        user: { name: 'testName2' }
-      }
+        user: { name: 'testName2' },
+      },
     })
 
     store.commit(`comment/${mutationTypes.collection.MODIFY}`, {
       data: {
         docId: 'comment2',
         message: 'second',
-        user: { name: 'testName1' }
-      }
+        user: { name: 'testName1' },
+      },
     })
 
     expect(store.state.comment['comments'][1].docId).toEqual('comment2')
@@ -151,23 +151,23 @@ describe('firestoreMutation', () => {
       data: {
         docId: 'comment1',
         message: 'first',
-        user: { name: 'testName1' }
-      }
+        user: { name: 'testName1' },
+      },
     })
     store.commit(`comment/${mutationTypes.collection.ADD}`, {
       data: {
         docId: 'comment2',
         message: 'second',
-        user: { name: 'testName2' }
-      }
+        user: { name: 'testName2' },
+      },
     })
 
     store.commit(`comment/${mutationTypes.collection.REMOVE}`, {
       data: {
         docId: 'comment1',
         message: 'first',
-        user: { name: 'testName1' }
-      }
+        user: { name: 'testName1' },
+      },
     })
 
     expect(store.state.comment['comments'][0].docId).toEqual('comment2')
@@ -179,16 +179,16 @@ describe('firestoreMutation', () => {
       data: {
         docId: 'comment1',
         message: 'first',
-        user: { name: 'testName1' }
-      }
+        user: { name: 'testName1' },
+      },
     })
 
     store.commit(`comment/${mutationTypes.collection.MODIFY}`, {
       data: {
         docId: 'comment3',
         message: 'second',
-        user: { name: 'testName2' }
-      }
+        user: { name: 'testName2' },
+      },
     })
 
     expect(store.state.comment['comments'][0].docId).toEqual('comment1')
@@ -200,16 +200,16 @@ describe('firestoreMutation', () => {
       data: {
         docId: 'comment1',
         message: 'first',
-        user: { name: 'testName1' }
-      }
+        user: { name: 'testName1' },
+      },
     })
 
     store.commit(`comment/${mutationTypes.collection.REMOVE}`, {
       data: {
         docId: 'comment2',
         message: 'second',
-        user: { name: 'testName2' }
-      }
+        user: { name: 'testName2' },
+      },
     })
 
     expect(store.state.comment['comments'][0].docId).toEqual('comment1')

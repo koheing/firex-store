@@ -23,6 +23,6 @@ import { Unsubscriber } from '../../models';
  *
  */
 export declare const firestoreUnsubscribeAction: (firestoreUnsubscriber: Unsubscriber, parameter: {
-    type: "document" | "collection";
-    actionName?: string | undefined;
+    type: 'document' | 'collection';
+    actionName?: string;
 }) => ActionTree<any, any>;

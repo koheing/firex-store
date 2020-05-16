@@ -73,7 +73,7 @@ export class FirestoreFinder implements Finder {
   ): Promise<NullOr<T | T[] | DocumentResult | DocumentResult[] | Error>> {
     const _options: FindOptionsParameter<T> = {
       ...options,
-      ...{ mapper: this._mapper }
+      ...{ mapper: this._mapper },
     }
     return isDocumentRef(this.ref)
       ? FirestoreRepository.find<T>({ ref: this.ref, ..._options })

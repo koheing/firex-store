@@ -16,11 +16,11 @@ describe('call-mutations', () => {
         user: {
           namespaced: true,
           state: {
-            user: null
+            user: null,
           },
           getters: {},
           mutations: {
-            ...firestoreMutations({ statePropName: 'user', type: 'document' })
+            ...firestoreMutations({ statePropName: 'user', type: 'document' }),
           },
           actions: {
             add: ({ state, commit }, payload) => {
@@ -28,7 +28,7 @@ describe('call-mutations', () => {
                 mutationType: 'document',
                 changeType: 'added',
                 commit,
-                payload
+                payload,
               })
             },
             modify: ({ state, commit }, payload) => {
@@ -36,7 +36,7 @@ describe('call-mutations', () => {
                 mutationType: 'document',
                 changeType: 'modified',
                 commit,
-                payload
+                payload,
               })
             },
             remove: ({ commit }, payload) => {
@@ -44,22 +44,22 @@ describe('call-mutations', () => {
                 mutationType: 'document',
                 changeType: 'removed',
                 commit,
-                payload
+                payload,
               })
-            }
-          }
+            },
+          },
         },
         comment: {
           namespaced: true,
           state: {
-            comments: []
+            comments: [],
           },
           getters: {},
           mutations: {
             ...firestoreMutations({
               statePropName: 'comments',
-              type: 'collection'
-            })
+              type: 'collection',
+            }),
           },
           actions: {
             add: ({ state, commit }, payload) => {
@@ -67,16 +67,16 @@ describe('call-mutations', () => {
                 mutationType: 'collection',
                 changeType: 'added',
                 commit,
-                payload
+                payload,
               })
-            }
-          }
-        }
+            },
+          },
+        },
       },
       state: {},
       getters: {},
       mutations: {},
-      actions: {}
+      actions: {},
     })
   })
 
@@ -89,7 +89,7 @@ describe('call-mutations', () => {
   it('document types.MODIFY called', () => {
     store.dispatch('user/add', { data: { docId: 'user1', name: 'testName1' } })
     store.dispatch('user/modify', {
-      data: { docId: 'user1', name: 'testName2' }
+      data: { docId: 'user1', name: 'testName2' },
     })
 
     expect(store.state.user.user.name).toEqual('testName2')
@@ -98,7 +98,7 @@ describe('call-mutations', () => {
   it('document types.REMOVE called', () => {
     store.dispatch('user/add', { data: { docId: 'user1', name: 'testName1' } })
     store.dispatch('user/remove', {
-      data: { docId: 'user1', name: 'testName1' }
+      data: { docId: 'user1', name: 'testName1' },
     })
 
     expect(store.state.user.user).toBeNull()
@@ -106,7 +106,7 @@ describe('call-mutations', () => {
 
   it('collection types.ADD called', () => {
     store.dispatch('comment/add', {
-      data: { docId: 'comment1', message: 'test' }
+      data: { docId: 'comment1', message: 'test' },
     })
 
     expect(store.state.comment.comments[0].docId).toEqual('comment1')

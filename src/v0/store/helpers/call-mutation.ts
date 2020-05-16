@@ -14,7 +14,7 @@ export const callMutation = ({
   mutationType,
   changeType,
   commit,
-  payload
+  payload,
 }: Criteria) => {
   const types =
     mutationType === 'document'

@@ -19,7 +19,11 @@ describe('FirestoreAdder', () => {
   it('FirestoreRepository.add called', async (done) => {
     jest.spyOn(FirestoreRepository, 'add')
     const data = {} as any
-    const adder = FirestoreAdder.to(new MockCollectionReference(data) as firebase.firestore.CollectionReference)
+    const adder = FirestoreAdder.to(
+      new MockCollectionReference(
+        data
+      ) as firebase.firestore.CollectionReference
+    )
     const result = adder.add({ name: 'test' })
     await flushPromises()
     expect(FirestoreRepository.add).toHaveBeenCalled()

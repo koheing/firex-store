@@ -16,7 +16,7 @@ interface Criteria {
  */
 export const firestoreUnsubscribeActions = ({
   type,
-  actionName
+  actionName,
 }: Criteria): ActionTree<any, any> => {
   const defaultActionName =
     type === 'document'
@@ -28,7 +28,7 @@ export const firestoreUnsubscribeActions = ({
   const tree: ActionTree<any, any> = {
     [action]({ state }) {
       unsubscribeFirestore({ state, type })
-    }
+    },
   }
 
   return tree
@@ -41,7 +41,7 @@ export const firestoreUnsubscribeActions = ({
  */
 export const firestoreUnsubscribeAction = ({
   type,
-  actionName
+  actionName,
 }: Criteria): ActionTree<any, any> => {
   const defaultActionName =
     type === 'document'
@@ -53,7 +53,7 @@ export const firestoreUnsubscribeAction = ({
   const tree: ActionTree<any, any> = {
     [action]({ state }) {
       unsubscribeFirestore({ state, type })
-    }
+    },
   }
 
   return tree
