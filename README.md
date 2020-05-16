@@ -1,7 +1,6 @@
 # firex-store
 
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
-[![CircleCI](https://circleci.com/gh/nor-ko-hi-jp/firex-store.svg?style=svg)](https://circleci.com/gh/nor-ko-hi-jp/firex-store)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/nor-ko-hi-jp/firex-store/issues)
 
 - `If you use this npm, you can read and write firestore data in Vuex, easily.`
