@@ -7,5 +7,5 @@ interface Criteria {
     commit: Commit;
     payload: Payload;
 }
-export declare const callMutation: ({ mutationType, changeType, commit, payload }: Criteria) => void;
+export declare const callMutation: ({ mutationType, changeType, commit, payload, }: Criteria) => void;
 export {};

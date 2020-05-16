@@ -2,7 +2,7 @@ import { subscribeFirestore } from '../../../../../src/v0/'
 import { FirestoreService } from '../../../../../src/v0/service/index'
 import {
   FIREX_COLLECTION_UNSUBSCRIBER,
-  FIREX_DOCUMENT_UNSUBSCRIBER
+  FIREX_DOCUMENT_UNSUBSCRIBER,
 } from '../../../../../src/v0/store/configurations'
 import { MockQueryReference } from '../../../../mocks/mock-query-reference'
 import { MockQuerySnapshot } from '../../../../mocks/mock-query-snapshot'
@@ -15,7 +15,7 @@ describe('subscribe test', () => {
     subscribeFirestore({
       state: {},
       commit: jest.fn(),
-      ref: new MockQueryReference(Promise.resolve(new MockQuerySnapshot()))
+      ref: new MockQueryReference(Promise.resolve(new MockQuerySnapshot())),
     })
 
     expect(spy).toHaveBeenCalled()
@@ -27,7 +27,7 @@ describe('subscribe test', () => {
     subscribeFirestore({
       state: { [FIREX_COLLECTION_UNSUBSCRIBER]: jest.fn() },
       commit: jest.fn(),
-      ref: new MockQueryReference(Promise.resolve(new MockQuerySnapshot()))
+      ref: new MockQueryReference(Promise.resolve(new MockQuerySnapshot())),
     })
 
     expect(spy).not.toHaveBeenCalled()
@@ -41,7 +41,7 @@ describe('subscribe test', () => {
       commit: jest.fn(),
       ref: new MockDocumentReference(
         Promise.resolve(new MockDocumentSnapshot())
-      ) as firebase.firestore.DocumentReference
+      ) as firebase.firestore.DocumentReference,
     })
 
     expect(spy).not.toHaveBeenCalled()
@@ -56,7 +56,7 @@ describe('subscribe test', () => {
     subscribeFirestore({
       state: { [FIREX_DOCUMENT_UNSUBSCRIBER]: jest.fn() },
       commit: jest.fn(),
-      ref: documentRef
+      ref: documentRef,
     })
 
     expect(spy).not.toHaveBeenCalled()

@@ -58,7 +58,7 @@ export class FirestoreDeleter implements Deleter, Transaction {
     const result: AppErrorOr<void> = await FirestoreRepository.delete({
       ref: this._ref,
       isTransaction: this._isTransaction,
-      ...options
+      ...options,
     })
 
     return result

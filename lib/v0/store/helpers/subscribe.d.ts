@@ -20,5 +20,5 @@ interface Criteria<T, U> {
  *   - afterMutationCalled
  *   - onCompleted `deprecated`
  */
-export declare const subscribeFirestore: <T = any>({ state, commit, ref, options }: Criteria<FirestoreRef, T>) => void;
+export declare const subscribeFirestore: <T = any>({ state, commit, ref, options, }: Criteria<FirestoreRef, T>) => void;
 export {};

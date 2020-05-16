@@ -4,5 +4,5 @@ interface MutationParameter {
     mutationType: MutationType;
     commit: Commit;
 }
-export declare const createMutation: ({ mutationType, commit }: MutationParameter) => CallMutation;
+export declare const createMutation: ({ mutationType, commit }: MutationParameter) => (statePropName: string) => CallMutation;
 export {};

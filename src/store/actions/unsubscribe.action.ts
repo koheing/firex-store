@@ -39,7 +39,7 @@ export const firestoreUnsubscribeAction = (
   const tree: ActionTree<any, any> = {
     [action]({ state }) {
       firestoreUnsubscriber.unsubscribe(state)
-    }
+    },
   }
 
   return tree

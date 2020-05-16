@@ -18,7 +18,7 @@ describe('toDocumentResult', () => {
 
     const mapper = (data: any) => ({
       name: data.name,
-      count: data.count + 1
+      count: data.count + 1,
     })
     const result: DocumentResult = toDocumentResult(snapshot, mapper)
 

@@ -7,5 +7,5 @@ interface Parameter {
     commit: Commit;
     payload: Payload;
 }
-export declare const callMutation: ({ mutationType, changeType, commit, payload }: Parameter) => void;
+export declare const callMutation: ({ mutationType, changeType, commit, payload, }: Parameter) => void;
 export {};

@@ -1,11 +1,11 @@
 export const actionTypes = {
   collection: {
     SUBSCRIBE: '[firex-store] Collection Subscribe',
-    UNSUBSCRIBE: '[firex-store] Collection Unsubscribe'
+    UNSUBSCRIBE: '[firex-store] Collection Unsubscribe',
   },
   document: {
     SUBSCRIBE: '[firex-store] Document Subscribe',
-    UNSUBSCRIBE: '[firex-store] Document Unsubscribe'
+    UNSUBSCRIBE: '[firex-store] Document Unsubscribe',
   },
   // --- deprecated, follow variables will be removed ^2.0.0 ---
   /**
@@ -23,5 +23,5 @@ export const actionTypes = {
   /**
    * @deprecated it will be removed ^2.0.0, so use `collection.UNSUBSCRIBE` , please
    */
-  COLLECTION_UNSUBSCRIBE: '[firex-store] Collection Unsubscribe'
+  COLLECTION_UNSUBSCRIBE: '[firex-store] Collection Unsubscribe',
 }

@@ -19,7 +19,7 @@ interface Criteria<T = any> {
  *   - afterMutationCalled
  *   - onCompleted `deprecated`
  */
-export declare const firestoreSubscribeActions: <T = any>({ ref, actionName, options }: Criteria<T>) => ActionTree<any, any>;
+export declare const firestoreSubscribeActions: <T = any>({ ref, actionName, options, }: Criteria<T>) => ActionTree<any, any>;
 /**
  *  subscribe firestore data to state property
  * @param actionName custom action name. can undefined
@@ -32,5 +32,5 @@ export declare const firestoreSubscribeActions: <T = any>({ ref, actionName, opt
  *   - afterMutationCalled
  *   - onCompleted `deprecated`
  */
-export declare const firestoreSubscribeAction: <T = any>({ ref, actionName, options }: Criteria<T>) => ActionTree<any, any>;
+export declare const firestoreSubscribeAction: <T = any>({ ref, actionName, options, }: Criteria<T>) => ActionTree<any, any>;
 export {};

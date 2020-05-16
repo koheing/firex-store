@@ -53,7 +53,7 @@ export const firestoreSubscribeAction = (
   const tree: ActionTree<any, any> = {
     [action]({ state, commit }) {
       firestoreSubscriber.subscribe(state, commit, options)
-    }
+    },
   }
   return tree
 }

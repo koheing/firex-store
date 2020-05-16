@@ -19,7 +19,7 @@ const documentMutations = (prop: string): MutationTree<any> => {
     },
     [types.REMOVE](state) {
       state[prop] = null
-    }
+    },
   }
 }
 
@@ -49,13 +49,13 @@ const collectionMutations = (prop: string): MutationTree<any> => {
         return
       }
       ;(state[prop] as Array<any>).splice(index, 1)
-    }
+    },
   }
 }
 
 export const firestoreMutations = ({
   statePropName,
-  type
+  type,
 }: Criteria): MutationTree<any> => {
   return type === 'document'
     ? documentMutations(statePropName)

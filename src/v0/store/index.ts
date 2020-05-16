@@ -3,7 +3,7 @@ export {
   firestoreSubscribeAction,
   firestoreSubscribeActions,
   firestoreUnsubscribeAction,
-  firestoreUnsubscribeActions
+  firestoreUnsubscribeActions,
 } from './actions'
 
 export { subscribeFirestore, unsubscribeFirestore } from './helpers'

@@ -28,7 +28,7 @@ export const transactionOfSetOrMergeSet = async <T = any>({
   data,
   merge,
   transaction,
-  errorHandler
+  errorHandler,
 }: SetTransactionParameter<T>): Promise<AppErrorOr<void>> => {
   const isMergeSet = merge
   const appErrorOrIsAbleToSetOrMergeSet = await transaction
@@ -60,7 +60,7 @@ export const transactionOfSetOrMergeSet = async <T = any>({
 export const transacitonOfDelete = async ({
   ref,
   transaction,
-  errorHandler
+  errorHandler,
 }: DeleteTransactionParameter): Promise<AppErrorOr<void>> => {
   const appErrorOrIsExisted = await transaction
     .get(ref)

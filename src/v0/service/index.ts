@@ -7,7 +7,7 @@ import {
   callCollectionMutation,
   notifyNotFound,
   notifyErrorOccurred,
-  notifyCompletionIfDefined
+  notifyCompletionIfDefined,
 } from './helpers'
 
 interface SubscribeCriteria<T, U> extends SubscribeCriteriaOptions<T> {
@@ -28,7 +28,7 @@ export class FirestoreService {
     completionHandler,
     afterMutationCalled,
     notFoundHandler,
-    onCompleted
+    onCompleted,
   }: SubscribeCriteria<T, firebase.firestore.DocumentReference>): Unsubscribe {
     return ref.onSnapshot(
       (snapshot) =>
@@ -38,7 +38,7 @@ export class FirestoreService {
               snapshot,
               callMutation,
               mapper,
-              afterMutationCalled
+              afterMutationCalled,
             }),
       (error: any) => notifyErrorOccurred(error, errorHandler),
       () =>
@@ -56,7 +56,7 @@ export class FirestoreService {
     completionHandler,
     afterMutationCalled,
     notFoundHandler,
-    onCompleted
+    onCompleted,
   }: SubscribeCriteria<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
@@ -71,7 +71,7 @@ export class FirestoreService {
               mapper,
               afterMutationCalled,
               notifyNotFound: () =>
-                notifyNotFound('collection', notFoundHandler, false)
+                notifyNotFound('collection', notFoundHandler, false),
             }),
       (error: any) => notifyErrorOccurred(error, errorHandler),
       () =>
@@ -86,7 +86,7 @@ export class FirestoreService {
     mapper,
     errorHandler,
     completionHandler,
-    onCompleted
+    onCompleted,
   }: FindCriteria<T, firebase.firestore.DocumentReference>): Promise<
     NullOr<T | any>
   > {
@@ -106,7 +106,7 @@ export class FirestoreService {
     mapper,
     errorHandler,
     completionHandler,
-    onCompleted
+    onCompleted,
   }: FindCriteria<
     T,
     firebase.firestore.CollectionReference | firebase.firestore.Query
