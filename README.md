@@ -130,6 +130,8 @@ npm install --save firex-store
 
 - If you'd like to subscribe again after unsubscribing 'collection', set the property of the store you'd like to subscribe to `[]` and then subscribe.
 
+- If you'd like to use helper method in pipe function, use [stream-executor](https://github.com/nor-ko-hi-jp/stream-executor#helper-methods-and-those-descriptions-in-createstream-are) library.
+
 
 ## Usage
 - If you'd like to know more, see [here](docs/v1/v1-usage.md), please

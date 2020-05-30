@@ -25,8 +25,10 @@ export class FirestoreStreamSubscriber {
 
   /**
    * Subscribe firestore data like rxjs
-   * @see see a comparison of usage with `from(ref).bindTo(statePropName)`
-    https://github.com/nor-ko-hi-jp/firex-store/blob/master/docs/v1/v1-usage.md#subscribe-firestore-using-like-rxjs
+   * @description please see a comparison of usage with `from(ref).bindTo(statePropName)`
+   *  https://github.com/nor-ko-hi-jp/firex-store/blob/master/docs/v1/v1-usage.md#subscribe-firestore-using-like-rxjs
+   * @description If you'd like to use helper method in pipe function, use stream-executor library.
+   *  https://github.com/nor-ko-hi-jp/stream-executor#helper-methods-and-those-descriptions-in-createstream-are
    * @param act1 <T, U>(data: { isLast: boolean, data: T, bindTo: (statePropName: string) => void }) => U
    * @param act2 <T, U>(data: T) => U
    * @param act3 <T, U>(data: T) => U
