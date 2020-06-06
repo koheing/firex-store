@@ -6,13 +6,13 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
 
     'plugin:prettier/recommended',
-    'prettier/@typescript-eslint'
+    'prettier/@typescript-eslint',
   ],
   plugins: ['@typescript-eslint'],
   parser: '@typescript-eslint/parser',
   env: { browser: true, node: true, es6: true },
   parserOptions: {
-    parser: '@typescript-eslint/parser'
+    parser: '@typescript-eslint/parser',
   },
   rules: {
     'no-unused-vars': 'off',
@@ -22,6 +22,7 @@ module.exports = {
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/ban-ts-ignore': 'off',
-    '@typescript-eslint/ban-ts-comment': 'off'
-  }
+    '@typescript-eslint/ban-ts-comment': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+  },
 }

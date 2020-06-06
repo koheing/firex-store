@@ -9,6 +9,7 @@ import { tap, Action, map as _map } from 'stream-executor'
 export class FirestoreStreamSubscriber {
   private _ref: FirestoreRef
   private _actions: Action<any, any>[] = []
+  private _statePropName?: string
 
   /**
    * Make FirestoreStreamSubscriber instance
@@ -113,6 +114,13 @@ export class FirestoreStreamSubscriber {
       'errorHandler' | 'notFoundHandler' | 'completionHandler'
     > = {}
   ) {
+    if (
+      this._statePropName &&
+      (state[FIREX_UNSUBSCRIBES] as Unsubscribes).has(this._statePropName)
+    ) {
+      return
+    }
+
     if (!state[FIREX_UNSUBSCRIBES]) {
       state[FIREX_UNSUBSCRIBES] = new Map<string, Unsubscribe>()
     }
@@ -148,6 +156,7 @@ export class FirestoreStreamSubscriber {
 
     const unsubscribes: Unsubscribes = state[FIREX_UNSUBSCRIBES]
     const statePropName = unsubscribes.get(firestoreRefType) as string
+    this._statePropName = statePropName
     unsubscribes.set(statePropName, unsubscribe)
     unsubscribes.delete(firestoreRefType)
   }

@@ -94,4 +94,42 @@ describe('FirestoreStreamSubscriber', () => {
     const unsubscribes: Unsubscribes = (state as any)[FIREX_UNSUBSCRIBES]
     expect(unsubscribes.get('charactor')).not.toBeUndefined()
   })
+
+  it('subscribe: call at once, only', () => {
+    const mockIsDocumentRef = (isDocumentRef as unknown) as jest.Mock
+    mockIsDocumentRef.mockImplementation(() => true)
+    const unsubscribe = () => jest.fn()
+    const state = {
+      charactor: null,
+      [FIREX_UNSUBSCRIBES]: new Map(),
+    }
+    const ref = {
+      onSnapshot: (onNext: any) => {
+        onNext(mockDocumentSnapshot)
+        return unsubscribe
+      },
+    }
+
+    // @ts-ignore
+    const subscriber = FirestoreStreamSubscriber.from(ref)
+
+    subscriber
+      .pipe(
+        map((data) => ({ id: data.docId, name: data.name })),
+        bindTo('charactor')
+      )
+      .subscribe(state, jest.fn())
+
+    expect(subscriber['_statePropName']).toEqual('charactor')
+    const spyRef = spyOn(ref, 'onSnapshot')
+
+    subscriber
+      .pipe(
+        map((data) => ({ id: data.docId, name: data.name })),
+        bindTo('charactor')
+      )
+      .subscribe(state, jest.fn())
+
+    expect(spyRef).not.toHaveBeenCalled()
+  })
 })

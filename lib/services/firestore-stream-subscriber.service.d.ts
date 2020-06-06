@@ -5,6 +5,7 @@ import { Action } from 'stream-executor';
 export declare class FirestoreStreamSubscriber {
     private _ref;
     private _actions;
+    private _statePropName?;
     /**
      * Make FirestoreStreamSubscriber instance
      * @param ref: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference | firebase.firestore.Query
