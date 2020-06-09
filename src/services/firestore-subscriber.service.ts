@@ -9,11 +9,7 @@ import {
 import { Commit } from 'vuex'
 import { SubscribeOptionsParameter } from '../parameters'
 import { errorMessageTree } from '../errors'
-import {
-  createSubscriber,
-  createMutation,
-  createMutationHandler,
-} from './helpers'
+import { createSubscriber, createMutation } from './helpers'
 import { FIREX_UNSUBSCRIBES } from '../configurations'
 import { isDocumentRef } from '../utils/is-document-ref'
 import { FirestoreRepository } from '../repositories'
