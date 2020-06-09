@@ -8,25 +8,6 @@
 - It is inspired by [vuexfire](https://github.com/vuejs/vuefire)
 - With this NPM, you can read and write Firestore data in Vuex like the following code
 ```js
-import { FirestoreMapper } from 'firex-store'
-
-class Model extends FirestoreMapper {
-  static fromJson(data) {
-    return new Model(data.id, `${data.family_name} ${data.first_name}` )
-  }
-
-  static toJson(data) {
-    return { id: data.id, family_name: data.fullName.split(' ')[0], first_name: data.fullName.split(' ')[1] }
-  }
-
-  construnctor(id, fullName) {
-    this.id = id
-    this.fullName = fullName
-  }
-}
-```
-
-```js
 import { to, from, on, firestoreMutations, bindTo, map } from 'firex-store'
 import { Model } from '~/model'
 import { firestore } from '~/plugins/firebase'
@@ -46,16 +27,16 @@ export default {
   },
   actions: {
     streamSubscribe: ({ state, commit }) => {
-      const toComment = (data) => new Comment(...data)
+      const toComment = (data) => new Model(...data)
       const ref = firestore.collection('comments')
       // write code like Rxjs
       from(ref)
         .pipe(
-          map(toComment), // option
+          map(toComment),                                               // option
           bindTo('comments'),                                           // required
-          (({ isLast }) => commit('setIsLoaded', isLast))               //option
+          (({ isLast }) => commit('setIsLoaded', isLast))               // option
         )
-        .subscribe(state, commit)
+        .subscribe(state, commit /*, { errorHandler, complectionHandler } */)
     },
     subscribe: ({ state, commit }) => {
       const ref = firestore.collection('comments')
@@ -108,6 +89,25 @@ export default {
         .transaction()  // options
         .delete(/* { errorHandler, completionHandler } */)
     }
+  }
+}
+```
+
+```js
+import { FirestoreMapper } from 'firex-store'
+
+class Model extends FirestoreMapper {
+  static fromJson(data) {
+    return new Model(data.id, `${data.family_name} ${data.first_name}` )
+  }
+
+  static toJson(data) {
+    return { id: data.id, family_name: data.fullName.split(' ')[0], first_name: data.fullName.split(' ')[1] }
+  }
+
+  construnctor(id, fullName) {
+    this.id = id
+    this.fullName = fullName
   }
 }
 ```
